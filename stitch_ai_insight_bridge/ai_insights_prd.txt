@@ -1,0 +1,28 @@
+# AI Insights Bilingual Blog - Product Requirements Document
+
+## Overview
+A high-fidelity web platform that curates content from Anthropic and OpenAI, translates it into Chinese, and provides an elegant reading experience. Includes an email subscription system and a full admin suite.
+
+## Visual Style: "Liquid Glass"
+- Frosted glass surfaces with backdrop-filter blur.
+- Dopamine gradient accents (saturated highlights, thin borders, button glows).
+- Apple Human Interface inspired: spacious, clean, refined.
+
+## Screen List
+
+### Public Experience
+1. **Homepage**: Hero with gradient bloom, glass nav, featured content grid (Anthropic/OpenAI badges), source/type filters.
+2. **Article Detail**: Long-form reading layout, original/translation toggle, side-by-side view option, floating subscribe prompt.
+3. **Subscription Flow**: Glass modal for email signup with success states.
+
+### Admin Experience (Management Suite)
+4. **Admin Dashboard**: Overview stats, workflow status, recent activity in glass cards.
+5. **Subscribers List**: Searchable/sortable table of email subscribers.
+6. **Content Management**: List of articles/videos with translation and publish status.
+7. **Workflow Monitor**: Timeline/log of automated fetching and translation jobs with status charts.
+8. **Manual Publish**: Form for adding content manually with source selection and translation fields.
+
+## Interaction Specs
+- Responsive: Desktop (Primary), Tablet, Mobile.
+- Hover/Active/Loading/Success states included.
+- Light mode (primary) and Dark mode.

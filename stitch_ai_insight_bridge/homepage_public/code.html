@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>InsightFlux - 全球 AI 洞察，中英双语呈现</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Noto+Serif+SC:wght@400;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#fffbff",
+                    "surface-container-high": "#eae7ea",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#f0edef",
+                    "tertiary": "#9e3d00",
+                    "on-tertiary-fixed": "#351000",
+                    "primary": "#0058bc",
+                    "on-primary-fixed-variant": "#004493",
+                    "surface-container-highest": "#e4e2e4",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "outline": "#717786",
+                    "surface-tint": "#005bc1",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#f3f0f2",
+                    "surface-variant": "#e4e2e4",
+                    "background": "#fcf8fb",
+                    "on-background": "#1b1b1d",
+                    "tertiary-fixed": "#ffdbcc",
+                    "on-error": "#ffffff",
+                    "secondary": "#bc000a",
+                    "primary-container": "#0070eb",
+                    "on-secondary-fixed": "#410001",
+                    "secondary-fixed": "#ffdad5",
+                    "on-tertiary": "#ffffff",
+                    "secondary-container": "#e2241f",
+                    "secondary-fixed-dim": "#ffb4aa",
+                    "primary-fixed": "#d8e2ff",
+                    "on-surface-variant": "#414755",
+                    "on-primary-fixed": "#001a41",
+                    "tertiary-fixed-dim": "#ffb595",
+                    "on-tertiary-fixed-variant": "#7c2e00",
+                    "on-secondary-container": "#fffbff",
+                    "surface-container-low": "#f6f3f5",
+                    "outline-variant": "#c1c6d7",
+                    "surface-dim": "#dcd9dc",
+                    "tertiary-container": "#c64f00",
+                    "surface-bright": "#fcf8fb",
+                    "surface": "#fcf8fb",
+                    "error-container": "#ffdad6",
+                    "on-primary-container": "#fefcff",
+                    "inverse-surface": "#303032",
+                    "on-secondary-fixed-variant": "#930005",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1b1b1d",
+                    "inverse-primary": "#adc6ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "md": "24px",
+                    "lg": "48px",
+                    "sm": "12px",
+                    "base": "8px",
+                    "xl": "80px",
+                    "container-max": "1120px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "article-body-cn": [
+                            "Noto Serif SC"
+                    ],
+                    "label-caps": [
+                            "Inter"
+                    ],
+                    "article-body": [
+                            "Noto Serif"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "display-lg-mobile": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "article-body-cn": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.8",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "article-body": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        .glass-surface {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .dopamine-gradient {
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+        }
+
+        .gradient-bloom {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(78,205,196,0.15) 0%, rgba(255,255,255,0) 70%);
+            top: -200px;
+            right: -200px;
+            z-index: -1;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .card-bloom {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(69,183,209,0.2) 0%, rgba(255,255,255,0) 70%);
+            top: 0;
+            right: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            border-radius: 0 0.5rem 0 0;
+        }
+
+        .glass-card:hover .card-bloom {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased font-article-body-cn text-article-body-cn pt-16">
+<!-- TopNavBar Component -->
+<nav class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl border-b border-outline-variant/20 dark:border-outline/20 shadow-[0_4px_30px_rgba(0,0,0,0.05)] shadow-sm backdrop-blur-md flex justify-between items-center h-16 px-gutter max-w-container-max mx-auto left-0 right-0">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">
+            InsightFlux
+        </div>
+<div class="hidden md:flex space-x-md items-center font-label-caps text-label-caps font-headline-md text-headline-md">
+<!-- Active Navigation -->
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 active:scale-95 duration-200 ease-out" href="#">
+                Articles
+            </a>
+<!-- Inactive Navigation -->
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors hover:bg-primary-container/10 dark:hover:bg-primary-container/20 rounded-lg transition-all px-2 py-1 active:scale-95 duration-200 ease-out" href="#">
+                About
+            </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors hover:bg-primary-container/10 dark:hover:bg-primary-container/20 rounded-lg transition-all px-2 py-1 active:scale-95 duration-200 ease-out" href="#">
+                Archive
+            </a>
+</div>
+<div class="flex items-center space-x-sm">
+<button class="font-label-caps text-label-caps text-on-surface-variant px-3 py-1 rounded-full glass-surface hover:bg-surface-variant/50 transition-colors">
+                CN/EN
+            </button>
+<button class="font-label-caps text-label-caps text-white bg-primary hover:bg-primary-fixed-variant px-4 py-2 rounded-full transition-colors dopamine-gradient border-none shadow-lg shadow-primary/20">
+                Subscribe
+            </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative overflow-hidden pt-xl pb-lg px-gutter max-w-container-max mx-auto text-center">
+<div class="gradient-bloom"></div>
+<div class="max-w-3xl mx-auto space-y-md">
+<h1 class="font-display-lg text-display-lg text-on-surface">
+                全球 AI 洞察，中英双语呈现
+            </h1>
+<p class="font-article-body-cn text-article-body-cn text-on-surface-variant text-lg">
+                精选来自 Anthropic 与 OpenAI 的前沿研究与技术更新。以专业的双语视角，解码通用人工智能的发展脉络。
+            </p>
+<div class="flex justify-center pt-md">
+<div class="glass-surface p-1 rounded-full flex items-center w-full max-w-md shadow-sm">
+<input class="bg-transparent border-none focus:ring-0 text-on-surface w-full px-4 font-article-body-cn text-base outline-none" placeholder="Enter your email" type="email"/>
+<button class="dopamine-gradient text-white font-label-caps text-label-caps px-6 py-3 rounded-full hover:opacity-90 transition-opacity whitespace-nowrap shadow-md">
+                        Subscribe
+                    </button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-container-max mx-auto px-gutter pb-xl space-y-xl">
+<!-- Filter Section -->
+<section class="flex flex-col md:flex-row justify-between items-center glass-surface p-2 rounded-xl">
+<div class="flex space-x-2 font-label-caps text-label-caps overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+<button class="bg-primary text-white px-4 py-2 rounded-lg shadow-sm">全部</button>
+<button class="text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-lg transition-colors">Anthropic</button>
+<button class="text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-lg transition-colors">OpenAI</button>
+</div>
+<div class="flex space-x-2 font-label-caps text-label-caps w-full md:w-auto border-t md:border-t-0 md:border-l border-outline-variant/30 pt-2 md:pt-0 pl-0 md:pl-4 mt-2 md:mt-0">
+<button class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg">文章</button>
+<button class="text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-lg transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+                    视频
+                </button>
+</div>
+</section>
+<!-- Content Grid (Bento/Cards) -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Card 1 -->
+<article class="glass-surface rounded-xl overflow-hidden glass-card group cursor-pointer flex flex-col hover:-translate-y-1 transition-transform duration-300 relative">
+<div class="card-bloom"></div>
+<div class="relative h-48 bg-surface-container overflow-hidden">
+<img alt="Abstract representation of AI neural networks" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A macro shot of a complex, glowing artificial neural network structure. The scene is illuminated with cool cyan and warm orange lights against a dark, glassy background, creating a high-tech, futuristic aesthetic. The style is sharp, modern, and highly detailed, perfectly fitting a sophisticated AI technology editorial." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl-AZ4GpMnpCJiQ9vz47eCyW8TZOI6In2xo9Uvti6jqlNTjdFSPsgEYioBQHHFJ3nDJV7lHaEuIWS5eVr_7_FAEZv1nRRzM6YCoAQeoGYpq-yzUj2TfW48NNeEi11X0UwiJPE15u9nBlWNp96sdj2KtOQ4h8SjyPdDOekNTZSlGAQoSJDdqmvArsWg6JNvlupomffGSkV-fkaDNGE_Q5wAKhALcFd2fkBw2DFDf7Tg1gYS_rDbjMav1IwjlWqFt9qnRWKTgj9eSLgr"/>
+<div class="absolute top-3 left-3 bg-surface/80 backdrop-blur-md px-2 py-1 rounded text-xs font-label-caps text-label-caps text-on-surface border border-outline-variant/20">
+                        Anthropic
+                    </div>
+</div>
+<div class="p-md flex-1 flex flex-col justify-between z-10">
+<div class="space-y-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface line-clamp-2 group-hover:text-primary transition-colors">
+                            Claude 3.5 Sonnet 模型更新解析
+                        </h3>
+<p class="font-article-body-cn text-base text-on-surface-variant line-clamp-3">
+                            深入探讨最新一代模型的架构改进，及其在复杂推理和编码任务中的性能跃升。探讨其对开发者生态的影响。
+                        </p>
+</div>
+<div class="mt-md flex justify-between items-center font-label-caps text-label-caps text-outline">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">article</span>
+                            Article
+                        </div>
+<time>Oct 24, 2024</time>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="glass-surface rounded-xl overflow-hidden glass-card group cursor-pointer flex flex-col hover:-translate-y-1 transition-transform duration-300 relative">
+<div class="card-bloom"></div>
+<div class="relative h-48 bg-surface-container overflow-hidden">
+<img alt="Digital interface with code and AI elements" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A clean, minimalist digital interface displaying lines of code merging with soft, glowing abstract geometric shapes. The color palette features pristine whites, deep blacks, and surgical accents of vibrant red and blue. The mood is calm, professional, and authoritative, reflecting high-end editorial design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChpZ7Eu25VdOufHjLP76ZuMXSnQNjjGc5EVCqjcakC--EndnXKoj90wC6vClEdDm13KM6YSQrk9Zjk-WWLTcitGQanb-0MTWpXAZR0eLxrTDIxeJQ320PH2Pet1Jt3w9y8PWjDJEQLZ3sPdzn2KstpkAWqZK9LNd2LvDxcWKMTbf0yVkqupXxpDWcWAogyTmEXfeKDX0h9W2Ki2xtRq1S2NjAuggRWlTab94W9MV0RM8weiDPW6_3XCKsAROxMkwR-auoj0z3Ta1Zp"/>
+<div class="absolute top-3 left-3 bg-surface/80 backdrop-blur-md px-2 py-1 rounded text-xs font-label-caps text-label-caps text-on-surface border border-outline-variant/20">
+                        OpenAI
+                    </div>
+</div>
+<div class="p-md flex-1 flex flex-col justify-between z-10">
+<div class="space-y-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface line-clamp-2 group-hover:text-primary transition-colors">
+                            GPT-4o：多模态交互的新范式
+                        </h3>
+<p class="font-article-body-cn text-base text-on-surface-variant line-clamp-3">
+                            解析原生多模态模型如何重塑语音、视觉与文本的融合处理，以及实时交互带来的体验变革。
+                        </p>
+</div>
+<div class="mt-md flex justify-between items-center font-label-caps text-label-caps text-outline">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">play_circle</span>
+                            Video
+                        </div>
+<time>Oct 20, 2024</time>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="glass-surface rounded-xl overflow-hidden glass-card group cursor-pointer flex flex-col hover:-translate-y-1 transition-transform duration-300 relative">
+<div class="card-bloom"></div>
+<div class="relative h-48 bg-surface-container overflow-hidden">
+<img alt="Server room with blue lighting" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sophisticated, high-index glass aesthetic applied to a modern server room concept. Semi-transparent layers of light blue and soft white overlap, creating a sense of layered depth and structural clarity. The image feels like physical glass sheets floating over a shifting spectrum of data, embodying calm authority." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrtuHwKTIV5LbVLNuGjdW_GxHQkzXBMXnt0oQZrPNzYBpsRUchUa-dujTfI9tpfUUUlPwwcQi7irlOBDkWxD7u6HvywK7Bxl3bfeuVdncLwJkWeb3Eak_evg1dxuKeMdCfNJmjaE_vY_Qcmn76xmeS0fNyoGA4i1v6aFTR6K1C8tQ_-DwBz8_hYV8q2bWaXpeRaTOlqWEwRD1DAeiklg2hcbvhdZXoktmduJMb6uB4Ryt9TuC8HC5NlCNPQeo8PWQo8A6BC3duNccV"/>
+<div class="absolute top-3 left-3 bg-surface/80 backdrop-blur-md px-2 py-1 rounded text-xs font-label-caps text-label-caps text-on-surface border border-outline-variant/20">
+                        Anthropic
+                    </div>
+</div>
+<div class="p-md flex-1 flex flex-col justify-between z-10">
+<div class="space-y-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface line-clamp-2 group-hover:text-primary transition-colors">
+                            Constitutional AI 的演进路径
+                        </h3>
+<p class="font-article-body-cn text-base text-on-surface-variant line-clamp-3">
+                            详述基于原则的 AI 对齐方法，探索如何在大规模部署中维持模型的安全性与有益性。
+                        </p>
+</div>
+<div class="mt-md flex justify-between items-center font-label-caps text-label-caps text-outline">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">article</span>
+                            Article
+                        </div>
+<time>Oct 15, 2024</time>
+</div>
+</div>
+</article>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="w-full py-xl bg-surface-container-lowest dark:bg-surface-dim border-t border-outline-variant/10">
+<div class="max-w-container-max mx-auto px-gutter flex flex-col md:flex-row justify-between items-center">
+<div class="font-headline-md text-headline-md text-on-surface mb-4 md:mb-0">
+                InsightFlux
+            </div>
+<div class="font-article-body text-article-body font-label-caps text-label-caps text-secondary dark:text-secondary-fixed-dim text-center md:text-left mb-4 md:mb-0">
+                © 2024 InsightFlux. Professional Bilingual Editorial.
+            </div>
+<div class="flex space-x-md font-article-body text-article-body font-label-caps text-label-caps text-on-surface-variant dark:text-outline-variant">
+<a class="hover:text-primary underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Privacy</a>
+<a class="hover:text-primary underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Terms</a>
+<a class="hover:text-primary underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">API</a>
+</div>
+</div>
+</footer>
+</body></html>
