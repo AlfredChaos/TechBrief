@@ -1,0 +1,201 @@
+{% extends "admin_console/base.html" %}
+
+{% block admin_console_content %}
+  <div class="tb-console-filters" style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; padding:12px 18px; border-radius:calc(var(--tb-rounded-xl) - 6px); background:rgba(255,255,255,0.9); border:1px solid var(--tb-console-border); box-shadow:var(--tb-console-shadow-soft);">
+    <form method="get" style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; width:100%;">
+      <div class="tb-console-field" style="min-width:160px;">
+        <label for="id_source_type">Type</label>
+        <select id="id_source_type" name="source_type" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;">
+          <option value="">All types</option>
+          {% for value, label in source_type_choices %}
+            <option value="{{ value }}"{% if filters.source_type == value %} selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="tb-console-field" style="min-width:160px;">
+        <label for="id_is_enabled">Enabled</label>
+        <select id="id_is_enabled" name="is_enabled" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;">
+          <option value="">All</option>
+          <option value="true"{% if filters.is_enabled == "true" %} selected{% endif %}>Enabled</option>
+          <option value="false"{% if filters.is_enabled == "false" %} selected{% endif %}>Disabled</option>
+        </select>
+      </div>
+      <div class="tb-console-field" style="align-self:flex-end;">
+        <button type="submit" class="button button-longrunning">Apply Filters</button>
+      </div>
+      <div class="tb-console-field" style="align-self:flex-end; margin-left:auto;">
+        <a href="{% url 'admin_console:manual-intake' %}" class="button button-small">Manual Intake</a>
+      </div>
+    </form>
+  </div>
+
+  {% if source_data.items %}
+    <section class="tb-console-table-wrap">
+      <table class="tb-console-table">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Type</th>
+            <th>Base URL</th>
+            <th>Endpoints</th>
+            <th>Schedule</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for source in source_data.items %}
+            <tr data-source-id="{{ source.id }}">
+              <td>
+                <a href="{% url 'admin_console:source-detail' source.id %}" style="text-decoration:none; color:inherit;">
+                  <strong>{{ source.source_name }}</strong><br />
+                </a>
+                <small style="color:var(--tb-colors-on-surface-variant);">{{ source.source_code }}</small>
+              </td>
+              <td><span class="tb-console-kicker">{{ source.source_type }}</span></td>
+              <td><small>{{ source.base_url|default:"-" }}</small></td>
+              <td>{{ source.endpoints|length }}</td>
+              <td><small>{{ source.schedule_cron_expr }}</small></td>
+              <td>
+                {% if source.is_enabled %}
+                  <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-success) 26%, white);">Enabled</span>
+                {% else %}
+                  <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-error) 26%, white);">Disabled</span>
+                {% endif %}
+              </td>
+              <td>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                  <button class="button button-small button--source-toggle"
+                          data-source-id="{{ source.id }}"
+                          data-is-enabled="{{ source.is_enabled|yesno:'true,false' }}"
+                          type="button">
+                    {% if source.is_enabled %}Disable{% else %}Enable{% endif %}
+                  </button>
+                  <button class="button button-small button--source-discover"
+                          data-source-id="{{ source.id }}"
+                          type="button">Discover</button>
+                  <a href="{% url 'admin_console:manual-intake' %}?source_id={{ source.id }}" class="button button-small">Import URL</a>
+                </div>
+              </td>
+            </tr>
+            {% if source.endpoints %}
+              <tr>
+                <td colspan="7" style="padding:0 16px 14px 32px; background:rgba(0,0,0,0.02);">
+                  <table style="width:100%; font-size:12px;">
+                    <thead>
+                      <tr>
+                        <th style="padding:6px 8px; text-align:left;">Endpoint URL</th>
+                        <th style="padding:6px 8px; text-align:left;">Type</th>
+                        <th style="padding:6px 8px; text-align:left;">Role</th>
+                        <th style="padding:6px 8px; text-align:left;">Priority</th>
+                        <th style="padding:6px 8px; text-align:left;">Last Success</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for ep in source.endpoints %}
+                        <tr>
+                          <td style="padding:6px 8px;"><code style="word-break:break-all;">{{ ep.endpoint_url }}</code></td>
+                          <td style="padding:6px 8px;">{{ ep.endpoint_type }}</td>
+                          <td style="padding:6px 8px;">{{ ep.endpoint_role }}</td>
+                          <td style="padding:6px 8px;">{{ ep.priority }}</td>
+                          <td style="padding:6px 8px;">{{ ep.last_success_at|default:"-" }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    <div class="tb-console-footer">
+      {{ source_data.items|length }} source{{ source_data.items|length|pluralize }}
+    </div>
+  {% else %}
+    <div class="tb-console-empty">
+      No sources configured yet. Use <strong>Manual Intake</strong> to add content or configure sources in Django admin.
+    </div>
+  {% endif %}
+
+  <script>
+    (function() {
+      var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+      function getCsrfHeader() {
+        if (csrfToken) return csrfToken.value;
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var c = cookies[i].trim();
+          if (c.indexOf('csrftoken=') === 0) return c.substring(10);
+        }
+        return '';
+      }
+
+      document.querySelectorAll('.button--source-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var sourceId = this.dataset.sourceId;
+          var isEnabled = this.dataset.isEnabled === 'true';
+          if (!confirm((isEnabled ? 'Disable' : 'Enable') + ' source?')) return;
+          btn.disabled = true;
+          btn.textContent = '...';
+          fetch('/cms/techbrief/api/sources/' + sourceId + '/toggle/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCsrfHeader(),
+            },
+            body: JSON.stringify({is_enabled: !isEnabled}),
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.success) {
+              location.reload();
+            } else {
+              alert('Error: ' + (data.message || 'unknown'));
+              btn.disabled = false;
+              btn.textContent = isEnabled ? 'Disable' : 'Enable';
+            }
+          })
+          .catch(function(err) {
+            alert('Request failed');
+            btn.disabled = false;
+            btn.textContent = isEnabled ? 'Disable' : 'Enable';
+          });
+        });
+      });
+
+      document.querySelectorAll('.button--source-discover').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var sourceId = this.dataset.sourceId;
+          if (!confirm('Trigger discovery for this source?')) return;
+          btn.disabled = true;
+          btn.textContent = '...';
+          fetch('/cms/techbrief/api/sources/' + sourceId + '/discover/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCsrfHeader(),
+            },
+            body: JSON.stringify({}),
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.success) {
+              alert('Discovery queued: ' + data.data.discovery_run_id);
+            } else {
+              alert('Error: ' + (data.message || 'unknown'));
+            }
+            btn.disabled = false;
+            btn.textContent = 'Discover';
+          })
+          .catch(function(err) {
+            alert('Request failed');
+            btn.disabled = false;
+            btn.textContent = 'Discover';
+          });
+        });
+      });
+    })();
+  </script>
+{% endblock %}

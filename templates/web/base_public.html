@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="{{ site_locale.code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ page_title }} - {{ brand_name }}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Serif:wght@400;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+{{ theme_css_variables|safe }}
+      --tb-border: rgba(255, 255, 255, 0.48);
+      --tb-glass-fill: rgba(255, 255, 255, 0.7);
+      --tb-glass-fill-strong: rgba(255, 255, 255, 0.82);
+      --tb-shadow: 0 24px 80px -24px rgba(17, 24, 39, 0.18);
+      --tb-shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.08);
+      --tb-gradient-primary: linear-gradient(135deg, var(--tb-colors-primary), #845ef7 55%, var(--tb-colors-tertiary));
+      --tb-gradient-bloom: radial-gradient(circle at top right, rgba(0, 88, 188, 0.18), transparent 55%);
+      --tb-gradient-bloom-alt: radial-gradient(circle at bottom left, rgba(158, 61, 0, 0.16), transparent 48%);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--tb-colors-on-background);
+      background:
+        radial-gradient(circle at top left, rgba(173, 198, 255, 0.3), transparent 30%),
+        radial-gradient(circle at top right, rgba(255, 181, 149, 0.28), transparent 36%),
+        linear-gradient(180deg, #fffefc 0%, var(--tb-colors-background) 100%);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .tb-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tb-container {
+      width: min(100% - 48px, 1120px);
+      margin: 0 auto;
+    }
+
+    .tb-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      background: rgba(252, 248, 251, 0.82);
+      border-bottom: 1px solid rgba(193, 198, 215, 0.38);
+    }
+
+    .tb-topbar__inner,
+    .tb-footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 72px;
+    }
+
+    .tb-brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--tb-colors-primary);
+    }
+
+    .tb-nav,
+    .tb-actions,
+    .tb-footer__links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tb-nav a,
+    .tb-pill,
+    .tb-button--ghost {
+      border-radius: 9999px;
+      padding: 10px 16px;
+      color: var(--tb-colors-on-surface-variant);
+      transition: all 180ms ease;
+    }
+
+    .tb-nav a.is-active,
+    .tb-nav a:hover,
+    .tb-pill.is-active,
+    .tb-button--ghost:hover {
+      background: rgba(0, 88, 188, 0.08);
+      color: var(--tb-colors-primary);
+    }
+
+    .tb-button,
+    button.tb-button,
+    .tb-button--ghost {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .tb-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 9999px;
+      padding: 12px 20px;
+      background: var(--tb-gradient-primary);
+      color: var(--tb-colors-on-primary);
+      box-shadow: 0 16px 48px -20px rgba(0, 88, 188, 0.56);
+    }
+
+    .tb-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 52px -18px rgba(0, 88, 188, 0.48);
+    }
+
+    .tb-button--ghost {
+      background: rgba(255, 255, 255, 0.46);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .tb-glass {
+      position: relative;
+      overflow: hidden;
+      background: var(--tb-glass-fill);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--tb-border);
+      box-shadow: var(--tb-shadow-soft);
+    }
+
+    .tb-glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--tb-gradient-bloom);
+      pointer-events: none;
+      opacity: 0.95;
+    }
+
+    .tb-card {
+      border-radius: 24px;
+    }
+
+    .tb-card__body,
+    .tb-card__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tb-section {
+      padding: 56px 0 80px;
+    }
+
+    .tb-heading {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .tb-subheading {
+      margin: 0;
+      color: var(--tb-colors-on-surface-variant);
+      font-family: {% if site_locale.is_chinese %}'Noto Serif SC', serif{% else %}'Noto Serif', serif{% endif %};
+      font-size: 1.1rem;
+      line-height: {% if site_locale.is_chinese %}1.85{% else %}1.7{% endif %};
+    }
+
+    .tb-hero {
+      padding-top: 72px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .tb-hero__panel,
+    .tb-panel {
+      padding: 32px;
+      border-radius: 32px;
+    }
+
+    .tb-hero__eyebrow,
+    .tb-metadata,
+    .tb-label {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-hero__copy {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-height: 100%;
+      justify-content: space-between;
+    }
+
+    .tb-inline-form,
+    .tb-filters {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tb-input,
+    .tb-select {
+      width: 100%;
+      border: 1px solid rgba(193, 198, 215, 0.5);
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 18px;
+      padding: 14px 16px;
+      color: var(--tb-colors-on-surface);
+      font: inherit;
+    }
+
+    .tb-inline-form .tb-input {
+      flex: 1 1 240px;
+    }
+
+    .tb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .tb-list-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .tb-item-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .tb-item-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--tb-shadow);
+    }
+
+    .tb-cover {
+      aspect-ratio: 16 / 10;
+      background:
+        linear-gradient(135deg, rgba(0, 88, 188, 0.18), rgba(158, 61, 0, 0.12)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.04));
+      overflow: hidden;
+    }
+
+    .tb-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .tb-item-card__body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .tb-title-md {
+      margin: 0;
+      font-size: 1.45rem;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .tb-summary,
+    .tb-copy {
+      margin: 0;
+      color: var(--tb-colors-on-surface-variant);
+      font-family: {% if site_locale.is_chinese %}'Noto Serif SC', serif{% else %}'Noto Serif', serif{% endif %};
+      line-height: {% if site_locale.is_chinese %}1.85{% else %}1.72{% endif %};
+    }
+
+    .tb-meta-row,
+    .tb-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tb-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(193, 198, 215, 0.42);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .tb-empty {
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .tb-pagination {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    .tb-article-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+    }
+
+    .tb-article-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
+    }
+
+    .tb-prose {
+      padding: 28px;
+      border-radius: 28px;
+    }
+
+    .tb-prose h2,
+    .tb-prose h3,
+    .tb-prose h4,
+    .tb-static-body h2,
+    .tb-static-body h3 {
+      margin: 28px 0 16px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .tb-prose p,
+    .tb-prose li,
+    .tb-prose blockquote,
+    .tb-static-body p,
+    .tb-static-body li {
+      margin: 0 0 16px;
+      color: var(--tb-colors-on-surface-variant);
+      font-family: 'Noto Serif', serif;
+      line-height: 1.75;
+    }
+
+    html[lang="zh-CN"] .tb-prose p,
+    html[lang="zh-CN"] .tb-prose li,
+    html[lang="zh-CN"] .tb-prose blockquote,
+    html[lang="zh-CN"] .tb-static-body p,
+    html[lang="zh-CN"] .tb-static-body li {
+      font-family: 'Noto Serif SC', serif;
+      line-height: 1.9;
+    }
+
+    .tb-prose code,
+    .tb-prose pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    .tb-prose pre {
+      margin: 0 0 16px;
+      padding: 16px;
+      overflow: auto;
+      border-radius: 18px;
+      background: rgba(27, 27, 29, 0.94);
+      color: #f3f0f2;
+    }
+
+    .tb-prose blockquote {
+      padding: 18px 20px;
+      border-left: 4px solid rgba(0, 88, 188, 0.4);
+      background: rgba(255, 255, 255, 0.58);
+      border-radius: 18px;
+    }
+
+    .tb-divider {
+      border: 0;
+      border-top: 1px solid rgba(193, 198, 215, 0.42);
+      margin: 24px 0;
+    }
+
+    .tb-footer {
+      margin-top: auto;
+      border-top: 1px solid rgba(193, 198, 215, 0.42);
+      background: rgba(255, 255, 255, 0.58);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .tb-footer__copy {
+      color: var(--tb-colors-on-surface-variant);
+      font-size: 0.92rem;
+    }
+
+    .tb-modal-backdrop[hidden] {
+      display: none;
+    }
+
+    .tb-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(48, 48, 50, 0.14);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .tb-modal {
+      width: min(100%, 480px);
+      padding: 32px;
+      border-radius: 32px;
+      background: var(--tb-glass-fill-strong);
+      border: 1px solid var(--tb-border);
+      box-shadow: var(--tb-shadow);
+    }
+
+    .tb-modal__close {
+      float: right;
+      background: transparent;
+      border: 0;
+      color: var(--tb-colors-on-surface-variant);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .tb-feedback {
+      min-height: 24px;
+      font-size: 0.92rem;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-feedback.is-error {
+      color: var(--tb-colors-error);
+    }
+
+    .tb-feedback.is-success {
+      color: var(--tb-colors-primary);
+    }
+
+    @media (max-width: 960px) {
+      .tb-hero,
+      .tb-grid,
+      .tb-list-grid,
+      .tb-article-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .tb-topbar__inner,
+      .tb-footer__inner {
+        min-height: auto;
+        padding: 16px 0;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .tb-container {
+        width: min(100% - 32px, 1120px);
+      }
+
+      .tb-nav {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .tb-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .tb-hero__panel,
+      .tb-panel,
+      .tb-modal {
+        padding: 24px;
+      }
+    }
+
+    /* ── Dark mode ──────────────────────────────────────────── */
+    @media (prefers-color-scheme: dark) {
+      :root {
+{{ dark_mode_css_variables|safe }}
+        --tb-border: rgba(0, 0, 0, 0.36);
+        --tb-glass-fill: rgba(31, 31, 35, 0.82);
+        --tb-glass-fill-strong: rgba(42, 42, 46, 0.92);
+        --tb-shadow: 0 24px 80px -24px rgba(0, 0, 0, 0.5);
+        --tb-shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.28);
+      }
+
+      body {
+        background:
+          radial-gradient(circle at top left, rgba(0, 88, 188, 0.12), transparent 30%),
+          radial-gradient(circle at top right, rgba(158, 61, 0, 0.1), transparent 36%),
+          linear-gradient(180deg, var(--tb-colors-surface) 0%, var(--tb-colors-background) 100%);
+      }
+
+      .tb-topbar {
+        background: rgba(19, 19, 22, 0.88);
+        border-bottom-color: rgba(65, 71, 85, 0.3);
+      }
+
+      .tb-nav a.is-active,
+      .tb-nav a:hover,
+      .tb-pill.is-active,
+      .tb-button--ghost:hover {
+        background: rgba(173, 198, 255, 0.12);
+      }
+
+      .tb-button--ghost {
+        background: rgba(31, 31, 35, 0.5);
+        border-color: rgba(65, 71, 85, 0.4);
+      }
+
+      .tb-badge {
+        background: rgba(31, 31, 35, 0.6);
+        border-color: rgba(65, 71, 85, 0.35);
+      }
+
+      .tb-prose pre {
+        background: rgba(14, 14, 17, 0.94);
+      }
+
+      .tb-prose blockquote {
+        background: rgba(31, 31, 35, 0.5);
+        border-left-color: rgba(173, 198, 255, 0.4);
+      }
+
+      .tb-modal-backdrop {
+        background: rgba(0, 0, 0, 0.45);
+      }
+
+      .tb-footer {
+        background: rgba(19, 19, 22, 0.7);
+        border-top-color: rgba(65, 71, 85, 0.3);
+      }
+
+      .tb-input,
+      .tb-select {
+        background: rgba(31, 31, 35, 0.6);
+        border-color: rgba(65, 71, 85, 0.5);
+      }
+
+      .tb-cover {
+        background:
+          linear-gradient(135deg, rgba(173, 198, 255, 0.12), rgba(255, 182, 140, 0.08)),
+          linear-gradient(180deg, rgba(31, 31, 35, 0.3), rgba(31, 31, 35, 0.05));
+      }
+    }
+
+    /* ── Reading progress bar ─────────────────────────────── */
+    .tb-reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: var(--tb-gradient-primary);
+      z-index: 100;
+      transition: width 80ms linear;
+    }
+
+    /* ── Floating subscribe button (detail page) ──────────── */
+    .tb-fab-subscribe {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 50;
+      border-radius: 9999px;
+      padding: 14px 24px;
+      background: var(--tb-gradient-primary);
+      color: var(--tb-colors-on-primary);
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.92rem;
+      box-shadow: 0 16px 48px -20px rgba(0, 88, 188, 0.56);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 260ms ease, opacity 260ms ease;
+    }
+
+    .tb-fab-subscribe.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .tb-fab-subscribe:hover {
+      box-shadow: 0 18px 52px -18px rgba(0, 88, 188, 0.48);
+    }
+
+    /* ── Copy button ──────────────────────────────────────── */
+    .tb-copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      background: rgba(0, 88, 188, 0.1);
+      border: 1px solid rgba(0, 88, 188, 0.2);
+      color: var(--tb-colors-primary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 180ms ease;
+      z-index: 2;
+    }
+
+    .tb-prose:hover .tb-copy-btn {
+      opacity: 1;
+    }
+
+    .tb-copy-btn.is-copied {
+      background: rgba(0, 188, 88, 0.12);
+      border-color: rgba(0, 188, 88, 0.25);
+      color: #22c55e;
+    }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <div class="tb-reading-progress" id="reading-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+  <div class="tb-shell">
+    <header class="tb-topbar">
+      <div class="tb-container tb-topbar__inner">
+        <a class="tb-brand" href="/">{{ brand_name }}</a>
+        <nav class="tb-nav" aria-label="Primary">
+          {% for item in nav_items %}
+            <a href="{{ item.url }}" class="{% if item.is_active %}is-active{% endif %}">{{ item.label }}</a>
+          {% endfor %}
+        </nav>
+        <div class="tb-actions">
+          <a class="tb-pill {% if site_locale.is_chinese %}is-active{% endif %}" href="{{ locale_switch_url_zh }}">CN</a>
+          <a class="tb-pill {% if not site_locale.is_chinese %}is-active{% endif %}" href="{{ locale_switch_url_en }}">EN</a>
+          <button type="button" class="tb-button" data-open-subscribe>{{ subscribe_labels.button }}</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="tb-container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="tb-footer">
+      <div class="tb-container tb-footer__inner">
+        <div class="tb-brand">{{ brand_name }}</div>
+        <div class="tb-footer__copy">© 2026 {{ brand_name }}. Bilingual AI editorial briefings.</div>
+        <div class="tb-footer__links">
+          {% for item in footer_links %}
+            <a href="{{ item.url }}">{{ item.label }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="tb-modal-backdrop" id="subscribe-modal" hidden>
+    <div class="tb-modal tb-glass">
+      <button type="button" class="tb-modal__close" data-close-subscribe>Close</button>
+      <div class="tb-stack" id="subscribe-modal-form-view">
+        <div class="tb-label">Newsletter</div>
+        <h2 class="tb-title-md">{{ subscribe_labels.modal_title }}</h2>
+        <p class="tb-summary">{{ subscribe_labels.modal_body }}</p>
+        <form class="tb-stack" data-subscription-form data-source-page="subscription_modal">
+          <input class="tb-input" type="email" name="email" placeholder="{{ subscribe_labels.modal_placeholder }}" required>
+          <button class="tb-button" type="submit">{{ subscribe_labels.modal_submit }}</button>
+          <div class="tb-feedback" data-subscription-feedback></div>
+        </form>
+        <div class="tb-metadata">{{ subscribe_labels.privacy }}</div>
+      </div>
+      <div class="tb-stack" id="subscribe-modal-success-view" hidden>
+        <div class="tb-label">Subscribed</div>
+        <h2 class="tb-title-md">{{ subscribe_labels.success_title }}</h2>
+        <p class="tb-summary">{{ subscribe_labels.success_body }}</p>
+        <button type="button" class="tb-button--ghost" data-close-subscribe>{{ subscribe_labels.success_back }}</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const modal = document.getElementById("subscribe-modal");
+      const formView = document.getElementById("subscribe-modal-form-view");
+      const successView = document.getElementById("subscribe-modal-success-view");
+      const openButtons = document.querySelectorAll("[data-open-subscribe]");
+      const closeButtons = document.querySelectorAll("[data-close-subscribe]");
+      const forms = document.querySelectorAll("[data-subscription-form]");
+      const subscriptionUrl = "{{ subscription_api_url }}";
+
+      const resetModal = () => {
+        formView.hidden = false;
+        successView.hidden = true;
+        const feedback = modal.querySelector("[data-subscription-feedback]");
+        if (feedback) {
+          feedback.textContent = "";
+          feedback.className = "tb-feedback";
+        }
+      };
+
+      const openModal = () => {
+        resetModal();
+        modal.hidden = false;
+      };
+
+      const closeModal = () => {
+        modal.hidden = true;
+      };
+
+      openButtons.forEach((button) => button.addEventListener("click", openModal));
+      closeButtons.forEach((button) => button.addEventListener("click", closeModal));
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+
+      const buildKey = () => {
+        if (window.crypto && window.crypto.randomUUID) {
+          return window.crypto.randomUUID();
+        }
+        return "tb-" + Date.now();
+      };
+
+      forms.forEach((form) => {
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const input = form.querySelector("input[name='email']");
+          const feedback = form.querySelector("[data-subscription-feedback]");
+          if (!input || !feedback) {
+            return;
+          }
+
+          feedback.className = "tb-feedback";
+          feedback.textContent = "{{ subscribe_labels.submitting|escapejs }}";
+
+          try {
+            const response = await fetch(subscriptionUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Idempotency-Key": buildKey()
+              },
+              body: JSON.stringify({
+                email: input.value,
+                source_page: form.dataset.sourcePage || "unknown",
+                locale: "{{ site_locale.code }}"
+              })
+            });
+            const payload = await response.json();
+            if (!response.ok || !payload.success) {
+              feedback.className = "tb-feedback is-error";
+              feedback.textContent = payload.message || "{{ subscribe_labels.error_failed|escapejs }}";
+              return;
+            }
+
+            feedback.textContent = "";
+            if (form.closest("#subscribe-modal-form-view")) {
+              formView.hidden = true;
+              successView.hidden = false;
+            } else {
+              feedback.className = "tb-feedback is-success";
+              feedback.textContent = "{{ subscribe_labels.success_title|escapejs }}";
+              input.value = "";
+            }
+          } catch (error) {
+            feedback.className = "tb-feedback is-error";
+            feedback.textContent = "{{ subscribe_labels.error_failed|escapejs }}";
+          }
+        });
+      });
+    })();
+  </script>
+
+  <!-- Reading progress bar -->
+  <script>
+    (() => {
+      const bar = document.getElementById("reading-progress");
+      if (!bar) return;
+      const onScroll = () => {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+        const clamped = Math.min(100, Math.max(0, progress));
+        bar.style.width = clamped + "%";
+        bar.setAttribute("aria-valuenow", Math.round(clamped));
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
+
+  {% block extra_js %}{% endblock %}
+
+  <!-- GA4 snippet placeholder -->
+  {% if ga4_measurement_id %}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga4_measurement_id }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ ga4_measurement_id }}');
+  </script>
+  {% endif %}
+</body>
+</html>

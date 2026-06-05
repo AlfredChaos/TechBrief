@@ -1,0 +1,221 @@
+{% extends "admin_console/base.html" %}
+
+{% block admin_console_content %}
+  <div style="display:grid; gap:24px;">
+    <!-- Mode Selection Tabs -->
+    <div class="tb-console-table-wrap" style="padding:18px;">
+      <div style="display:flex; gap:12px; margin-bottom:18px;">
+        <button class="button button--tab is-active" data-tab="url" type="button">URL Import</button>
+        <button class="button button--tab button-secondary" data-tab="rich_text" type="button">Rich Text Entry</button>
+      </div>
+
+      <!-- URL Import Form -->
+      <form id="form-url" class="intake-form" style="display:grid; gap:16px;">
+        <div class="tb-console-field">
+          <label for="id_url">URL *</label>
+          <input id="id_url" type="url" name="url" required placeholder="https://example.com/article" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+        </div>
+        <div class="tb-console-field">
+          <label for="id_source_select">Source (optional)</label>
+          <select id="id_source_select" name="source_id" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;">
+            <option value="">Auto-detect from URL</option>
+            {% for source in source_choices %}
+              <option value="{{ source.id }}" {% if request.GET.source_id == source.id|stringformat:"s" %}selected{% endif %}>{{ source.source_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="tb-console-field">
+          <label for="id_source_name">Source Name (override)</label>
+          <input id="id_source_name" type="text" name="source_name" placeholder="Optional override" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+        </div>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <label style="display:flex; align-items:center; gap:6px;">
+            <input type="checkbox" name="force_reimport" value="true" />
+            Force re-import (ignore dedup)
+          </label>
+        </div>
+        <div style="display:flex; gap:12px;">
+          <button type="submit" class="button" id="btn-url-submit">Import URL</button>
+        </div>
+        <div id="url-result" style="display:none; padding:12px; border-radius:8px; background:rgba(0,0,0,0.03);"></div>
+      </form>
+
+      <!-- Rich Text Form -->
+      <form id="form-rich_text" class="intake-form" style="display:none; grid-gap:16px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="tb-console-field">
+            <label for="id_title_original">Original Title *</label>
+            <input id="id_title_original" type="text" name="title_original" required style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+          </div>
+          <div class="tb-console-field">
+            <label for="id_title_zh">Chinese Title *</label>
+            <input id="id_title_zh" type="text" name="title_zh" required style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+          </div>
+        </div>
+        <div class="tb-console-field">
+          <label for="id_rt_source_name">Source Name *</label>
+          <input id="id_rt_source_name" type="text" name="source_name" required placeholder="e.g., OpenAI Blog" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+        </div>
+        <div class="tb-console-field">
+          <label for="id_canonical_url">Canonical URL (optional)</label>
+          <input id="id_canonical_url" type="url" name="canonical_url" placeholder="https://example.com/original" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+        </div>
+        <div class="tb-console-field">
+          <label for="id_author">Author / Speaker</label>
+          <input id="id_author" type="text" name="author_or_speaker" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="tb-console-field">
+            <label for="id_summary_original">Original Summary</label>
+            <textarea id="id_summary_original" name="summary_original" rows="3" style="width:100%; min-height:80px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff; resize:vertical;"></textarea>
+          </div>
+          <div class="tb-console-field">
+            <label for="id_summary_zh">Chinese Summary</label>
+            <textarea id="id_summary_zh" name="summary_zh" rows="3" style="width:100%; min-height:80px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff; resize:vertical;"></textarea>
+          </div>
+        </div>
+        <div class="tb-console-field">
+          <label for="id_body_original_md">Original Body (Markdown) *</label>
+          <textarea id="id_body_original_md" name="body_original_md" required rows="10" style="width:100%; min-height:240px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff; font-family:monospace; resize:vertical;" placeholder="# Title
+
+Content in markdown..."></textarea>
+        </div>
+        <div class="tb-console-field">
+          <label for="id_body_zh_md">Chinese Body (Markdown) *</label>
+          <textarea id="id_body_zh_md" name="body_zh_md" required rows="10" style="width:100%; min-height:240px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff; font-family:monospace; resize:vertical;" placeholder="# 标题
+
+中文正文内容..."></textarea>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <label style="display:flex; align-items:center; gap:6px;">
+            <input type="checkbox" name="supports_bilingual" value="true" checked />
+            Supports bilingual viewing
+          </label>
+        </div>
+        <div style="display:flex; gap:12px;">
+          <button type="submit" class="button" id="btn-rt-submit">Create Content</button>
+        </div>
+        <div id="rt-result" style="display:none; padding:12px; border-radius:8px; background:rgba(0,0,0,0.03);"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Tab switching
+      document.querySelectorAll('.button--tab').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.button--tab').forEach(function(b) { b.classList.remove('is-active'); b.classList.add('button-secondary'); });
+          this.classList.add('is-active');
+          this.classList.remove('button-secondary');
+          var tab = this.dataset.tab;
+          document.querySelectorAll('.intake-form').forEach(function(f) { f.style.display = 'none'; });
+          document.getElementById('form-' + tab).style.display = 'grid';
+        });
+      });
+
+      // Auto-select tab from URL params
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('mode') === 'rich_text') {
+        document.querySelector('.button--tab[data-tab="rich_text"]').click();
+      }
+
+      function getCsrfHeader() {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var c = cookies[i].trim();
+          if (c.indexOf('csrftoken=') === 0) return c.substring(10);
+        }
+        return '';
+      }
+
+      function showResult(containerId, success, message, data) {
+        var el = document.getElementById(containerId);
+        el.style.display = 'block';
+        if (success) {
+          el.style.background = 'color-mix(in srgb, var(--tb-colors-success) 12%, white)';
+          el.innerHTML = '<strong>Success:</strong> ' + message + (data && data.content_item_id ? ' <a href="/cms/techbrief/content/' + data.content_item_id + '/">View Detail</a>' : '');
+        } else {
+          el.style.background = 'color-mix(in srgb, var(--tb-colors-error) 12%, white)';
+          el.innerHTML = '<strong>Error:</strong> ' + message;
+        }
+      }
+
+      // URL import
+      document.getElementById('form-url').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('btn-url-submit');
+        btn.disabled = true;
+        btn.textContent = 'Importing...';
+        var formData = new FormData(this);
+        var payload = {
+          mode: 'url',
+          url: formData.get('url'),
+          source_id: formData.get('source_id') || null,
+          source_name: formData.get('source_name') || null,
+          force_reimport: formData.get('force_reimport') === 'true',
+        };
+        fetch('/cms/techbrief/api/manual-intake/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfHeader(),
+          },
+          body: JSON.stringify(payload),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          showResult('url-result', data.success, data.message || (data.data && data.data.reused ? 'Content already exists' : 'Import queued'), data.data);
+          btn.disabled = false;
+          btn.textContent = 'Import URL';
+        })
+        .catch(function() {
+          showResult('url-result', false, 'Request failed');
+          btn.disabled = false;
+          btn.textContent = 'Import URL';
+        });
+      });
+
+      // Rich text create
+      document.getElementById('form-rich_text').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('btn-rt-submit');
+        btn.disabled = true;
+        btn.textContent = 'Creating...';
+        var formData = new FormData(this);
+        var payload = {
+          mode: 'rich_text',
+          title_original: formData.get('title_original'),
+          title_zh: formData.get('title_zh'),
+          source_name: formData.get('source_name'),
+          canonical_url: formData.get('canonical_url') || null,
+          author_or_speaker: formData.get('author_or_speaker') || null,
+          summary_original: formData.get('summary_original') || null,
+          summary_zh: formData.get('summary_zh') || null,
+          body_original_md: formData.get('body_original_md'),
+          body_zh_md: formData.get('body_zh_md'),
+          supports_bilingual: formData.get('supports_bilingual') === 'true',
+        };
+        fetch('/cms/techbrief/api/manual-intake/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfHeader(),
+          },
+          body: JSON.stringify(payload),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          showResult('rt-result', data.success, data.message || 'Content created', data.data);
+          btn.disabled = false;
+          btn.textContent = 'Create Content';
+        })
+        .catch(function() {
+          showResult('rt-result', false, 'Request failed');
+          btn.disabled = false;
+          btn.textContent = 'Create Content';
+        });
+      });
+    })();
+  </script>
+{% endblock %}

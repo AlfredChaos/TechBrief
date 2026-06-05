@@ -1,0 +1,74 @@
+{% extends "admin_console/base.html" %}
+
+{% block admin_console_content %}
+  <section class="tb-console-grid tb-console-grid--cards">
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Total Runs</p>
+      <p class="tb-console-card__value">{{ workflow_data.summary.total_runs }}</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Success Runs</p>
+      <p class="tb-console-card__value">{{ workflow_data.summary.success_runs }}</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Failed Runs</p>
+      <p class="tb-console-card__value">{{ workflow_data.summary.failed_runs }}</p>
+    </article>
+  </section>
+
+  <form method="get" class="tb-console-filters">
+    <div class="tb-console-field">
+      <label for="id_status">Status</label>
+      <select id="id_status" name="status">
+        <option value="">All statuses</option>
+        {% for value, label in status_choices %}
+          <option value="{{ value }}"{% if filters.status == value %} selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="tb-console-field">
+      <label for="id_stage">Stage</label>
+      <select id="id_stage" name="stage">
+        <option value="">All stages</option>
+        {% for value, label in stage_choices %}
+          <option value="{{ value }}"{% if filters.stage == value %} selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="tb-console-field">
+      <button type="submit" class="button button-longrunning">Apply Filters</button>
+    </div>
+  </form>
+
+  {% if workflow_data.items %}
+    <section class="tb-console-table-wrap">
+      <table class="tb-console-table">
+        <thead>
+          <tr>
+            <th>Run ID</th>
+            <th>Status</th>
+            <th>Stage</th>
+            <th>Duration</th>
+            <th>Error Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in workflow_data.items %}
+            <tr>
+              <td>{{ item.run_id }}</td>
+              <td><span class="tb-console-kicker">{{ item.status }}</span></td>
+              <td>{{ item.stage }}</td>
+              <td>{{ item.duration_ms }}</td>
+              <td>{{ item.error_code|default:"-" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    <div class="tb-console-footer">
+      {{ workflow_data.pagination.total }} runs · page {{ workflow_data.pagination.page }} / {{ workflow_data.pagination.total_pages }}
+    </div>
+  {% else %}
+    <div class="tb-console-empty">No workflow runs are available yet.</div>
+  {% endif %}
+{% endblock %}

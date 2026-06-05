@@ -1,0 +1,36 @@
+{
+  "success": true,
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "items": [
+      {
+        "id": "0771e5f7-0cb3-42f9-ac42-48dc84f4cce7",
+        "email": "task11-reader-d7754e13@example.com",
+        "status": "unsubscribed",
+        "source_page": "home_hero",
+        "subscribed_at": "2026-06-05T09:28:52.930209+00:00",
+        "unsubscribed_at": "2026-06-05T09:28:52.947557+00:00",
+        "last_sent_at": null
+      },
+      {
+        "id": "ee189a96-4c11-4bc5-b03b-7b9b04d711f1",
+        "email": "task11-unsubscribed@example.com",
+        "status": "unsubscribed",
+        "source_page": "nav_modal",
+        "subscribed_at": "2026-06-05T09:27:48.066290+00:00",
+        "unsubscribed_at": "2026-06-05T09:28:52.812104+00:00",
+        "last_sent_at": null
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "page_size": 20,
+      "total": 2,
+      "total_pages": 1
+    }
+  },
+  "meta": {
+    "request_id": "req_aba1dc6041134fa3bef65cfb10c9af88"
+  }
+}

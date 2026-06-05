@@ -1,0 +1,213 @@
+{% extends "admin_console/base.html" %}
+
+{% block admin_console_content %}
+  {% with source=source_detail_data %}
+  <div style="display:grid; gap:24px;">
+    <!-- Header -->
+    <section class="tb-console-table-wrap" style="padding:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 style="margin:0 0 4px; font-size:20px;">{{ source.source_name }}</h2>
+          <p style="margin:0; color:var(--tb-colors-on-surface-variant); font-size:13px;">{{ source.source_code }}</p>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          {% if source.is_enabled %}
+            <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-success) 26%, white);">Enabled</span>
+          {% else %}
+            <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-error) 26%, white);">Disabled</span>
+          {% endif %}
+          <span class="tb-console-kicker">{{ source.source_type }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metadata -->
+    <section class="tb-console-grid tb-console-grid--cards" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));">
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Base URL</p>
+        <p class="tb-console-card__value" style="font-size:13px; word-break:break-all;">{{ source.base_url|default:"-" }}</p>
+      </article>
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Default Language</p>
+        <p class="tb-console-card__value" style="font-size:14px;">{{ source.default_language }}</p>
+      </article>
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Schedule</p>
+        <p class="tb-console-card__value" style="font-size:14px;">{{ source.schedule_cron_expr }}</p>
+      </article>
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Content Items</p>
+        <p class="tb-console-card__value" style="font-size:14px;">{{ source.content_count }}</p>
+      </article>
+    </section>
+
+    <!-- Endpoints -->
+    <section class="tb-console-table-wrap">
+      <h3 style="margin:0; padding:14px 16px; font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tb-colors-on-surface-variant);">Endpoints</h3>
+      {% if source.endpoints %}
+        <table class="tb-console-table">
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th>Type</th>
+              <th>Role</th>
+              <th>Content Scope</th>
+              <th>Priority</th>
+              <th>Last Success</th>
+              <th>Enabled</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ep in source.endpoints %}
+              <tr>
+                <td><code style="font-size:12px; word-break:break-all;">{{ ep.endpoint_url }}</code></td>
+                <td><span class="tb-console-kicker">{{ ep.endpoint_type }}</span></td>
+                <td>{{ ep.endpoint_role }}</td>
+                <td>{{ ep.content_type_scope }}</td>
+                <td>{{ ep.priority }}</td>
+                <td><small>{{ ep.last_success_at|default:"-" }}</small></td>
+                <td>
+                  {% if ep.is_enabled %}
+                    <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-success) 26%, white);">Yes</span>
+                  {% else %}
+                    <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-error) 26%, white);">No</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="tb-console-empty">No endpoints configured for this source.</div>
+      {% endif %}
+    </section>
+
+    <!-- Recent Discovery Runs -->
+    {% if source.recent_discovery_runs %}
+      <section class="tb-console-table-wrap">
+        <h3 style="margin:0; padding:14px 16px; font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tb-colors-on-surface-variant);">Recent Discovery Runs</h3>
+        <table class="tb-console-table">
+          <thead>
+            <tr>
+              <th>Run ID</th>
+              <th>Status</th>
+              <th>New</th>
+              <th>Updated</th>
+              <th>Failed</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for run in source.recent_discovery_runs %}
+              <tr>
+                <td><code style="font-size:12px;">{{ run.run_id }}</code></td>
+                <td><span class="tb-console-kicker">{{ run.status }}</span></td>
+                <td>{{ run.new_count }}</td>
+                <td>{{ run.updated_count }}</td>
+                <td>{{ run.failed_count }}</td>
+                <td><small>{{ run.created_at }}</small></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    {% endif %}
+
+    <!-- Notes -->
+    {% if source.notes %}
+      <section class="tb-console-table-wrap" style="padding:18px;">
+        <h3 style="margin:0 0 8px; font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tb-colors-on-surface-variant);">Notes</h3>
+        <pre style="white-space:pre-wrap; font-size:12px; padding:8px; background:rgba(0,0,0,0.03); border-radius:8px;">{{ source.notes }}</pre>
+      </section>
+    {% endif %}
+
+    <!-- Actions -->
+    <section style="display:flex; gap:12px; flex-wrap:wrap;">
+      <button class="button button--source-toggle" data-source-id="{{ source.id }}" data-is-enabled="{{ source.is_enabled|yesno:'true,false' }}" type="button">
+        {% if source.is_enabled %}Disable{% else %}Enable{% endif %} Source
+      </button>
+      <button class="button button--source-discover" data-source-id="{{ source.id }}" type="button">Trigger Discovery</button>
+      <a href="{% url 'admin_console:manual-intake' %}?source_id={{ source.id }}" class="button button-secondary">Import URL</a>
+      <button class="button button--source-delete" data-source-id="{{ source.id }}" type="button" style="background:var(--tb-colors-error); color:white;">Delete Source</button>
+    </section>
+  </div>
+
+  <script>
+    (function() {
+      function getCsrfHeader() {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var c = cookies[i].trim();
+          if (c.indexOf('csrftoken=') === 0) return c.substring(10);
+        }
+        return '';
+      }
+
+      var toggleBtn = document.querySelector('.button--source-toggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+          var isEnabled = toggleBtn.dataset.isEnabled === 'true';
+          if (!confirm((isEnabled ? 'Disable' : 'Enable') + ' this source?')) return;
+          toggleBtn.disabled = true;
+          toggleBtn.textContent = '...';
+          fetch('/cms/techbrief/api/sources/' + toggleBtn.dataset.sourceId + '/toggle/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCsrfHeader(),
+            },
+            body: JSON.stringify({is_enabled: !isEnabled}),
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.success) location.reload();
+            else { alert('Error: ' + (data.message || 'unknown')); toggleBtn.disabled = false; toggleBtn.textContent = isEnabled ? 'Disable' : 'Enable'; }
+          })
+          .catch(function() { alert('Request failed'); toggleBtn.disabled = false; toggleBtn.textContent = isEnabled ? 'Disable' : 'Enable'; });
+        });
+      }
+
+      var discoverBtn = document.querySelector('.button--source-discover');
+      if (discoverBtn) {
+        discoverBtn.addEventListener('click', function() {
+          if (!confirm('Trigger discovery for this source?')) return;
+          discoverBtn.disabled = true;
+          discoverBtn.textContent = '...';
+          fetch('/cms/techbrief/api/sources/' + discoverBtn.dataset.sourceId + '/discover/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfHeader() },
+            body: JSON.stringify({}),
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.success) alert('Discovery queued: ' + data.data.discovery_run_id);
+            else alert('Error: ' + (data.message || 'unknown'));
+            discoverBtn.disabled = false; discoverBtn.textContent = 'Trigger Discovery';
+          })
+          .catch(function() { alert('Request failed'); discoverBtn.disabled = false; discoverBtn.textContent = 'Trigger Discovery'; });
+        });
+      }
+
+      var deleteBtn = document.querySelector('.button--source-delete');
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', function() {
+          if (!confirm('Delete this source? This will disable it and remove all endpoints. This cannot be undone.')) return;
+          deleteBtn.disabled = true;
+          deleteBtn.textContent = '...';
+          fetch('/cms/techbrief/api/sources/' + deleteBtn.dataset.sourceId + '/delete/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfHeader() },
+            body: JSON.stringify({}),
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.success) { alert('Source disabled and endpoints removed.'); window.location.href = '/cms/techbrief/sources/'; }
+            else { alert('Error: ' + (data.message || 'unknown')); deleteBtn.disabled = false; deleteBtn.textContent = 'Delete Source'; }
+          })
+          .catch(function() { alert('Request failed'); deleteBtn.disabled = false; deleteBtn.textContent = 'Delete Source'; });
+        });
+      }
+    })();
+  </script>
+  {% endwith %}
+{% endblock %}

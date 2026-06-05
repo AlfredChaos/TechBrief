@@ -1,0 +1,668 @@
+<!doctype html>
+
+
+
+<html lang="en-us" dir="ltr" class="w-theme-system w-density-default w-contrast-system">
+    <head>
+        <meta charset="utf-8" />
+        <title>Admin Dashboard - Wagtail</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="noindex" />
+
+        
+    <link rel="stylesheet" href="/static/wagtailadmin/css/core.css?v=75fffe15">
+
+    
+
+    
+  
+  <style>
+    :root {
+  --tb-colors-surface: #fcf8fb;
+  --tb-colors-surface-dim: #dcd9dc;
+  --tb-colors-surface-bright: #fcf8fb;
+  --tb-colors-surface-container-lowest: #ffffff;
+  --tb-colors-surface-container-low: #f6f3f5;
+  --tb-colors-surface-container: #f0edef;
+  --tb-colors-surface-container-high: #eae7ea;
+  --tb-colors-surface-container-highest: #e4e2e4;
+  --tb-colors-on-surface: #1b1b1d;
+  --tb-colors-on-surface-variant: #414755;
+  --tb-colors-inverse-surface: #303032;
+  --tb-colors-inverse-on-surface: #f3f0f2;
+  --tb-colors-outline: #717786;
+  --tb-colors-outline-variant: #c1c6d7;
+  --tb-colors-surface-tint: #005bc1;
+  --tb-colors-primary: #0058bc;
+  --tb-colors-on-primary: #ffffff;
+  --tb-colors-primary-container: #0070eb;
+  --tb-colors-on-primary-container: #fefcff;
+  --tb-colors-inverse-primary: #adc6ff;
+  --tb-colors-secondary: #bc000a;
+  --tb-colors-on-secondary: #ffffff;
+  --tb-colors-secondary-container: #e2241f;
+  --tb-colors-on-secondary-container: #fffbff;
+  --tb-colors-tertiary: #9e3d00;
+  --tb-colors-on-tertiary: #ffffff;
+  --tb-colors-tertiary-container: #c64f00;
+  --tb-colors-on-tertiary-container: #fffbff;
+  --tb-colors-error: #ba1a1a;
+  --tb-colors-on-error: #ffffff;
+  --tb-colors-error-container: #ffdad6;
+  --tb-colors-on-error-container: #93000a;
+  --tb-colors-background: #fcf8fb;
+  --tb-colors-on-background: #1b1b1d;
+  --tb-colors-surface-variant: #e4e2e4;
+  --tb-typography-display-lg-font-family: 'Inter', sans-serif;
+  --tb-typography-display-lg-font-size: 48px;
+  --tb-typography-display-lg-font-weight: 700;
+  --tb-typography-display-lg-line-height: 1.1;
+  --tb-typography-display-lg-letter-spacing: -0.02em;
+  --tb-typography-display-lg-mobile-font-size: 32px;
+  --tb-typography-display-lg-mobile-line-height: 1.2;
+  --tb-typography-headline-md-font-family: 'Inter', sans-serif;
+  --tb-typography-headline-md-font-size: 24px;
+  --tb-typography-headline-md-font-weight: 600;
+  --tb-typography-headline-md-line-height: 1.3;
+  --tb-typography-headline-md-letter-spacing: -0.01em;
+  --tb-typography-article-body-font-family: 'Noto Serif', serif;
+  --tb-typography-article-body-font-size: 18px;
+  --tb-typography-article-body-font-weight: 400;
+  --tb-typography-article-body-line-height: 1.6;
+  --tb-typography-article-body-cn-font-family: 'Noto Serif SC', serif;
+  --tb-typography-article-body-cn-font-size: 18px;
+  --tb-typography-article-body-cn-font-weight: 400;
+  --tb-typography-article-body-cn-line-height: 1.8;
+  --tb-typography-label-caps-font-family: 'Inter', sans-serif;
+  --tb-typography-label-caps-font-size: 12px;
+  --tb-typography-label-caps-font-weight: 600;
+  --tb-typography-label-caps-line-height: 1;
+  --tb-typography-label-caps-letter-spacing: 0.05em;
+  --tb-rounded-sm: 4px;
+  --tb-rounded-default: 8px;
+  --tb-rounded-md: 12px;
+  --tb-rounded-lg: 16px;
+  --tb-rounded-xl: 24px;
+  --tb-rounded-full: 9999px;
+  --tb-spacing-xs: 4px;
+  --tb-spacing-sm: 12px;
+  --tb-spacing-base: 8px;
+  --tb-spacing-md: 24px;
+  --tb-spacing-lg: 48px;
+  --tb-spacing-xl: 80px;
+  --tb-spacing-container-max: 1120px;
+  --tb-spacing-gutter: 24px;
+      --tb-console-border: color-mix(in srgb, var(--tb-colors-outline-variant) 52%, white);
+      --tb-console-surface: rgba(255, 255, 255, 0.88);
+      --tb-console-surface-strong: rgba(255, 255, 255, 0.92);
+      --tb-console-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+      --tb-console-shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --tb-console-active: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--tb-colors-primary) 18%, white),
+        color-mix(in srgb, var(--tb-colors-tertiary) 16%, white)
+      );
+    }
+
+    .tb-console-shell {
+      display: grid;
+      gap: 24px;
+    }
+
+    .tb-console-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 12px;
+      border-radius: var(--tb-rounded-lg);
+      background: linear-gradient(180deg, var(--tb-console-surface), var(--tb-console-surface-strong));
+      border: 1px solid var(--tb-console-border);
+      box-shadow: var(--tb-console-shadow);
+    }
+
+    .tb-console-nav__link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      padding: 10px 14px;
+      border-radius: var(--tb-rounded-full);
+      color: var(--tb-colors-on-surface-variant);
+      text-decoration: none;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid transparent;
+    }
+
+    .tb-console-nav__link.is-active {
+      color: var(--tb-colors-on-surface);
+      border-color: color-mix(in srgb, var(--tb-colors-primary) 24%, white);
+      background: var(--tb-console-active);
+    }
+
+    .tb-console-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .tb-console-grid--cards {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .tb-console-card {
+      padding: 18px;
+      border-radius: calc(var(--tb-rounded-xl) - 6px);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--tb-console-border);
+      box-shadow: var(--tb-console-shadow-soft);
+    }
+
+    .tb-console-card__eyebrow {
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-console-card__value {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--tb-colors-on-surface);
+    }
+
+    .tb-console-card__meta {
+      margin-top: 8px;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-console-table-wrap {
+      overflow-x: auto;
+      border-radius: calc(var(--tb-rounded-xl) - 6px);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--tb-console-border);
+      box-shadow: var(--tb-console-shadow-soft);
+    }
+
+    .tb-console-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .tb-console-table th,
+    .tb-console-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--tb-console-border);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .tb-console-table th {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-console-kicker {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: var(--tb-rounded-full);
+      background: color-mix(in srgb, var(--tb-colors-inverse-primary) 26%, white);
+      color: var(--tb-colors-on-surface-variant);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .tb-console-filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      align-items: end;
+      padding: 18px;
+      border-radius: calc(var(--tb-rounded-xl) - 6px);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--tb-console-border);
+      box-shadow: var(--tb-console-shadow-soft);
+    }
+
+    .tb-console-field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-console-field input,
+    .tb-console-field select {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 12px;
+      border: 1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white);
+      border-radius: var(--tb-rounded-md);
+      background: #fff;
+    }
+
+    .tb-console-empty {
+      padding: 32px 20px;
+      text-align: center;
+      color: var(--tb-colors-on-surface-variant);
+      border-radius: calc(var(--tb-rounded-xl) - 6px);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px dashed color-mix(in srgb, var(--tb-colors-outline) 28%, white);
+    }
+
+    .tb-console-footer {
+      color: var(--tb-colors-on-surface-variant);
+      font-size: 13px;
+    }
+  </style>
+
+
+
+        
+    <link rel="shortcut icon" href="/static/wagtailadmin/images/favicon.ico?v=75fffe15" />
+
+    </head>
+    
+    
+    <body id="wagtail" class="" data-controller="w-init" data-w-init-ready-class="ready">
+        
+            <div data-sprite></div>
+
+            <script src="/static/wagtailadmin/js/icons.js?v=75fffe15" data-icon-url="/cms/sprite/?h=b489757f"></script>
+        
+
+        <noscript class="capabilitymessage">
+            JavaScript is required to use Wagtail, but it is currently disabled.<br /> Here are the <a href="https://www.enable-javascript.com/" target="_blank" rel="noreferrer">instructions how to enable JavaScript in your web browser</a>.
+        </noscript>
+
+        
+    
+    <script id="wagtail-config" type="application/json">{"CSRF_TOKEN": "6MCDqwaeX7cfKlrAYyxKgLA6m4LXBPv46LWlLSROir705q7Dd87oyM0ULDDY9lko", "CSRF_HEADER_NAME": "X-Csrftoken", "ADMIN_API": {"PAGES": "/cms/api/main/pages/", "DOCUMENTS": "/cms/api/main/documents/", "IMAGES": "/cms/api/main/images/", "EXTRA_CHILDREN_PARAMETERS": ""}, "ADMIN_URLS": {"DISMISSIBLES": "/cms/dismissibles/", "PAGES": "/cms/pages/", "BLOCK_PREVIEW": "/cms/block-preview/"}, "I18N_ENABLED": false, "LOCALES": [{"code": "en", "display_name": "English"}], "STRINGS": {"MONTHS": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "WEEKDAYS": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "WEEKDAYS_SHORT": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], "BULK_ACTIONS": {"PAGE": {"SINGULAR": "1 page selected", "PLURAL": "%(objects)s pages selected", "ALL": "All %(objects)s pages on this screen selected", "ALL_IN_LISTING": "All pages in listing selected"}, "DOCUMENT": {"SINGULAR": "1 document selected", "PLURAL": "%(objects)s documents selected", "ALL": "All %(objects)s documents on this screen selected", "ALL_IN_LISTING": "All documents in listing selected"}, "IMAGE": {"SINGULAR": "1 image selected", "PLURAL": "%(objects)s images selected", "ALL": "All %(objects)s images on this screen selected", "ALL_IN_LISTING": "All images in listing selected"}, "USER": {"SINGULAR": "1 user selected", "PLURAL": "%(objects)s users selected", "ALL": "All %(objects)s users on this screen selected", "ALL_IN_LISTING": "All users in listing selected"}, "SNIPPET": {"SINGULAR": "1 snippet selected", "PLURAL": "%(objects)s snippets selected", "ALL": "All %(objects)s snippets on this screen selected", "ALL_IN_LISTING": "All snippets in listing selected"}, "ITEM": {"SINGULAR": "1 item selected", "PLURAL": "%(objects)s items selected", "ALL": "All %(objects)s items on this screen selected", "ALL_IN_LISTING": "All items in listing selected"}}}}</script>
+    <script src="/static/wagtailadmin/js/vendor/jquery-3.6.0.min.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/vendor/jquery-ui-1.13.2.min.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/vendor/jquery.datetimepicker.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/vendor/bootstrap-transition.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/vendor/bootstrap-modal.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/vendor/tag-it.js?v=75fffe15"></script>
+    <script src="/cms/jsi18n/"></script>
+    <script src="/static/wagtailadmin/js/core.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/vendor.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/wagtailadmin.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/telepath/telepath.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/sidebar.js?v=75fffe15"></script>
+    <script src="/static/wagtailadmin/js/modal-workflow.js?v=75fffe15"></script>
+
+    
+
+    
+
+
+        <a class="skiplink button" href="#main" data-controller="w-skip-link" data-action="w-skip-link#skip">Skip to main content</a>
+
+        <div class="wrapper">
+            
+    <template data-wagtail-sidebar-branding-logo></template>
+    <script id="wagtail-sidebar-props" type="application/json">{"modules": [{"_type": "wagtail.sidebar.WagtailBrandingModule", "_args": ["/cms/"]}, {"_type": "wagtail.sidebar.SearchModule", "_args": ["/cms/pages/search/"]}, {"_type": "wagtail.sidebar.MainMenuModule", "_args": [[{"_type": "wagtail.sidebar.PageExplorerMenuItem", "_args": [{"name": "explorer", "label": "Pages", "icon_name": "folder-open-inverse", "classname": "", "attrs": {}, "url": "/cms/pages/"}, 1]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "techbrief", "label": "TechBrief", "icon_name": "home", "classname": "", "attrs": {}, "url": "/cms/techbrief/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "images", "label": "Images", "icon_name": "image", "classname": "", "attrs": {}, "url": "/cms/images/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "documents", "label": "Documents", "icon_name": "doc-full-inverse", "classname": "", "attrs": {}, "url": "/cms/documents/"}]}, {"_type": "wagtail.sidebar.SubMenuItem", "_args": [{"name": "reports", "label": "Reports", "icon_name": "site", "classname": "", "attrs": {}, "footer_text": ""}, [{"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "locked-pages", "label": "Locked pages", "icon_name": "lock", "classname": "", "attrs": {}, "url": "/cms/reports/locked/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "workflows", "label": "Workflows", "icon_name": "tasks", "classname": "", "attrs": {}, "url": "/cms/reports/workflow/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "workflow-tasks", "label": "Workflow tasks", "icon_name": "thumbtack", "classname": "", "attrs": {}, "url": "/cms/reports/workflow_tasks/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "site-history", "label": "Site history", "icon_name": "history", "classname": "", "attrs": {}, "url": "/cms/reports/site-history/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "aging-pages", "label": "Aging pages", "icon_name": "time", "classname": "", "attrs": {}, "url": "/cms/reports/aging-pages/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "page-types-usage", "label": "Page types usage", "icon_name": "doc-empty-inverse", "classname": "", "attrs": {}, "url": "/cms/reports/page-types-usage/"}]}]]}, {"_type": "wagtail.sidebar.SubMenuItem", "_args": [{"name": "settings", "label": "Settings", "icon_name": "cogs", "classname": "", "attrs": {}, "footer_text": "Wagtail v6.4.2"}, [{"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "workflows", "label": "Workflows", "icon_name": "tasks", "classname": "", "attrs": {}, "url": "/cms/workflows/list/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "workflow-tasks", "label": "Workflow tasks", "icon_name": "thumbtack", "classname": "", "attrs": {}, "url": "/cms/workflows/tasks/index/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "users", "label": "Users", "icon_name": "user", "classname": "", "attrs": {}, "url": "/cms/users/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "groups", "label": "Groups", "icon_name": "group", "classname": "", "attrs": {}, "url": "/cms/groups/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "sites", "label": "Sites", "icon_name": "site", "classname": "", "attrs": {}, "url": "/cms/sites/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "collections", "label": "Collections", "icon_name": "folder-open-1", "classname": "", "attrs": {}, "url": "/cms/collections/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "redirects", "label": "Redirects", "icon_name": "redirect", "classname": "", "attrs": {}, "url": "/cms/redirects/"}]}]]}, {"_type": "wagtail.sidebar.SubMenuItem", "_args": [{"name": "help", "label": "Help", "icon_name": "help", "classname": "", "attrs": {"data-controller": "w-dismissible", "data-w-dismissible-dismissed-class": {"_val": "w-dismissible--dismissed", "_id": 8}, "data-w-dismissible-id-value": "help"}, "footer_text": ""}, [{"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": {"_val": "whats-new-in-wagtail-6.4", "_id": 9}, "label": "What's new in Wagtail 6.4", "icon_name": "help", "classname": "", "attrs": {"target": "_blank", "rel": "noreferrer", "data-controller": "w-dismissible", "data-w-dismissible-dismissed-class": {"_ref": 8}, "data-w-dismissible-id-value": {"_ref": 9}}, "url": "https://guide.wagtail.org/en-6.4.x/releases/new-in-wagtail-6-4/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "editor-guide", "label": "Editor Guide", "icon_name": "help", "classname": "", "attrs": {"target": "_blank", "rel": "noreferrer", "data-controller": "w-dismissible", "data-w-dismissible-dismissed-class": {"_ref": 8}, "data-w-dismissible-id-value": "editor-guide"}, "url": "https://guide.wagtail.org/en-6.4.x/"}]}, {"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "keyboard-shortcuts-trigger", "label": "Shortcuts", "icon_name": "keyboard", "classname": "", "attrs": {"role": "button", "data-a11y-dialog-show": "keyboard-shortcuts-dialog", "data-action": "w-action#noop:prevent:stop", "data-controller": "w-action"}, "url": "#"}]}]]}], [{"_type": "wagtail.sidebar.LinkMenuItem", "_args": [{"name": "account", "label": "Account", "icon_name": "user", "classname": "", "attrs": {}, "url": "/cms/account/"}]}, {"_type": "wagtail.sidebar.ActionMenuItem", "_args": [{"name": "logout", "label": "Log out", "icon_name": "logout", "classname": "", "attrs": {}, "action": "/cms/logout/", "method": "POST"}]}], {"name": "task11-operator", "avatarUrl": "//www.gravatar.com/avatar/ef4b000dec7fbb7fb5eccb432767547a?d=mp\u0026s=100"}]}]}</script>
+    <aside id="wagtail-sidebar" class="sidebar-loading" data-wagtail-sidebar aria-label="Sidebar"></aside>
+    
+
+<template
+    data-controller="w-teleport"
+    
+>
+    <div id="keyboard-shortcuts-dialog"
+         aria-labelledby="title-keyboard-shortcuts-dialog"
+         aria-hidden="true"
+         class="w-dialog w-keyboard-shortcuts"
+         data-controller="w-dialog"
+         data-action="w-dialog:hide->w-dialog#hide w-dialog:show->w-dialog#show"
+         
+         
+    >
+        <div class="w-dialog__overlay" data-action="click->w-dialog#hide"></div>
+        <div class="w-dialog__box">
+            <button type="button" class="w-dialog__close-button" aria-label="Close dialog" data-action="w-dialog#hide">
+                <svg class="icon icon-cross w-dialog__close-icon" aria-hidden="true"><use href="#icon-cross"></use></svg>
+            </button>
+
+            
+
+            <div class="w-dialog__content">
+                <div class="w-dialog__header">
+                    <h2 class="w-dialog__title w-h1" id="title-keyboard-shortcuts-dialog">
+                        
+                        <svg class="icon icon-keyboard w-dialog__icon" aria-hidden="true"><use href="#icon-keyboard"></use></svg>
+                        <span id="title-text-keyboard-shortcuts-dialog">Keyboard shortcuts</span>
+                    </h2>
+
+                    
+                </div>
+
+                <div class="w-dialog__body" data-w-dialog-target="body">
+                    
+    <table class="w-w-full">
+        <caption class="w-sr-only">
+            All keyboard shortcuts
+        </caption>
+        <thead class="w-sr-only">
+            <tr>
+                <th scope="col">Section</th>
+                <th scope="col">Keyboard shortcut</th>
+            </tr>
+        </thead>
+        
+            
+                <tbody class="w-w-full" id="keyboard-shortut-group-actions-common">
+                    <tr class="w-keyboard-shortcuts__category" colspan="2">
+                        <th class="w-h4" scope="rowgroup">Common actions</th>
+                    </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Copy</th>
+                            <td><kbd>Ctrl + c</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Cut</th>
+                            <td><kbd>Ctrl + x</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Paste</th>
+                            <td><kbd>Ctrl + v</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Paste without formatting</th>
+                            <td><kbd>Ctrl + Shift + v</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Undo</th>
+                            <td><kbd>Ctrl + z</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Redo</th>
+                            <td><kbd>Ctrl + y</kbd></td>
+                        </tr>
+                    
+                </tbody>
+            
+                <tbody class="w-w-full" id="keyboard-shortut-group-actions-model">
+                    <tr class="w-keyboard-shortcuts__category" colspan="2">
+                        <th class="w-h4" scope="rowgroup">Actions</th>
+                    </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Save changes</th>
+                            <td><kbd>Ctrl + s</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Preview</th>
+                            <td><kbd>Ctrl + p</kbd></td>
+                        </tr>
+                    
+                </tbody>
+            
+                <tbody class="w-w-full" id="keyboard-shortut-group-rich-text-content">
+                    <tr class="w-keyboard-shortcuts__category" colspan="2">
+                        <th class="w-h4" scope="rowgroup">Text content</th>
+                    </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Insert or edit a link</th>
+                            <td><kbd>Ctrl + k</kbd></td>
+                        </tr>
+                    
+                </tbody>
+            
+                <tbody class="w-w-full" id="keyboard-shortut-group-rich-text-formatting">
+                    <tr class="w-keyboard-shortcuts__category" colspan="2">
+                        <th class="w-h4" scope="rowgroup">Text formatting</th>
+                    </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Bold</th>
+                            <td><kbd>Ctrl + b</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Italic</th>
+                            <td><kbd>Ctrl + i</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Underline</th>
+                            <td><kbd>Ctrl + u</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Monospace (code)</th>
+                            <td><kbd>Ctrl + j</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Strike-through</th>
+                            <td><kbd>Ctrl + x</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Superscript</th>
+                            <td><kbd>Ctrl + .</kbd></td>
+                        </tr>
+                    
+                        <tr class="w-keyboard_shortcuts__key">
+                            <th scope="row">Subscript</th>
+                            <td><kbd>Ctrl + ,</kbd></td>
+                        </tr>
+                    
+                </tbody>
+            
+        
+    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+    <main class="content-wrapper w-overflow-x-hidden" id="main">
+        <div class="content">
+            
+            <div class="messages" role="status" data-controller="w-messages" data-action="w-messages:add@document->w-messages#add" data-w-messages-added-class="new" data-w-messages-show-class="appear" data-w-messages-show-delay-value="100">
+                <ul data-w-messages-target="container">
+                    
+                </ul>
+                <template data-w-messages-target="template" data-type="success">
+                    <li class="success"><svg class="icon icon-success messages-icon" aria-hidden="true"><use href="#icon-success"></use></svg><span></span></li>
+                </template>
+                <template data-w-messages-target="template" data-type="error">
+                    <li class="error"><svg class="icon icon-warning messages-icon" aria-hidden="true"><use href="#icon-warning"></use></svg><span></span></li>
+                </template>
+                <template data-w-messages-target="template" data-type="warning">
+                    <li class="warning"><svg class="icon icon-warning messages-icon" aria-hidden="true"><use href="#icon-warning"></use></svg><span></span></li>
+                </template>
+            </div>
+
+            
+
+    
+        
+            
+        
+        
+            
+                
+
+<header class="w-header">
+    <div class="row">
+        <div class="left">
+            <div class="col">
+                
+                    <h1 class="w-header__title" id="header-title">
+                        
+                            <svg class="icon icon-home w-header__glyph" aria-hidden="true"><use href="#icon-home"></use></svg>
+                        
+                        Admin Dashboard <span class="w-header__subtitle">Daily operational summary</span>
+                    </h1>
+                
+            </div>
+            
+        </div>
+        <div class="right">
+            
+            
+                
+            
+            
+        </div>
+    </div>
+    
+</header>
+
+            
+        
+    
+
+    <div class="nice-padding">
+        
+  <section class="tb-console-shell">
+    <nav class="tb-console-nav" aria-label="TechBrief admin sections">
+      
+        <a href="/cms/techbrief/" class="tb-console-nav__link is-active">Dashboard</a>
+      
+        <a href="/cms/techbrief/content/" class="tb-console-nav__link">Content</a>
+      
+        <a href="/cms/techbrief/subscribers/" class="tb-console-nav__link">Subscribers</a>
+      
+        <a href="/cms/techbrief/workflow/" class="tb-console-nav__link">Workflow</a>
+      
+    </nav>
+    
+  <section class="tb-console-grid tb-console-grid--cards">
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">New Content Today</p>
+      <p class="tb-console-card__value">11</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Published Today</p>
+      <p class="tb-console-card__value">6</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Failed Today</p>
+      <p class="tb-console-card__value">1</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Subscribers</p>
+      <p class="tb-console-card__value">5</p>
+      <div class="tb-console-card__meta">+5 today</div>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Review Pending</p>
+      <p class="tb-console-card__value">4</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Workflow Success Rate</p>
+      <p class="tb-console-card__value">0.95</p>
+    </article>
+  </section>
+
+  <section class="tb-console-grid tb-console-grid--cards">
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Database</p>
+      <span class="tb-console-kicker">online</span>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Redis</p>
+      <span class="tb-console-kicker">configured</span>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Worker</p>
+      <span class="tb-console-kicker">eager</span>
+    </article>
+  </section>
+
+  
+    <section class="tb-console-table-wrap">
+      <table class="tb-console-table">
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>Type</th>
+            <th>Occurred At</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>New subscriber task11-reader-d7754e13@example.com</td>
+              <td><span class="tb-console-kicker">subscriber_joined</span></td>
+              <td>2026-06-05T09:28:52.930209+00:00</td>
+            </tr>
+          
+            <tr>
+              <td>Workflow failed at translate</td>
+              <td><span class="tb-console-kicker">workflow_failed</span></td>
+              <td>2026-06-05T09:28:52.812104+00:00</td>
+            </tr>
+          
+            <tr>
+              <td>New subscriber task11-unsubscribed@example.com</td>
+              <td><span class="tb-console-kicker">subscriber_joined</span></td>
+              <td>2026-06-05T09:27:48.066290+00:00</td>
+            </tr>
+          
+            <tr>
+              <td>New subscriber task11-active@example.com</td>
+              <td><span class="tb-console-kicker">subscriber_joined</span></td>
+              <td>2026-06-05T09:27:48.059657+00:00</td>
+            </tr>
+          
+            <tr>
+              <td>New subscriber wechat-failure-anthropic-reader2@example.com</td>
+              <td><span class="tb-console-kicker">subscriber_joined</span></td>
+              <td>2026-06-05T09:27:45.488721+00:00</td>
+            </tr>
+          
+            <tr>
+              <td>Workflow failed at notify</td>
+              <td><span class="tb-console-kicker">workflow_failed</span></td>
+              <td>2026-06-05T09:27:45.385951+00:00</td>
+            </tr>
+          
+            <tr>
+              <td>Workflow failed at notify</td>
+              <td><span class="tb-console-kicker">workflow_failed</span></td>
+              <td>2026-06-05T09:00:41.292499+00:00</td>
+            </tr>
+          
+            <tr>
+              <td>Discovered Anthropic 安全工作坊</td>
+              <td><span class="tb-console-kicker">content_discovered</span></td>
+              <td>2026-06-05T09:00:20.974445+00:00</td>
+            </tr>
+          
+        </tbody>
+      </table>
+    </section>
+  
+
+  </section>
+
+    </div>
+
+        </div>
+    </main>
+
+        </div>
+    </body>
+</html>

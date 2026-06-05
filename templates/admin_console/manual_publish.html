@@ -1,0 +1,318 @@
+{% extends "admin_console/base.html" %}
+
+{% block admin_console_content %}
+  <div style="display:grid; gap:24px;">
+    <!-- Publish Tabs -->
+    <div class="tb-console-table-wrap" style="padding:18px;">
+      <div style="display:flex; gap:12px; margin-bottom:18px;">
+        <button class="button button--pub-tab is-active" data-tab="web" type="button">Web Publish</button>
+        <button class="button button--pub-tab button-secondary" data-tab="wechat" type="button">WeChat Draft</button>
+        <button class="button button--pub-tab button-secondary" data-tab="digest" type="button">Digest Preview</button>
+      </div>
+
+      <!-- Web Publish Section -->
+      <div id="tab-web" class="pub-section">
+        <h3 style="margin:0 0 12px; font-size:14px;">Publish Content to Web</h3>
+        {% if published_items %}
+          <table class="tb-console-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Published At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in published_items %}
+                <tr>
+                  <td><strong>{{ item.title_zh|default:item.title_original }}</strong></td>
+                  <td><code>{{ item.web_slug }}</code></td>
+                  <td>{{ item.published_at_web }}</td>
+                  <td><a href="/articles/{{ item.web_slug }}/" target="_blank" class="button button-small">View</a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <div class="tb-console-empty">No published content yet.</div>
+        {% endif %}
+      </div>
+
+      <!-- WeChat Draft Section -->
+      <div id="tab-wechat" class="pub-section" style="display:none;">
+        <h3 style="margin:0 0 12px; font-size:14px;">Create WeChat Draft</h3>
+
+        <!-- Mode Selection -->
+        <div style="display:flex; gap:12px; margin-bottom:16px;">
+          <button class="button button--wechat-mode is-active" data-mode="content_item" type="button">From Content</button>
+          <button class="button button--wechat-mode button-secondary" data-mode="manual_input" type="button">Manual Input</button>
+        </div>
+
+        <!-- Content Item Mode -->
+        <form id="form-wechat-content" class="wechat-form" style="display:grid; gap:16px;">
+          <div class="tb-console-field">
+            <label for="id_wechat_content_id">Content Item ID *</label>
+            <input id="id_wechat_content_id" type="text" name="content_item_id" required placeholder="UUID of published content" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+          </div>
+          <div class="tb-console-field">
+            <label for="id_thumb_media_id">Thumb Media ID (optional)</label>
+            <input id="id_thumb_media_id" type="text" name="thumb_media_id" placeholder="WeChat media ID for cover" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+          </div>
+          <div style="display:flex; gap:12px;">
+            <button type="submit" class="button" id="btn-wechat-content">Create Draft</button>
+          </div>
+          <div id="wechat-content-result" style="display:none; padding:12px; border-radius:8px; background:rgba(0,0,0,0.03);"></div>
+        </form>
+
+        <!-- Manual Input Mode -->
+        <form id="form-wechat-manual" class="wechat-form" style="display:none; grid-gap:16px;">
+          <div class="tb-console-field">
+            <label for="id_wx_title">Title *</label>
+            <input id="id_wx_title" type="text" name="title" required style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+          </div>
+          <div class="tb-console-field">
+            <label for="id_wx_author">Author (optional)</label>
+            <input id="id_wx_author" type="text" name="author" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+          </div>
+          <div class="tb-console-field">
+            <label for="id_wx_digest">Digest (optional)</label>
+            <textarea id="id_wx_digest" name="digest" rows="2" style="width:100%; min-height:60px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff; resize:vertical;"></textarea>
+          </div>
+          <div class="tb-console-field">
+            <label for="id_wx_body_html">Body HTML *</label>
+            <textarea id="id_wx_body_html" name="body_html" required rows="8" style="width:100%; min-height:200px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff; font-family:monospace; resize:vertical;" placeholder="<h1>Title</h1><p>Content...</p>"></textarea>
+          </div>
+          <div class="tb-console-field">
+            <label for="id_wx_thumb">Thumb Media ID (optional)</label>
+            <input id="id_wx_thumb" type="text" name="thumb_media_id" style="width:100%; min-height:42px; padding:10px 12px; border:1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white); border-radius:var(--tb-rounded-md); background:#fff;" />
+          </div>
+          <div style="display:flex; gap:12px;">
+            <button type="submit" class="button" id="btn-wechat-manual">Create Draft</button>
+          </div>
+          <div id="wechat-manual-result" style="display:none; padding:12px; border-radius:8px; background:rgba(0,0,0,0.03);"></div>
+        </form>
+
+        <!-- Recent WeChat Records -->
+        {% if recent_wechat_records %}
+          <h4 style="margin:24px 0 12px; font-size:13px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tb-colors-on-surface-variant);">Recent Drafts</h4>
+          <table class="tb-console-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Draft ID</th>
+                <th>Created</th>
+                <th>Retry</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in recent_wechat_records %}
+                <tr>
+                  <td><strong>{{ record.content_item.title_zh|default:record.content_item.title_original|default:record.wechat_detail.manual_title|truncatechars:60 }}</strong></td>
+                  <td>
+                    {% if record.status == "success" %}
+                      <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-success) 26%, white);">{{ record.status }}</span>
+                    {% elif record.status == "failed" %}
+                      <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-error) 26%, white);">{{ record.status }}</span>
+                    {% else %}
+                      <span class="tb-console-kicker">{{ record.status }}</span>
+                    {% endif %}
+                  </td>
+                  <td><small>{{ record.external_id|default:"-" }}</small></td>
+                  <td><small>{{ record.created_at }}</small></td>
+                  <td>
+                    {% if record.status == "failed" %}
+                      <button class="button button-small button--wechat-retry" data-record-id="{{ record.id }}" type="button">Retry</button>
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+      </div>
+
+      <!-- Digest Preview Section -->
+      <div id="tab-digest" class="pub-section" style="display:none;">
+        <h3 style="margin:0 0 12px; font-size:14px;">Digest Preview</h3>
+        <p style="color:var(--tb-colors-on-surface-variant);">
+          The daily digest is automatically assembled and sent to active subscribers.
+          Content published today will be included in tonight's digest batch.
+        </p>
+        {% if published_items %}
+          <h4 style="margin:16px 0 12px; font-size:13px;">Today's Published Content</h4>
+          <ul style="list-style:none; padding:0;">
+            {% for item in published_items %}
+              <li style="padding:8px 0; border-bottom:1px solid var(--tb-console-border);">
+                <strong>{{ item.title_zh|default:item.title_original }}</strong>
+                {% if item.summary_zh %}
+                  <br /><small style="color:var(--tb-colors-on-surface-variant);">{{ item.summary_zh|truncatechars:120 }}</small>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="tb-console-empty">No content published today for digest.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Tab switching
+      document.querySelectorAll('.button--pub-tab').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.button--pub-tab').forEach(function(b) { b.classList.remove('is-active'); b.classList.add('button-secondary'); });
+          this.classList.add('is-active');
+          this.classList.remove('button-secondary');
+          document.querySelectorAll('.pub-section').forEach(function(s) { s.style.display = 'none'; });
+          document.getElementById('tab-' + this.dataset.tab).style.display = 'block';
+        });
+      });
+
+      // WeChat mode switching
+      document.querySelectorAll('.button--wechat-mode').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.button--wechat-mode').forEach(function(b) { b.classList.remove('is-active'); b.classList.add('button-secondary'); });
+          this.classList.add('is-active');
+          this.classList.remove('button-secondary');
+          document.querySelectorAll('.wechat-form').forEach(function(f) { f.style.display = 'none'; });
+          var mode = this.dataset.mode;
+          document.getElementById('form-wechat-' + (mode === 'content_item' ? 'content' : 'manual')).style.display = 'grid';
+        });
+      });
+
+      function getCsrfHeader() {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var c = cookies[i].trim();
+          if (c.indexOf('csrftoken=') === 0) return c.substring(10);
+        }
+        return '';
+      }
+
+      function showResult(containerId, success, message, data) {
+        var el = document.getElementById(containerId);
+        el.style.display = 'block';
+        if (success) {
+          el.style.background = 'color-mix(in srgb, var(--tb-colors-success) 12%, white)';
+          var extra = '';
+          if (data && data.wechat_draft_id) extra = ' Draft ID: ' + data.wechat_draft_id;
+          el.innerHTML = '<strong>Success:</strong> ' + message + extra;
+        } else {
+          el.style.background = 'color-mix(in srgb, var(--tb-colors-error) 12%, white)';
+          el.innerHTML = '<strong>Error:</strong> ' + message;
+        }
+      }
+
+      // WeChat from content
+      document.getElementById('form-wechat-content').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('btn-wechat-content');
+        btn.disabled = true;
+        btn.textContent = 'Creating...';
+        var fd = new FormData(this);
+        fetch('/cms/techbrief/api/publish/wechat/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfHeader(),
+          },
+          body: JSON.stringify({
+            source_mode: 'content_item',
+            content_item_id: fd.get('content_item_id'),
+            thumb_media_id: fd.get('thumb_media_id') || null,
+            show_cover_pic: true,
+          }),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          showResult('wechat-content-result', data.success, data.message || 'Draft created', data.data);
+          btn.disabled = false;
+          btn.textContent = 'Create Draft';
+        })
+        .catch(function() {
+          showResult('wechat-content-result', false, 'Request failed');
+          btn.disabled = false;
+          btn.textContent = 'Create Draft';
+        });
+      });
+
+      // WeChat manual
+      document.getElementById('form-wechat-manual').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('btn-wechat-manual');
+        btn.disabled = true;
+        btn.textContent = 'Creating...';
+        var fd = new FormData(this);
+        fetch('/cms/techbrief/api/publish/wechat/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfHeader(),
+          },
+          body: JSON.stringify({
+            source_mode: 'manual_input',
+            title: fd.get('title'),
+            author: fd.get('author') || null,
+            digest: fd.get('digest') || null,
+            body_html: fd.get('body_html'),
+            thumb_media_id: fd.get('thumb_media_id') || null,
+            show_cover_pic: true,
+          }),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          showResult('wechat-manual-result', data.success, data.message || 'Draft created', data.data);
+          btn.disabled = false;
+          btn.textContent = 'Create Draft';
+        })
+        .catch(function() {
+          showResult('wechat-manual-result', false, 'Request failed');
+          btn.disabled = false;
+          btn.textContent = 'Create Draft';
+        });
+      });
+
+      // WeChat retry
+      document.querySelectorAll('.button--wechat-retry').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          if (!confirm('Retry this WeChat draft?')) return;
+          btn.disabled = true;
+          btn.textContent = '...';
+          fetch('/cms/techbrief/api/publish/wechat/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCsrfHeader(),
+            },
+            body: JSON.stringify({
+              action: 'retry',
+              publish_record_id: btn.dataset.recordId,
+            }),
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.success) {
+              alert('Retry queued');
+              location.reload();
+            } else {
+              alert('Error: ' + (data.message || 'unknown'));
+              btn.disabled = false;
+              btn.textContent = 'Retry';
+            }
+          })
+          .catch(function() {
+            alert('Request failed');
+            btn.disabled = false;
+            btn.textContent = 'Retry';
+          });
+        });
+      });
+    })();
+  </script>
+{% endblock %}

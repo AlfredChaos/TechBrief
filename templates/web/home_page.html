@@ -1,0 +1,87 @@
+{% extends "web/base_public.html" %}
+
+{% block title %}{{ page_title }} - {{ brand_name }}{% endblock %}
+
+{% block content %}
+  <section class="tb-section tb-hero">
+    <article class="tb-glass tb-card tb-hero__panel">
+      <div class="tb-hero__copy">
+        <div class="tb-stack">
+          <div class="tb-hero__eyebrow">Liquid Narrative</div>
+          <h1 class="tb-heading">{{ hero_title }}</h1>
+          <p class="tb-subheading">{{ hero_subtitle }}</p>
+        </div>
+        <form class="tb-inline-form" data-subscription-form data-source-page="home_hero">
+          <input class="tb-input" type="email" name="email" placeholder="{{ home_cta_placeholder }}" required>
+          <button class="tb-button" type="submit">{{ home_cta_button }}</button>
+          <div class="tb-feedback" data-subscription-feedback></div>
+        </form>
+      </div>
+    </article>
+
+    <aside class="tb-glass tb-card tb-hero__panel">
+      <div class="tb-stack">
+        <div class="tb-label">{{ sections.latest }}</div>
+        {% if featured_items %}
+          {% for item in featured_items|slice:":3" %}
+            <a href="{{ item.url }}" class="tb-glass tb-card" style="padding:20px; display:block;">
+              <div class="tb-stack" style="gap:12px;">
+                <div class="tb-meta-row">
+                  <span class="tb-badge">{{ item.source_name }}</span>
+                  <span class="tb-metadata">{{ item.published_label }}</span>
+                </div>
+                <h2 class="tb-title-md">{{ item.title }}</h2>
+                <p class="tb-summary">{{ item.summary|default:"" }}</p>
+              </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          <div class="tb-empty tb-glass tb-card">
+            <h2 class="tb-title-md">{{ sections.latest }}</h2>
+            <p class="tb-summary">{{ sections.empty }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </aside>
+  </section>
+
+  <section class="tb-section">
+    <div class="tb-toolbar" style="margin-bottom:24px;">
+      <div class="tb-stack" style="gap:8px;">
+        <div class="tb-label">{{ sections.latest }}</div>
+        <h2 class="tb-title-md" style="font-size:2rem;">{{ sections.view_all }}</h2>
+      </div>
+      <a class="tb-button--ghost" href="/articles">{{ sections.view_all }}</a>
+    </div>
+
+    {% if featured_items %}
+      <div class="tb-grid">
+        {% for item in featured_items %}
+          <a href="{{ item.url }}" class="tb-glass tb-item-card">
+            <div class="tb-cover">
+              {% if item.cover_url %}
+                <img src="{{ item.cover_url }}" alt="{{ item.title }}">
+              {% endif %}
+            </div>
+            <div class="tb-item-card__body tb-card__body">
+              <div class="tb-meta-row">
+                <span class="tb-badge">{{ item.source_name }}</span>
+                <span class="tb-metadata">{{ item.published_label }}</span>
+              </div>
+              <h3 class="tb-title-md">{{ item.title }}</h3>
+              <p class="tb-summary">{{ item.summary|default:"" }}</p>
+              <div class="tb-meta-row">
+                <span class="tb-metadata">{{ item.content_type|upper }}</span>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="tb-glass tb-card tb-empty">
+        <h2 class="tb-title-md">{{ sections.latest }}</h2>
+        <p class="tb-summary">{{ sections.empty }}</p>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

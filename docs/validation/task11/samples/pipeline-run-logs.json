@@ -1,0 +1,180 @@
+[
+  {
+    "stage": "discover",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "discovered_count": 3,
+      "enqueued_count": 3,
+      "failed_count": 0,
+      "content_item_ids": [
+        "d46e6942-8413-4d09-8b96-7a907226f5af",
+        "7acd6dfc-4d72-4538-8e60-168d6a954ee5",
+        "57b5fb09-e1bd-45d5-afe3-4b02356519cc"
+      ]
+    }
+  },
+  {
+    "stage": "fetch",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "final_url": "https://example.com/task11/article"
+    }
+  },
+  {
+    "stage": "extract",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "content_length": 57
+    }
+  },
+  {
+    "stage": "transcribe",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "transcript_available": false
+    }
+  },
+  {
+    "stage": "translate",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "translated": true
+    }
+  },
+  {
+    "stage": "research",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "report_length": 119
+    }
+  },
+  {
+    "stage": "review_pending",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "review_ready": true
+    }
+  },
+  {
+    "stage": "fetch",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "final_url": "https://openai.com/blog/reasoning-interfaces"
+    }
+  },
+  {
+    "stage": "extract",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "content_length": 198
+    }
+  },
+  {
+    "stage": "transcribe",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "transcript_available": false
+    }
+  },
+  {
+    "stage": "translate",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "translated": true
+    }
+  },
+  {
+    "stage": "research",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "report_length": 118
+    }
+  },
+  {
+    "stage": "review_pending",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "review_ready": true
+    }
+  },
+  {
+    "stage": "fetch",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "final_url": "https://www.youtube.com/watch?v=anthropic-demo-1"
+    }
+  },
+  {
+    "stage": "extract",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "content_length": 202
+    }
+  },
+  {
+    "stage": "transcribe",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "transcript_available": true
+    }
+  },
+  {
+    "stage": "translate",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "translated": true
+    }
+  },
+  {
+    "stage": "research",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "report_length": 115
+    }
+  },
+  {
+    "stage": "review_pending",
+    "status": "success",
+    "retryable": false,
+    "error_code": null,
+    "context_json": {
+      "review_ready": true
+    }
+  }
+]

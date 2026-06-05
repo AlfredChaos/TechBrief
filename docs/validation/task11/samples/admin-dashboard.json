@@ -1,0 +1,82 @@
+{
+  "success": true,
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "metrics": {
+      "new_content_today": 11,
+      "published_today": 6,
+      "failed_today": 1,
+      "subscriber_new_today": 5,
+      "subscriber_total": 5,
+      "review_pending_count": 4,
+      "workflow_success_rate": 0.9535
+    },
+    "recent_activities": [
+      {
+        "type": "subscriber_joined",
+        "message": "New subscriber task11-reader-d7754e13@example.com",
+        "occurred_at": "2026-06-05T09:28:52.930209+00:00",
+        "target_type": "subscriber",
+        "target_id": "0771e5f7-0cb3-42f9-ac42-48dc84f4cce7"
+      },
+      {
+        "type": "workflow_failed",
+        "message": "Workflow failed at translate",
+        "occurred_at": "2026-06-05T09:28:52.812104+00:00",
+        "target_type": "run_log",
+        "target_id": "b8f1c15a-e4b9-4f6b-88a5-4f220db695a2"
+      },
+      {
+        "type": "subscriber_joined",
+        "message": "New subscriber task11-unsubscribed@example.com",
+        "occurred_at": "2026-06-05T09:27:48.066290+00:00",
+        "target_type": "subscriber",
+        "target_id": "ee189a96-4c11-4bc5-b03b-7b9b04d711f1"
+      },
+      {
+        "type": "subscriber_joined",
+        "message": "New subscriber task11-active@example.com",
+        "occurred_at": "2026-06-05T09:27:48.059657+00:00",
+        "target_type": "subscriber",
+        "target_id": "809eece7-201c-4700-9a90-fa523c5d1657"
+      },
+      {
+        "type": "subscriber_joined",
+        "message": "New subscriber wechat-failure-anthropic-reader2@example.com",
+        "occurred_at": "2026-06-05T09:27:45.488721+00:00",
+        "target_type": "subscriber",
+        "target_id": "1b93bde3-e919-4856-ae5e-2a7ea191982e"
+      },
+      {
+        "type": "workflow_failed",
+        "message": "Workflow failed at notify",
+        "occurred_at": "2026-06-05T09:27:45.385951+00:00",
+        "target_type": "run_log",
+        "target_id": "8adacc19-056f-4cf9-bbd8-e2990ebd89f1"
+      },
+      {
+        "type": "workflow_failed",
+        "message": "Workflow failed at notify",
+        "occurred_at": "2026-06-05T09:00:41.292499+00:00",
+        "target_type": "run_log",
+        "target_id": "cca31707-d243-4706-895c-1b020e47e871"
+      },
+      {
+        "type": "content_discovered",
+        "message": "Discovered Anthropic 安全工作坊",
+        "occurred_at": "2026-06-05T09:00:20.974445+00:00",
+        "target_type": "content_item",
+        "target_id": "5e0e738a-ecb0-4275-8724-f3c24d715e3a"
+      }
+    ],
+    "system_status": {
+      "database": "online",
+      "redis": "configured",
+      "worker": "eager"
+    }
+  },
+  "meta": {
+    "request_id": "req_8e950b250808435c906686d66a488e29"
+  }
+}

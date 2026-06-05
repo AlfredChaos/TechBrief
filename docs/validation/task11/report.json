@@ -1,0 +1,767 @@
+{
+  "generated_at": "2026-06-05T09:28:53.707922+00:00",
+  "command": "python manage.py generate_task11_evidence",
+  "settings_module": "techbrief.settings.test",
+  "base_urls": {
+    "public": "http://127.0.0.1:8010",
+    "admin": "http://127.0.0.1:8010"
+  },
+  "flows": {
+    "public_site": {
+      "routes": {
+        "home": {
+          "status_code": 200,
+          "contains_title": true
+        },
+        "articles": {
+          "status_code": 200,
+          "filtered": true
+        },
+        "archive": {
+          "status_code": 200
+        },
+        "detail": {
+          "status_code": 200,
+          "contains_zh": true,
+          "contains_original": true
+        },
+        "about": {
+          "status_code": 200
+        },
+        "privacy": {
+          "status_code": 200
+        },
+        "terms": {
+          "status_code": 200
+        },
+        "unsubscribe_page": {
+          "status_code": 200,
+          "contains_success_message": true
+        }
+      },
+      "apis": {
+        "content_items": {
+          "success": true,
+          "code": "OK",
+          "message": "success",
+          "data": {
+            "items": [
+              {
+                "id": "717715bd-1c79-48cd-938b-2161401ee29d",
+                "slug": "task11-openai-reasoning-models",
+                "content_type": "article",
+                "source_name": "OpenAI",
+                "source_code": "task11-openai",
+                "title": "Task11 OpenAI 推理模型",
+                "title_zh": "Task11 OpenAI 推理模型",
+                "title_original": "Task11 OpenAI Reasoning Models",
+                "summary": "Task11 公开文章摘要。",
+                "summary_zh": "Task11 公开文章摘要。",
+                "summary_original": "Task11 public article summary.",
+                "cover_url": null,
+                "published_at": "2026-06-05T09:28:52.800538Z",
+                "published_label": "2026-06-05",
+                "reading_mode_flags": {
+                  "supports_zh": true,
+                  "supports_bilingual": true
+                },
+                "url": "/articles/task11-openai-reasoning-models"
+              }
+            ],
+            "pagination": {
+              "page": 1,
+              "page_size": 20,
+              "total": 1,
+              "total_pages": 1
+            }
+          },
+          "meta": {
+            "request_id": "req_3fed0eba8d0047478b166df54f7ad16c"
+          }
+        },
+        "content_item_detail": {
+          "success": true,
+          "code": "OK",
+          "message": "success",
+          "data": {
+            "id": "717715bd-1c79-48cd-938b-2161401ee29d",
+            "slug": "task11-openai-reasoning-models",
+            "content_type": "article",
+            "source_name": "OpenAI",
+            "title_zh": "Task11 OpenAI 推理模型",
+            "title_original": "Task11 OpenAI Reasoning Models",
+            "author_or_speaker": "OpenAI",
+            "published_at_source": "2026-06-05T09:28:52.800538Z",
+            "published_label": "Jun 05, 2026",
+            "source_url": "https://openai.com/research/task11-reasoning",
+            "canonical_url": "https://openai.com/research/task11-reasoning",
+            "cover_url": null,
+            "view_mode": "bilingual",
+            "content_blocks_zh": [
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "工作原理"
+              },
+              {
+                "type": "paragraph",
+                "text": "Task11 中文正文。"
+              }
+            ],
+            "content_blocks_original": [
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "How it works"
+              },
+              {
+                "type": "paragraph",
+                "text": "Task11 original body."
+              }
+            ],
+            "body_zh_md": "## 工作原理\n\nTask11 中文正文。",
+            "body_original_md": "## How it works\n\nTask11 original body.",
+            "research_report_md": null,
+            "disclaimer": "This is a translated editorial briefing.",
+            "supports_bilingual": true,
+            "is_video": false
+          },
+          "meta": {
+            "request_id": "req_c3c014c4798d4463ba400f14ef3af676"
+          }
+        }
+      },
+      "subscription": {
+        "create": {
+          "success": true,
+          "code": "OK",
+          "message": "subscribed",
+          "data": {
+            "subscriber_id": "0771e5f7-0cb3-42f9-ac42-48dc84f4cce7",
+            "status": "active",
+            "subscribed_at": "2026-06-05T09:28:52.930209+00:00",
+            "unsubscribe_token": "22b2174539b34a9f8f9ad4435168e547"
+          },
+          "meta": {
+            "request_id": "req_c22a23fb63f1472e8571a84ab817c231"
+          }
+        },
+        "repeat_same_idempotency_key": {
+          "success": true,
+          "code": "OK",
+          "message": "subscribed",
+          "data": {
+            "subscriber_id": "0771e5f7-0cb3-42f9-ac42-48dc84f4cce7",
+            "status": "active",
+            "subscribed_at": "2026-06-05T09:28:52.930209+00:00",
+            "unsubscribe_token": "22b2174539b34a9f8f9ad4435168e547"
+          },
+          "meta": {
+            "request_id": "req_c22a23fb63f1472e8571a84ab817c231"
+          }
+        },
+        "unsubscribe": {
+          "success": true,
+          "code": "OK",
+          "message": "unsubscribed",
+          "data": {
+            "status": "unsubscribed",
+            "unsubscribed_at": "2026-06-05T09:28:52.947557+00:00"
+          },
+          "meta": {
+            "request_id": "req_42dbbdcf98bf4f35b33380b268c5e47d"
+          }
+        },
+        "subscriber_email": "task11-reader-d7754e13@example.com",
+        "subscriber_status": "unsubscribed",
+        "unsubscribe_token": "22b2174539b34a9f8f9ad4435168e547"
+      }
+    },
+    "admin_console": {
+      "pages": {
+        "dashboard": {
+          "status_code": 200
+        },
+        "content": {
+          "status_code": 200
+        },
+        "subscribers": {
+          "status_code": 200
+        },
+        "workflow": {
+          "status_code": 200
+        }
+      },
+      "apis": {
+        "dashboard": {
+          "success": true,
+          "code": "OK",
+          "message": "success",
+          "data": {
+            "metrics": {
+              "new_content_today": 11,
+              "published_today": 6,
+              "failed_today": 1,
+              "subscriber_new_today": 5,
+              "subscriber_total": 5,
+              "review_pending_count": 4,
+              "workflow_success_rate": 0.9535
+            },
+            "recent_activities": [
+              {
+                "type": "subscriber_joined",
+                "message": "New subscriber task11-reader-d7754e13@example.com",
+                "occurred_at": "2026-06-05T09:28:52.930209+00:00",
+                "target_type": "subscriber",
+                "target_id": "0771e5f7-0cb3-42f9-ac42-48dc84f4cce7"
+              },
+              {
+                "type": "workflow_failed",
+                "message": "Workflow failed at translate",
+                "occurred_at": "2026-06-05T09:28:52.812104+00:00",
+                "target_type": "run_log",
+                "target_id": "b8f1c15a-e4b9-4f6b-88a5-4f220db695a2"
+              },
+              {
+                "type": "subscriber_joined",
+                "message": "New subscriber task11-unsubscribed@example.com",
+                "occurred_at": "2026-06-05T09:27:48.066290+00:00",
+                "target_type": "subscriber",
+                "target_id": "ee189a96-4c11-4bc5-b03b-7b9b04d711f1"
+              },
+              {
+                "type": "subscriber_joined",
+                "message": "New subscriber task11-active@example.com",
+                "occurred_at": "2026-06-05T09:27:48.059657+00:00",
+                "target_type": "subscriber",
+                "target_id": "809eece7-201c-4700-9a90-fa523c5d1657"
+              },
+              {
+                "type": "subscriber_joined",
+                "message": "New subscriber wechat-failure-anthropic-reader2@example.com",
+                "occurred_at": "2026-06-05T09:27:45.488721+00:00",
+                "target_type": "subscriber",
+                "target_id": "1b93bde3-e919-4856-ae5e-2a7ea191982e"
+              },
+              {
+                "type": "workflow_failed",
+                "message": "Workflow failed at notify",
+                "occurred_at": "2026-06-05T09:27:45.385951+00:00",
+                "target_type": "run_log",
+                "target_id": "8adacc19-056f-4cf9-bbd8-e2990ebd89f1"
+              },
+              {
+                "type": "workflow_failed",
+                "message": "Workflow failed at notify",
+                "occurred_at": "2026-06-05T09:00:41.292499+00:00",
+                "target_type": "run_log",
+                "target_id": "cca31707-d243-4706-895c-1b020e47e871"
+              },
+              {
+                "type": "content_discovered",
+                "message": "Discovered Anthropic 安全工作坊",
+                "occurred_at": "2026-06-05T09:00:20.974445+00:00",
+                "target_type": "content_item",
+                "target_id": "5e0e738a-ecb0-4275-8724-f3c24d715e3a"
+              }
+            ],
+            "system_status": {
+              "database": "online",
+              "redis": "configured",
+              "worker": "eager"
+            }
+          },
+          "meta": {
+            "request_id": "req_8e950b250808435c906686d66a488e29"
+          }
+        },
+        "content": {
+          "success": true,
+          "code": "OK",
+          "message": "success",
+          "data": {
+            "items": [
+              {
+                "id": "3cc7ae74-645c-4d94-bb26-6246a5b30052",
+                "content_type": "article",
+                "source_name": "Anthropic",
+                "title_original": "Task11 Review Pending Article",
+                "title_zh": "Task11 待审核文章",
+                "status": "review_pending",
+                "current_stage": "review_pending",
+                "published_at_source": "2026-06-05T09:28:52.812104+00:00",
+                "updated_at": "2026-06-05T09:28:52.812908+00:00",
+                "preview_url": "/articles/task11-review-pending-article",
+                "available_actions": [
+                  "view_detail",
+                  "publish_web",
+                  "open_public_page"
+                ]
+              },
+              {
+                "id": "d46e6942-8413-4d09-8b96-7a907226f5af",
+                "content_type": "article",
+                "source_name": "Pipeline Source",
+                "title_original": "Task11 Pipeline Article",
+                "title_zh": "ZH: Task11 Pipeline Article",
+                "status": "review_pending",
+                "current_stage": "review_pending",
+                "published_at_source": "2026-06-05T08:55:17.062364+00:00",
+                "updated_at": "2026-06-05T08:55:17.245063+00:00",
+                "preview_url": null,
+                "available_actions": [
+                  "view_detail",
+                  "publish_web"
+                ]
+              }
+            ],
+            "pagination": {
+              "page": 1,
+              "page_size": 20,
+              "total": 2,
+              "total_pages": 1
+            }
+          },
+          "meta": {
+            "request_id": "req_da0cd5cdc1424bc88d9c83e930734b4a"
+          }
+        },
+        "subscribers": {
+          "success": true,
+          "code": "OK",
+          "message": "success",
+          "data": {
+            "items": [
+              {
+                "id": "0771e5f7-0cb3-42f9-ac42-48dc84f4cce7",
+                "email": "task11-reader-d7754e13@example.com",
+                "status": "unsubscribed",
+                "source_page": "home_hero",
+                "subscribed_at": "2026-06-05T09:28:52.930209+00:00",
+                "unsubscribed_at": "2026-06-05T09:28:52.947557+00:00",
+                "last_sent_at": null
+              },
+              {
+                "id": "ee189a96-4c11-4bc5-b03b-7b9b04d711f1",
+                "email": "task11-unsubscribed@example.com",
+                "status": "unsubscribed",
+                "source_page": "nav_modal",
+                "subscribed_at": "2026-06-05T09:27:48.066290+00:00",
+                "unsubscribed_at": "2026-06-05T09:28:52.812104+00:00",
+                "last_sent_at": null
+              }
+            ],
+            "pagination": {
+              "page": 1,
+              "page_size": 20,
+              "total": 2,
+              "total_pages": 1
+            }
+          },
+          "meta": {
+            "request_id": "req_aba1dc6041134fa3bef65cfb10c9af88"
+          }
+        },
+        "workflow": {
+          "success": true,
+          "code": "OK",
+          "message": "success",
+          "data": {
+            "items": [
+              {
+                "run_id": "8bcd660b-6001-5c3d-88f2-e39ee46747ee",
+                "discovery_run_id": null,
+                "content_item_id": "3cc7ae74-645c-4d94-bb26-6246a5b30052",
+                "status": "failed",
+                "stage": "translate",
+                "duration_ms": 3200,
+                "error_code": "TRANSLATE_TIMEOUT",
+                "started_at": "2026-06-05T09:28:52.812104+00:00",
+                "ended_at": "2026-06-05T09:28:52.812104+00:00"
+              },
+              {
+                "run_id": "eb39ac69-f8fc-450d-9c48-498331e60f03",
+                "discovery_run_id": null,
+                "content_item_id": "5acb9154-34ef-494b-ab9b-f4d8f611d171",
+                "status": "failed",
+                "stage": "notify",
+                "duration_ms": 53,
+                "error_code": "DIGEST_DELIVERY_FAILED",
+                "started_at": "2026-06-05T09:27:45.385951+00:00",
+                "ended_at": "2026-06-05T09:27:45.439442+00:00"
+              },
+              {
+                "run_id": "76415c9d-65b0-4229-a6e3-238443258316",
+                "discovery_run_id": null,
+                "content_item_id": "5acb9154-34ef-494b-ab9b-f4d8f611d171",
+                "status": "failed",
+                "stage": "notify",
+                "duration_ms": 61,
+                "error_code": "DIGEST_DELIVERY_FAILED",
+                "started_at": "2026-06-05T09:00:41.292499+00:00",
+                "ended_at": "2026-06-05T09:00:41.354328+00:00"
+              },
+              {
+                "run_id": "d0d711eb-7ab8-498e-a919-22530602c965",
+                "discovery_run_id": null,
+                "content_item_id": "5acb9154-34ef-494b-ab9b-f4d8f611d171",
+                "status": "failed",
+                "stage": "notify",
+                "duration_ms": 54,
+                "error_code": "DIGEST_DELIVERY_FAILED",
+                "started_at": "2026-06-05T09:00:20.882495+00:00",
+                "ended_at": "2026-06-05T09:00:20.936502+00:00"
+              }
+            ],
+            "summary": {
+              "total_runs": 4,
+              "success_runs": 0,
+              "failed_runs": 4
+            },
+            "pagination": {
+              "page": 1,
+              "page_size": 20,
+              "total": 4,
+              "total_pages": 1
+            }
+          },
+          "meta": {
+            "request_id": "req_bcaad63cca7144be9d9850a5b0766f17"
+          }
+        }
+      }
+    },
+    "pipeline": {
+      "discovery_result": {
+        "run_id": "ce836f93-9efe-4e92-8447-bd419a074084",
+        "discovery_run_id": "ac449989-f1ae-44fa-bce5-60592b768abe",
+        "content_item_ids": [
+          "d46e6942-8413-4d09-8b96-7a907226f5af",
+          "7acd6dfc-4d72-4538-8e60-168d6a954ee5",
+          "57b5fb09-e1bd-45d5-afe3-4b02356519cc"
+        ],
+        "discovered_count": 3,
+        "enqueued_count": 3,
+        "failed_count": 0
+      },
+      "run_logs": [
+        {
+          "stage": "discover",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "discovered_count": 3,
+            "enqueued_count": 3,
+            "failed_count": 0,
+            "content_item_ids": [
+              "d46e6942-8413-4d09-8b96-7a907226f5af",
+              "7acd6dfc-4d72-4538-8e60-168d6a954ee5",
+              "57b5fb09-e1bd-45d5-afe3-4b02356519cc"
+            ]
+          }
+        },
+        {
+          "stage": "fetch",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "final_url": "https://example.com/task11/article"
+          }
+        },
+        {
+          "stage": "extract",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "content_length": 57
+          }
+        },
+        {
+          "stage": "transcribe",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "transcript_available": false
+          }
+        },
+        {
+          "stage": "translate",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "translated": true
+          }
+        },
+        {
+          "stage": "research",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "report_length": 119
+          }
+        },
+        {
+          "stage": "review_pending",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "review_ready": true
+          }
+        },
+        {
+          "stage": "fetch",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "final_url": "https://openai.com/blog/reasoning-interfaces"
+          }
+        },
+        {
+          "stage": "extract",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "content_length": 198
+          }
+        },
+        {
+          "stage": "transcribe",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "transcript_available": false
+          }
+        },
+        {
+          "stage": "translate",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "translated": true
+          }
+        },
+        {
+          "stage": "research",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "report_length": 118
+          }
+        },
+        {
+          "stage": "review_pending",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "review_ready": true
+          }
+        },
+        {
+          "stage": "fetch",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "final_url": "https://www.youtube.com/watch?v=anthropic-demo-1"
+          }
+        },
+        {
+          "stage": "extract",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "content_length": 202
+          }
+        },
+        {
+          "stage": "transcribe",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "transcript_available": true
+          }
+        },
+        {
+          "stage": "translate",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "translated": true
+          }
+        },
+        {
+          "stage": "research",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "report_length": 115
+          }
+        },
+        {
+          "stage": "review_pending",
+          "status": "success",
+          "retryable": false,
+          "error_code": null,
+          "context_json": {
+            "review_ready": true
+          }
+        }
+      ],
+      "content_item_ids": [
+        "d46e6942-8413-4d09-8b96-7a907226f5af",
+        "7acd6dfc-4d72-4538-8e60-168d6a954ee5",
+        "57b5fb09-e1bd-45d5-afe3-4b02356519cc"
+      ]
+    },
+    "publish_notify_wechat": {
+      "result": {
+        "content_item_id": "d8e4271b-1f5a-466a-8f6c-b74a183969e3",
+        "run_id": "8d58db41-e6b5-49f6-8d41-f47d3b2614a6",
+        "publish": {
+          "run_id": "8d58db41-e6b5-49f6-8d41-f47d3b2614a6",
+          "publish_record_id": "1253daa3-9adb-446f-9c7c-c3ef4d354170",
+          "snapshot_id": "df129d06-fc27-4243-8ccb-d41ffdd38c76",
+          "slug": "openai",
+          "status": "published"
+        },
+        "notify": {
+          "run_id": "8d58db41-e6b5-49f6-8d41-f47d3b2614a6",
+          "batch_id": "d074c439-cd00-4005-a0a6-0f16ebca355a",
+          "publish_record_id": "cfd9e8d0-48cb-4bed-8519-cf92941215d3",
+          "batch_status": "sent",
+          "sent_count": 5,
+          "failed_count": 0
+        },
+        "wechat": {
+          "publish_record_id": "0ce05a3f-1685-4cfa-8a4f-c0df2f08ed3f",
+          "wechat_detail_id": "ea190703-7019-473b-832b-aad1fb5bcf33",
+          "status": "success",
+          "draft_id": "mock-draft-b9e981527b35"
+        }
+      },
+      "snapshot": {
+        "snapshot_id": "df129d06-fc27-4243-8ccb-d41ffdd38c76",
+        "slug": "openai",
+        "is_published": true
+      },
+      "digest_batch": {
+        "batch_id": "d074c439-cd00-4005-a0a6-0f16ebca355a",
+        "status": "sent",
+        "sent_count": 5,
+        "failed_count": 0
+      },
+      "publish_records": [
+        {
+          "channel": "email_digest",
+          "status": "success",
+          "external_id": null,
+          "error_code": null,
+          "response_snapshot": {
+            "sent_count": 5,
+            "failed_count": 0,
+            "total_recipient_count": 5
+          }
+        },
+        {
+          "channel": "web",
+          "status": "success",
+          "external_id": "openai",
+          "error_code": null,
+          "response_snapshot": {
+            "snapshot_id": "df129d06-fc27-4243-8ccb-d41ffdd38c76",
+            "is_published": true
+          }
+        },
+        {
+          "channel": "wechat_draft",
+          "status": "success",
+          "external_id": "mock-draft-b9e981527b35",
+          "error_code": null,
+          "response_snapshot": {
+            "provider": "mock_wechat",
+            "title": "OpenAI 推理模型"
+          }
+        }
+      ],
+      "deliveries": [
+        {
+          "subscriber__email": "reader1@example.com",
+          "status": "sent",
+          "provider_message_id": "mock-email-97a6c9b602c3c8b7",
+          "error_code": null
+        },
+        {
+          "subscriber__email": "reader2@example.com",
+          "status": "sent",
+          "provider_message_id": "mock-email-9478c8dc7909cff5",
+          "error_code": null
+        },
+        {
+          "subscriber__email": "task11-active@example.com",
+          "status": "sent",
+          "provider_message_id": "mock-email-d8192ca6fafc82af",
+          "error_code": null
+        },
+        {
+          "subscriber__email": "wechat-failure-anthropic-reader1@example.com",
+          "status": "sent",
+          "provider_message_id": "mock-email-736a551602617bc4",
+          "error_code": null
+        },
+        {
+          "subscriber__email": "wechat-failure-anthropic-reader2@example.com",
+          "status": "sent",
+          "provider_message_id": "mock-email-8bccb78176df71e1",
+          "error_code": null
+        }
+      ],
+      "run_logs": [
+        {
+          "stage": "publish",
+          "status": "success",
+          "retryable": true,
+          "error_code": null,
+          "context_json": {
+            "publish_record_id": "1253daa3-9adb-446f-9c7c-c3ef4d354170",
+            "content_page_snapshot_id": "df129d06-fc27-4243-8ccb-d41ffdd38c76",
+            "slug": "openai"
+          }
+        },
+        {
+          "stage": "notify",
+          "status": "success",
+          "retryable": true,
+          "error_code": null,
+          "context_json": {
+            "batch_id": "d074c439-cd00-4005-a0a6-0f16ebca355a",
+            "publish_record_id": "cfd9e8d0-48cb-4bed-8519-cf92941215d3",
+            "sent_count": 5,
+            "failed_count": 0
+          }
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Email and WeChat checks use mock adapters in this validation run.",
+    "COS, ASR, and GA4 real integrations are not exercised by this command.",
+    "Browser screenshots are not captured in the current CLI environment."
+  ]
+}

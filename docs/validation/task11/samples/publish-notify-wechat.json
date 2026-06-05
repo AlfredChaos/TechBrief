@@ -1,0 +1,128 @@
+{
+  "result": {
+    "content_item_id": "d8e4271b-1f5a-466a-8f6c-b74a183969e3",
+    "run_id": "8d58db41-e6b5-49f6-8d41-f47d3b2614a6",
+    "publish": {
+      "run_id": "8d58db41-e6b5-49f6-8d41-f47d3b2614a6",
+      "publish_record_id": "1253daa3-9adb-446f-9c7c-c3ef4d354170",
+      "snapshot_id": "df129d06-fc27-4243-8ccb-d41ffdd38c76",
+      "slug": "openai",
+      "status": "published"
+    },
+    "notify": {
+      "run_id": "8d58db41-e6b5-49f6-8d41-f47d3b2614a6",
+      "batch_id": "d074c439-cd00-4005-a0a6-0f16ebca355a",
+      "publish_record_id": "cfd9e8d0-48cb-4bed-8519-cf92941215d3",
+      "batch_status": "sent",
+      "sent_count": 5,
+      "failed_count": 0
+    },
+    "wechat": {
+      "publish_record_id": "0ce05a3f-1685-4cfa-8a4f-c0df2f08ed3f",
+      "wechat_detail_id": "ea190703-7019-473b-832b-aad1fb5bcf33",
+      "status": "success",
+      "draft_id": "mock-draft-b9e981527b35"
+    }
+  },
+  "snapshot": {
+    "snapshot_id": "df129d06-fc27-4243-8ccb-d41ffdd38c76",
+    "slug": "openai",
+    "is_published": true
+  },
+  "digest_batch": {
+    "batch_id": "d074c439-cd00-4005-a0a6-0f16ebca355a",
+    "status": "sent",
+    "sent_count": 5,
+    "failed_count": 0
+  },
+  "publish_records": [
+    {
+      "channel": "email_digest",
+      "status": "success",
+      "external_id": null,
+      "error_code": null,
+      "response_snapshot": {
+        "sent_count": 5,
+        "failed_count": 0,
+        "total_recipient_count": 5
+      }
+    },
+    {
+      "channel": "web",
+      "status": "success",
+      "external_id": "openai",
+      "error_code": null,
+      "response_snapshot": {
+        "snapshot_id": "df129d06-fc27-4243-8ccb-d41ffdd38c76",
+        "is_published": true
+      }
+    },
+    {
+      "channel": "wechat_draft",
+      "status": "success",
+      "external_id": "mock-draft-b9e981527b35",
+      "error_code": null,
+      "response_snapshot": {
+        "provider": "mock_wechat",
+        "title": "OpenAI 推理模型"
+      }
+    }
+  ],
+  "deliveries": [
+    {
+      "subscriber__email": "reader1@example.com",
+      "status": "sent",
+      "provider_message_id": "mock-email-97a6c9b602c3c8b7",
+      "error_code": null
+    },
+    {
+      "subscriber__email": "reader2@example.com",
+      "status": "sent",
+      "provider_message_id": "mock-email-9478c8dc7909cff5",
+      "error_code": null
+    },
+    {
+      "subscriber__email": "task11-active@example.com",
+      "status": "sent",
+      "provider_message_id": "mock-email-d8192ca6fafc82af",
+      "error_code": null
+    },
+    {
+      "subscriber__email": "wechat-failure-anthropic-reader1@example.com",
+      "status": "sent",
+      "provider_message_id": "mock-email-736a551602617bc4",
+      "error_code": null
+    },
+    {
+      "subscriber__email": "wechat-failure-anthropic-reader2@example.com",
+      "status": "sent",
+      "provider_message_id": "mock-email-8bccb78176df71e1",
+      "error_code": null
+    }
+  ],
+  "run_logs": [
+    {
+      "stage": "publish",
+      "status": "success",
+      "retryable": true,
+      "error_code": null,
+      "context_json": {
+        "publish_record_id": "1253daa3-9adb-446f-9c7c-c3ef4d354170",
+        "content_page_snapshot_id": "df129d06-fc27-4243-8ccb-d41ffdd38c76",
+        "slug": "openai"
+      }
+    },
+    {
+      "stage": "notify",
+      "status": "success",
+      "retryable": true,
+      "error_code": null,
+      "context_json": {
+        "batch_id": "d074c439-cd00-4005-a0a6-0f16ebca355a",
+        "publish_record_id": "cfd9e8d0-48cb-4bed-8519-cf92941215d3",
+        "sent_count": 5,
+        "failed_count": 0
+      }
+    }
+  ]
+}

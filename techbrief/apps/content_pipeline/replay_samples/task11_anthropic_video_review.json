@@ -1,0 +1,35 @@
+{
+  "source": {
+    "source_code": "anthropic",
+    "source_name": "Anthropic",
+    "base_url": "https://www.anthropic.com",
+    "default_language": "en"
+  },
+  "endpoint": {
+    "endpoint_type": "video_channel",
+    "endpoint_role": "primary",
+    "endpoint_url": "https://www.youtube.com/@anthropic-ai/videos",
+    "content_type_scope": "video"
+  },
+  "discovery_items": [
+    {
+      "dedupe_key": "task11-anthropic-video-review-0001",
+      "title_original": "Claude Team Workflow Demo",
+      "summary_original": "A replay sample for Task11.1 video review validation.",
+      "source_url": "https://www.youtube.com/watch?v=anthropic-demo-1",
+      "canonical_url": "https://www.youtube.com/watch?v=anthropic-demo-1",
+      "source_item_id": "anthropic-video-review-0001",
+      "published_at_source": "2026-05-02T12:30:00+00:00",
+      "content_type": "video",
+      "content_md": "# Claude Team Workflow Demo\n\n## Demo outline\n\nThe team demonstrates prompt review loops.\n\n```bash\nclaude --model sonnet\n```\n\nWatch the [session replay](https://www.youtube.com/watch?v=anthropic-demo-1).",
+      "zh_md": "# Claude 团队工作流演示\n\n## 演示提纲\n\n团队展示了提示词评审闭环。\n\n```bash\nclaude --model sonnet\n```\n\n观看 [session replay](https://www.youtube.com/watch?v=anthropic-demo-1)。",
+      "supports_bilingual": true,
+      "metadata_json": {
+        "acceptance_tags": [
+          "review_pending",
+          "video"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,316 @@
+{% extends "admin_console/base.html" %}
+
+{% block admin_console_content %}
+  {% with content=content_detail_data.content artifacts=content_detail_data.artifacts run_logs=content_detail_data.run_logs publish_records=content_detail_data.publish_records preview=content_detail_data.preview %}
+  <div style="display:grid; gap:24px;">
+    <!-- Header -->
+    <section class="tb-console-table-wrap" style="padding:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 style="margin:0 0 4px; font-size:20px;">{{ content.title_zh|default:content.title_original }}</h2>
+          {% if content.title_zh and content.title_original != content.title_zh %}
+            <p style="margin:0; color:var(--tb-colors-on-surface-variant); font-size:13px;">{{ content.title_original }}</p>
+          {% endif %}
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="tb-console-kicker">{{ content.status }}</span>
+          <span class="tb-console-kicker">{{ content.current_stage }}</span>
+          <span class="tb-console-kicker">{{ content.content_type }}</span>
+          {% if content.web_slug %}
+            <a href="{{ preview.url }}" target="_blank" class="button button-small">View Public Page</a>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Metadata Grid -->
+    <section class="tb-console-grid tb-console-grid--cards" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));">
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Source</p>
+        <p class="tb-console-card__value" style="font-size:14px;">{{ content.source_name }}</p>
+      </article>
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Ingestion Mode</p>
+        <p class="tb-console-card__value" style="font-size:14px;">{{ content.ingestion_mode }}</p>
+      </article>
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Author</p>
+        <p class="tb-console-card__value" style="font-size:14px;">{{ content.author_or_speaker|default:"-" }}</p>
+      </article>
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Published At Source</p>
+        <p class="tb-console-card__value" style="font-size:14px;">{{ content.published_at_source|default:"-" }}</p>
+      </article>
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Published At Web</p>
+        <p class="tb-console-card__value" style="font-size:14px;">{{ content.published_at_web|default:"-" }}</p>
+      </article>
+      <article class="tb-console-card">
+        <p class="tb-console-card__eyebrow">Web Slug</p>
+        <p class="tb-console-card__value" style="font-size:14px; word-break:break-all;">{{ content.web_slug|default:"-" }}</p>
+      </article>
+    </section>
+
+    <!-- URLs -->
+    <section class="tb-console-table-wrap" style="padding:18px;">
+      <h3 style="margin:0 0 12px; font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tb-colors-on-surface-variant);">URLs</h3>
+      <table class="tb-console-table" style="font-size:13px;">
+        <tbody>
+          <tr><th style="width:140px;">Source URL</th><td><code style="word-break:break-all;">{{ content.source_url|default:"-" }}</code></td></tr>
+          <tr><th>Final URL</th><td><code style="word-break:break-all;">{{ content.final_url|default:"-" }}</code></td></tr>
+          <tr><th>Canonical URL</th><td><code style="word-break:break-all;">{{ content.canonical_url|default:"-" }}</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Content Body -->
+    <section class="tb-console-table-wrap" style="padding:18px;">
+      <h3 style="margin:0 0 12px; font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tb-colors-on-surface-variant);">Content</h3>
+      {% if content.content_md %}
+        <details>
+          <summary style="cursor:pointer; font-weight:600; padding:8px 0;">Original Markdown ({{ content.content_md|length }} chars)</summary>
+          <pre style="white-space:pre-wrap; font-size:12px; padding:12px; background:rgba(0,0,0,0.03); border-radius:8px; max-height:300px; overflow:auto;">{{ content.content_md }}</pre>
+        </details>
+      {% endif %}
+      {% if content.zh_md %}
+        <details style="margin-top:12px;">
+          <summary style="cursor:pointer; font-weight:600; padding:8px 0;">Chinese Markdown ({{ content.zh_md|length }} chars)</summary>
+          <pre style="white-space:pre-wrap; font-size:12px; padding:12px; background:rgba(0,0,0,0.03); border-radius:8px; max-height:300px; overflow:auto;">{{ content.zh_md }}</pre>
+        </details>
+      {% endif %}
+      {% if content.research_report_md %}
+        <details style="margin-top:12px;">
+          <summary style="cursor:pointer; font-weight:600; padding:8px 0;">Research Report ({{ content.research_report_md|length }} chars)</summary>
+          <pre style="white-space:pre-wrap; font-size:12px; padding:12px; background:rgba(0,0,0,0.03); border-radius:8px; max-height:300px; overflow:auto;">{{ content.research_report_md }}</pre>
+        </details>
+      {% endif %}
+      {% if content.transcript_text %}
+        <details style="margin-top:12px;">
+          <summary style="cursor:pointer; font-weight:600; padding:8px 0;">Transcript ({{ content.transcript_text|length }} chars)</summary>
+          <pre style="white-space:pre-wrap; font-size:12px; padding:12px; background:rgba(0,0,0,0.03); border-radius:8px; max-height:300px; overflow:auto;">{{ content.transcript_text }}</pre>
+        </details>
+      {% endif %}
+    </section>
+
+    <!-- Artifacts -->
+    <section class="tb-console-table-wrap">
+      <h3 style="margin:0; padding:14px 16px; font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tb-colors-on-surface-variant);">Artifacts</h3>
+      {% if artifacts %}
+        <table class="tb-console-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Storage Key</th>
+              <th>Content Type</th>
+              <th>Size</th>
+              <th>Primary</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for artifact in artifacts %}
+              <tr>
+                <td><span class="tb-console-kicker">{{ artifact.artifact_type }}</span></td>
+                <td><code style="font-size:12px; word-break:break-all;">{{ artifact.storage_key }}</code></td>
+                <td><small>{{ artifact.content_type }}</small></td>
+                <td><small>{{ artifact.size_bytes }} B</small></td>
+                <td>{% if artifact.is_primary %}<span class="tb-console-kicker">Primary</span>{% else %}-{% endif %}</td>
+                <td><small>{{ artifact.created_at }}</small></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="tb-console-empty">No artifacts recorded for this content item.</div>
+      {% endif %}
+    </section>
+
+    <!-- Run Logs -->
+    <section class="tb-console-table-wrap">
+      <h3 style="margin:0; padding:14px 16px; font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tb-colors-on-surface-variant);">Run Logs</h3>
+      {% if run_logs %}
+        <table class="tb-console-table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Attempt</th>
+              <th>Status</th>
+              <th>Duration</th>
+              <th>Error</th>
+              <th>Triggered By</th>
+              <th>Started</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in run_logs %}
+              <tr>
+                <td><span class="tb-console-kicker">{{ log.stage }}</span></td>
+                <td>{{ log.attempt_no }}</td>
+                <td>
+                  {% if log.status == "success" %}
+                    <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-success) 26%, white);">{{ log.status }}</span>
+                  {% elif log.status == "failed" %}
+                    <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-error) 26%, white);">{{ log.status }}</span>
+                  {% else %}
+                    <span class="tb-console-kicker">{{ log.status }}</span>
+                  {% endif %}
+                </td>
+                <td><small>{{ log.duration_ms|default:"-" }} ms</small></td>
+                <td>
+                  {% if log.error_code %}
+                    <small><code>{{ log.error_code }}</code>: {{ log.error_summary|truncatechars:80 }}</small>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <td><small>{{ log.triggered_by_user|default:log.triggered_by }}</small></td>
+                <td><small>{{ log.started_at }}</small></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="tb-console-empty">No run logs recorded for this content item.</div>
+      {% endif %}
+    </section>
+
+    <!-- Publish Records -->
+    <section class="tb-console-table-wrap">
+      <h3 style="margin:0; padding:14px 16px; font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--tb-colors-on-surface-variant);">Publish Records</h3>
+      {% if publish_records %}
+        <table class="tb-console-table">
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th>Status</th>
+              <th>External ID</th>
+              <th>Published At</th>
+              <th>Retry Count</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in publish_records %}
+              <tr>
+                <td><span class="tb-console-kicker">{{ record.channel }}</span></td>
+                <td>
+                  {% if record.status == "success" %}
+                    <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-success) 26%, white);">{{ record.status }}</span>
+                  {% elif record.status == "failed" %}
+                    <span class="tb-console-kicker" style="background:color-mix(in srgb, var(--tb-colors-error) 26%, white);">{{ record.status }}</span>
+                  {% else %}
+                    <span class="tb-console-kicker">{{ record.status }}</span>
+                  {% endif %}
+                </td>
+                <td><small>{{ record.external_id|default:"-" }}</small></td>
+                <td><small>{{ record.published_at|default:"-" }}</small></td>
+                <td><small>{{ record.retry_count }}</small></td>
+                <td>
+                  {% if record.error_code %}
+                    <small><code>{{ record.error_code }}</code>: {{ record.error_message|truncatechars:80 }}</small>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="tb-console-empty">No publish records for this content item.</div>
+      {% endif %}
+    </section>
+
+    <!-- Action Buttons -->
+    <section style="display:flex; gap:12px; flex-wrap:wrap;">
+      {% if content.status == "review_pending" %}
+        <button class="button button--publish-web" data-content-id="{{ content.id }}" type="button">Publish to Web</button>
+      {% endif %}
+      {% if content.status == "failed" or content.current_stage in "fetch,extract,transcribe,translate,research,publish,notify" %}
+        <button class="button button-secondary button--retry-stage" data-content-id="{{ content.id }}" data-stage="{{ content.current_stage }}" type="button">
+          Retry {{ content.current_stage }}
+        </button>
+      {% endif %}
+    </section>
+  </div>
+
+  <script>
+    (function() {
+      function getCsrfHeader() {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var c = cookies[i].trim();
+          if (c.indexOf('csrftoken=') === 0) return c.substring(10);
+        }
+        return '';
+      }
+
+      var publishBtn = document.querySelector('.button--publish-web');
+      if (publishBtn) {
+        publishBtn.addEventListener('click', function() {
+          if (!confirm('Publish this content to the web?')) return;
+          publishBtn.disabled = true;
+          publishBtn.textContent = 'Publishing...';
+          fetch('/cms/techbrief/api/content-items/' + publishBtn.dataset.contentId + '/publish-web/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCsrfHeader(),
+            },
+            body: JSON.stringify({}),
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.success) {
+              alert('Published: ' + data.data.url);
+              location.reload();
+            } else {
+              alert('Error: ' + (data.message || 'unknown'));
+              publishBtn.disabled = false;
+              publishBtn.textContent = 'Publish to Web';
+            }
+          })
+          .catch(function() {
+            alert('Request failed');
+            publishBtn.disabled = false;
+            publishBtn.textContent = 'Publish to Web';
+          });
+        });
+      }
+
+      var retryBtn = document.querySelector('.button--retry-stage');
+      if (retryBtn) {
+        retryBtn.addEventListener('click', function() {
+          if (!confirm('Retry stage: ' + retryBtn.dataset.stage + '?')) return;
+          retryBtn.disabled = true;
+          retryBtn.textContent = 'Retrying...';
+          fetch('/cms/techbrief/api/content-items/' + retryBtn.dataset.contentId + '/retry-stage/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCsrfHeader(),
+            },
+            body: JSON.stringify({stage: retryBtn.dataset.stage}),
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.success) {
+              alert('Retry queued: run ' + data.data.run_id);
+              location.reload();
+            } else {
+              alert('Error: ' + (data.message || 'unknown'));
+              retryBtn.disabled = false;
+              retryBtn.textContent = 'Retry ' + retryBtn.dataset.stage;
+            }
+          })
+          .catch(function() {
+            alert('Request failed');
+            retryBtn.disabled = false;
+            retryBtn.textContent = 'Retry ' + retryBtn.dataset.stage;
+          });
+        });
+      }
+    })();
+  </script>
+  {% endwith %}
+{% endblock %}

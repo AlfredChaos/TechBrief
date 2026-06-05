@@ -1,0 +1,54 @@
+{% extends "admin_console/base.html" %}
+
+{% block admin_console_content %}
+  <form method="get" class="tb-console-filters">
+    <div class="tb-console-field">
+      <label for="id_q">Search</label>
+      <input id="id_q" type="text" name="q" value="{{ filters.q }}" placeholder="reader@example.com" />
+    </div>
+    <div class="tb-console-field">
+      <label for="id_status">Status</label>
+      <select id="id_status" name="status">
+        <option value="">All statuses</option>
+        {% for value, label in status_choices %}
+          <option value="{{ value }}"{% if filters.status == value %} selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="tb-console-field">
+      <button type="submit" class="button button-longrunning">Apply Filters</button>
+    </div>
+  </form>
+
+  {% if subscriber_data.items %}
+    <section class="tb-console-table-wrap">
+      <table class="tb-console-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Source Page</th>
+            <th>Subscribed At</th>
+            <th>Last Sent</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in subscriber_data.items %}
+            <tr>
+              <td>{{ item.email }}</td>
+              <td><span class="tb-console-kicker">{{ item.status }}</span></td>
+              <td>{{ item.source_page }}</td>
+              <td>{{ item.subscribed_at }}</td>
+              <td>{{ item.last_sent_at|default:"-" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    <div class="tb-console-footer">
+      {{ subscriber_data.pagination.total }} subscribers · page {{ subscriber_data.pagination.page }} / {{ subscriber_data.pagination.total_pages }}
+    </div>
+  {% else %}
+    <div class="tb-console-empty">No subscribers match the current filters.</div>
+  {% endif %}
+{% endblock %}

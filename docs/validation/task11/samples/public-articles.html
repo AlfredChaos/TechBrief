@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>最新内容 - TechBrief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Serif:wght@400;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+  --tb-colors-surface: #fcf8fb;
+  --tb-colors-surface-dim: #dcd9dc;
+  --tb-colors-surface-bright: #fcf8fb;
+  --tb-colors-surface-container-lowest: #ffffff;
+  --tb-colors-surface-container-low: #f6f3f5;
+  --tb-colors-surface-container: #f0edef;
+  --tb-colors-surface-container-high: #eae7ea;
+  --tb-colors-surface-container-highest: #e4e2e4;
+  --tb-colors-on-surface: #1b1b1d;
+  --tb-colors-on-surface-variant: #414755;
+  --tb-colors-inverse-surface: #303032;
+  --tb-colors-inverse-on-surface: #f3f0f2;
+  --tb-colors-outline: #717786;
+  --tb-colors-outline-variant: #c1c6d7;
+  --tb-colors-surface-tint: #005bc1;
+  --tb-colors-primary: #0058bc;
+  --tb-colors-on-primary: #ffffff;
+  --tb-colors-primary-container: #0070eb;
+  --tb-colors-on-primary-container: #fefcff;
+  --tb-colors-inverse-primary: #adc6ff;
+  --tb-colors-secondary: #bc000a;
+  --tb-colors-on-secondary: #ffffff;
+  --tb-colors-secondary-container: #e2241f;
+  --tb-colors-on-secondary-container: #fffbff;
+  --tb-colors-tertiary: #9e3d00;
+  --tb-colors-on-tertiary: #ffffff;
+  --tb-colors-tertiary-container: #c64f00;
+  --tb-colors-on-tertiary-container: #fffbff;
+  --tb-colors-error: #ba1a1a;
+  --tb-colors-on-error: #ffffff;
+  --tb-colors-error-container: #ffdad6;
+  --tb-colors-on-error-container: #93000a;
+  --tb-colors-background: #fcf8fb;
+  --tb-colors-on-background: #1b1b1d;
+  --tb-colors-surface-variant: #e4e2e4;
+  --tb-typography-display-lg-font-family: 'Inter', sans-serif;
+  --tb-typography-display-lg-font-size: 48px;
+  --tb-typography-display-lg-font-weight: 700;
+  --tb-typography-display-lg-line-height: 1.1;
+  --tb-typography-display-lg-letter-spacing: -0.02em;
+  --tb-typography-display-lg-mobile-font-size: 32px;
+  --tb-typography-display-lg-mobile-line-height: 1.2;
+  --tb-typography-headline-md-font-family: 'Inter', sans-serif;
+  --tb-typography-headline-md-font-size: 24px;
+  --tb-typography-headline-md-font-weight: 600;
+  --tb-typography-headline-md-line-height: 1.3;
+  --tb-typography-headline-md-letter-spacing: -0.01em;
+  --tb-typography-article-body-font-family: 'Noto Serif', serif;
+  --tb-typography-article-body-font-size: 18px;
+  --tb-typography-article-body-font-weight: 400;
+  --tb-typography-article-body-line-height: 1.6;
+  --tb-typography-article-body-cn-font-family: 'Noto Serif SC', serif;
+  --tb-typography-article-body-cn-font-size: 18px;
+  --tb-typography-article-body-cn-font-weight: 400;
+  --tb-typography-article-body-cn-line-height: 1.8;
+  --tb-typography-label-caps-font-family: 'Inter', sans-serif;
+  --tb-typography-label-caps-font-size: 12px;
+  --tb-typography-label-caps-font-weight: 600;
+  --tb-typography-label-caps-line-height: 1;
+  --tb-typography-label-caps-letter-spacing: 0.05em;
+  --tb-rounded-sm: 4px;
+  --tb-rounded-default: 8px;
+  --tb-rounded-md: 12px;
+  --tb-rounded-lg: 16px;
+  --tb-rounded-xl: 24px;
+  --tb-rounded-full: 9999px;
+  --tb-spacing-xs: 4px;
+  --tb-spacing-sm: 12px;
+  --tb-spacing-base: 8px;
+  --tb-spacing-md: 24px;
+  --tb-spacing-lg: 48px;
+  --tb-spacing-xl: 80px;
+  --tb-spacing-container-max: 1120px;
+  --tb-spacing-gutter: 24px;
+      --tb-border: rgba(255, 255, 255, 0.48);
+      --tb-glass-fill: rgba(255, 255, 255, 0.7);
+      --tb-glass-fill-strong: rgba(255, 255, 255, 0.82);
+      --tb-shadow: 0 24px 80px -24px rgba(17, 24, 39, 0.18);
+      --tb-shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.08);
+      --tb-gradient-primary: linear-gradient(135deg, var(--tb-colors-primary), #845ef7 55%, var(--tb-colors-tertiary));
+      --tb-gradient-bloom: radial-gradient(circle at top right, rgba(0, 88, 188, 0.18), transparent 55%);
+      --tb-gradient-bloom-alt: radial-gradient(circle at bottom left, rgba(158, 61, 0, 0.16), transparent 48%);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--tb-colors-on-background);
+      background:
+        radial-gradient(circle at top left, rgba(173, 198, 255, 0.3), transparent 30%),
+        radial-gradient(circle at top right, rgba(255, 181, 149, 0.28), transparent 36%),
+        linear-gradient(180deg, #fffefc 0%, var(--tb-colors-background) 100%);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .tb-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tb-container {
+      width: min(100% - 48px, 1120px);
+      margin: 0 auto;
+    }
+
+    .tb-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      background: rgba(252, 248, 251, 0.82);
+      border-bottom: 1px solid rgba(193, 198, 215, 0.38);
+    }
+
+    .tb-topbar__inner,
+    .tb-footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 72px;
+    }
+
+    .tb-brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--tb-colors-primary);
+    }
+
+    .tb-nav,
+    .tb-actions,
+    .tb-footer__links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tb-nav a,
+    .tb-pill,
+    .tb-button--ghost {
+      border-radius: 9999px;
+      padding: 10px 16px;
+      color: var(--tb-colors-on-surface-variant);
+      transition: all 180ms ease;
+    }
+
+    .tb-nav a.is-active,
+    .tb-nav a:hover,
+    .tb-pill.is-active,
+    .tb-button--ghost:hover {
+      background: rgba(0, 88, 188, 0.08);
+      color: var(--tb-colors-primary);
+    }
+
+    .tb-button,
+    button.tb-button,
+    .tb-button--ghost {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .tb-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 9999px;
+      padding: 12px 20px;
+      background: var(--tb-gradient-primary);
+      color: var(--tb-colors-on-primary);
+      box-shadow: 0 16px 48px -20px rgba(0, 88, 188, 0.56);
+    }
+
+    .tb-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 52px -18px rgba(0, 88, 188, 0.48);
+    }
+
+    .tb-button--ghost {
+      background: rgba(255, 255, 255, 0.46);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .tb-glass {
+      position: relative;
+      overflow: hidden;
+      background: var(--tb-glass-fill);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--tb-border);
+      box-shadow: var(--tb-shadow-soft);
+    }
+
+    .tb-glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--tb-gradient-bloom);
+      pointer-events: none;
+      opacity: 0.95;
+    }
+
+    .tb-card {
+      border-radius: 24px;
+    }
+
+    .tb-card__body,
+    .tb-card__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tb-section {
+      padding: 56px 0 80px;
+    }
+
+    .tb-heading {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .tb-subheading {
+      margin: 0;
+      color: var(--tb-colors-on-surface-variant);
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.1rem;
+      line-height: 1.85;
+    }
+
+    .tb-hero {
+      padding-top: 72px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .tb-hero__panel,
+    .tb-panel {
+      padding: 32px;
+      border-radius: 32px;
+    }
+
+    .tb-hero__eyebrow,
+    .tb-metadata,
+    .tb-label {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-hero__copy {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-height: 100%;
+      justify-content: space-between;
+    }
+
+    .tb-inline-form,
+    .tb-filters {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tb-input,
+    .tb-select {
+      width: 100%;
+      border: 1px solid rgba(193, 198, 215, 0.5);
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 18px;
+      padding: 14px 16px;
+      color: var(--tb-colors-on-surface);
+      font: inherit;
+    }
+
+    .tb-inline-form .tb-input {
+      flex: 1 1 240px;
+    }
+
+    .tb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .tb-list-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .tb-item-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .tb-item-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--tb-shadow);
+    }
+
+    .tb-cover {
+      aspect-ratio: 16 / 10;
+      background:
+        linear-gradient(135deg, rgba(0, 88, 188, 0.18), rgba(158, 61, 0, 0.12)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.04));
+      overflow: hidden;
+    }
+
+    .tb-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .tb-item-card__body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .tb-title-md {
+      margin: 0;
+      font-size: 1.45rem;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .tb-summary,
+    .tb-copy {
+      margin: 0;
+      color: var(--tb-colors-on-surface-variant);
+      font-family: 'Noto Serif SC', serif;
+      line-height: 1.85;
+    }
+
+    .tb-meta-row,
+    .tb-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tb-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(193, 198, 215, 0.42);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .tb-empty {
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .tb-pagination {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    .tb-article-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+    }
+
+    .tb-article-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
+    }
+
+    .tb-prose {
+      padding: 28px;
+      border-radius: 28px;
+    }
+
+    .tb-prose h2,
+    .tb-prose h3,
+    .tb-prose h4,
+    .tb-static-body h2,
+    .tb-static-body h3 {
+      margin: 28px 0 16px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .tb-prose p,
+    .tb-prose li,
+    .tb-prose blockquote,
+    .tb-static-body p,
+    .tb-static-body li {
+      margin: 0 0 16px;
+      color: var(--tb-colors-on-surface-variant);
+      font-family: 'Noto Serif', serif;
+      line-height: 1.75;
+    }
+
+    html[lang="zh-CN"] .tb-prose p,
+    html[lang="zh-CN"] .tb-prose li,
+    html[lang="zh-CN"] .tb-prose blockquote,
+    html[lang="zh-CN"] .tb-static-body p,
+    html[lang="zh-CN"] .tb-static-body li {
+      font-family: 'Noto Serif SC', serif;
+      line-height: 1.9;
+    }
+
+    .tb-prose code,
+    .tb-prose pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    .tb-prose pre {
+      margin: 0 0 16px;
+      padding: 16px;
+      overflow: auto;
+      border-radius: 18px;
+      background: rgba(27, 27, 29, 0.94);
+      color: #f3f0f2;
+    }
+
+    .tb-prose blockquote {
+      padding: 18px 20px;
+      border-left: 4px solid rgba(0, 88, 188, 0.4);
+      background: rgba(255, 255, 255, 0.58);
+      border-radius: 18px;
+    }
+
+    .tb-divider {
+      border: 0;
+      border-top: 1px solid rgba(193, 198, 215, 0.42);
+      margin: 24px 0;
+    }
+
+    .tb-footer {
+      margin-top: auto;
+      border-top: 1px solid rgba(193, 198, 215, 0.42);
+      background: rgba(255, 255, 255, 0.58);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .tb-footer__copy {
+      color: var(--tb-colors-on-surface-variant);
+      font-size: 0.92rem;
+    }
+
+    .tb-modal-backdrop[hidden] {
+      display: none;
+    }
+
+    .tb-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(48, 48, 50, 0.14);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .tb-modal {
+      width: min(100%, 480px);
+      padding: 32px;
+      border-radius: 32px;
+      background: var(--tb-glass-fill-strong);
+      border: 1px solid var(--tb-border);
+      box-shadow: var(--tb-shadow);
+    }
+
+    .tb-modal__close {
+      float: right;
+      background: transparent;
+      border: 0;
+      color: var(--tb-colors-on-surface-variant);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .tb-feedback {
+      min-height: 24px;
+      font-size: 0.92rem;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-feedback.is-error {
+      color: var(--tb-colors-error);
+    }
+
+    .tb-feedback.is-success {
+      color: var(--tb-colors-primary);
+    }
+
+    @media (max-width: 960px) {
+      .tb-hero,
+      .tb-grid,
+      .tb-list-grid,
+      .tb-article-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .tb-topbar__inner,
+      .tb-footer__inner {
+        min-height: auto;
+        padding: 16px 0;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .tb-container {
+        width: min(100% - 32px, 1120px);
+      }
+
+      .tb-nav {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .tb-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .tb-hero__panel,
+      .tb-panel,
+      .tb-modal {
+        padding: 24px;
+      }
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="tb-shell">
+    <header class="tb-topbar">
+      <div class="tb-container tb-topbar__inner">
+        <a class="tb-brand" href="/">TechBrief</a>
+        <nav class="tb-nav" aria-label="Primary">
+          
+            <a href="/articles" class="is-active">最新内容</a>
+          
+            <a href="/about" class="">关于</a>
+          
+            <a href="/archive" class="">归档</a>
+          
+        </nav>
+        <div class="tb-actions">
+          <a class="tb-pill is-active" href="/articles?source=task11-openai&amp;content_type=article&amp;locale=zh-CN">CN</a>
+          <a class="tb-pill " href="/articles?source=task11-openai&amp;content_type=article&amp;locale=en-US">EN</a>
+          <button type="button" class="tb-button" data-open-subscribe>立即订阅</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="tb-container">
+      
+  <section class="tb-section">
+    <div class="tb-stack" style="gap:24px;">
+      <div class="tb-stack" style="gap:12px;">
+        <div class="tb-label">Briefings</div>
+        <h1 class="tb-heading" style="font-size:clamp(2rem,4vw,3.25rem);">最新内容</h1>
+        <p class="tb-subheading">浏览最新发布的文章与公开视频技术内容。</p>
+      </div>
+
+      <div class="tb-glass tb-card tb-panel">
+        <form class="tb-filters" method="get">
+          <input class="tb-input" type="search" name="q" value="" placeholder="搜索">
+          <input class="tb-input" type="text" name="source" value="task11-openai" placeholder="来源">
+          <select class="tb-select" name="content_type">
+            <option value="">内容类型</option>
+            <option value="article" selected>Article</option>
+            <option value="video" >Video</option>
+          </select>
+          <input class="tb-input" type="date" name="date_from" value="">
+          <input class="tb-input" type="date" name="date_to" value="">
+          <button class="tb-button" type="submit">Apply</button>
+        </form>
+      </div>
+
+      
+
+      
+        <div class="tb-list-grid">
+          
+            <a href="/articles/task11-openai-reasoning-models" class="tb-glass tb-item-card">
+              <div class="tb-cover">
+                
+              </div>
+              <div class="tb-item-card__body tb-card__body">
+                <div class="tb-meta-row">
+                  <span class="tb-badge">OpenAI</span>
+                  <span class="tb-metadata">2026-06-05</span>
+                </div>
+                <h2 class="tb-title-md">Task11 OpenAI 推理模型</h2>
+                <p class="tb-summary">Task11 公开文章摘要。</p>
+                <div class="tb-meta-row">
+                  <span class="tb-metadata">ARTICLE</span>
+                  
+                    <span class="tb-metadata">Bilingual</span>
+                  
+                </div>
+              </div>
+            </a>
+          
+        </div>
+
+        
+      
+    </div>
+  </section>
+
+    </main>
+
+    <footer class="tb-footer">
+      <div class="tb-container tb-footer__inner">
+        <div class="tb-brand">TechBrief</div>
+        <div class="tb-footer__copy">© 2026 TechBrief. Bilingual AI editorial briefings.</div>
+        <div class="tb-footer__links">
+          
+            <a href="/privacy">隐私</a>
+          
+            <a href="/terms">条款</a>
+          
+            <a href="/api/public/content-items">API</a>
+          
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="tb-modal-backdrop" id="subscribe-modal" hidden>
+    <div class="tb-modal tb-glass">
+      <button type="button" class="tb-modal__close" data-close-subscribe>Close</button>
+      <div class="tb-stack" id="subscribe-modal-form-view">
+        <div class="tb-label">Newsletter</div>
+        <h2 class="tb-title-md">订阅每日 AI 内容汇总</h2>
+        <p class="tb-summary">获取当天新增的 AI 翻译文章与深度内容摘要，每日汇总发送到您的邮箱。</p>
+        <form class="tb-stack" data-subscription-form data-source-page="subscription_modal">
+          <input class="tb-input" type="email" name="email" placeholder="输入您的邮箱地址" required>
+          <button class="tb-button" type="submit">立即订阅</button>
+          <div class="tb-feedback" data-subscription-feedback></div>
+        </form>
+        <div class="tb-metadata">我们尊重您的隐私，随时可以取消订阅。</div>
+      </div>
+      <div class="tb-stack" id="subscribe-modal-success-view" hidden>
+        <div class="tb-label">Subscribed</div>
+        <h2 class="tb-title-md">感谢订阅！</h2>
+        <p class="tb-summary">您的邮箱已成功加入名单。请检查收件箱以确认订阅。</p>
+        <button type="button" class="tb-button--ghost" data-close-subscribe>返回浏览</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const modal = document.getElementById("subscribe-modal");
+      const formView = document.getElementById("subscribe-modal-form-view");
+      const successView = document.getElementById("subscribe-modal-success-view");
+      const openButtons = document.querySelectorAll("[data-open-subscribe]");
+      const closeButtons = document.querySelectorAll("[data-close-subscribe]");
+      const forms = document.querySelectorAll("[data-subscription-form]");
+      const subscriptionUrl = "/api/public/subscriptions";
+
+      const resetModal = () => {
+        formView.hidden = false;
+        successView.hidden = true;
+        const feedback = modal.querySelector("[data-subscription-feedback]");
+        if (feedback) {
+          feedback.textContent = "";
+          feedback.className = "tb-feedback";
+        }
+      };
+
+      const openModal = () => {
+        resetModal();
+        modal.hidden = false;
+      };
+
+      const closeModal = () => {
+        modal.hidden = true;
+      };
+
+      openButtons.forEach((button) => button.addEventListener("click", openModal));
+      closeButtons.forEach((button) => button.addEventListener("click", closeModal));
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+
+      const buildKey = () => {
+        if (window.crypto && window.crypto.randomUUID) {
+          return window.crypto.randomUUID();
+        }
+        return "tb-" + Date.now();
+      };
+
+      forms.forEach((form) => {
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const input = form.querySelector("input[name='email']");
+          const feedback = form.querySelector("[data-subscription-feedback]");
+          if (!input || !feedback) {
+            return;
+          }
+
+          feedback.className = "tb-feedback";
+          feedback.textContent = "提交中...";
+
+          try {
+            const response = await fetch(subscriptionUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Idempotency-Key": buildKey()
+              },
+              body: JSON.stringify({
+                email: input.value,
+                source_page: form.dataset.sourcePage || "unknown",
+                locale: "zh-CN"
+              })
+            });
+            const payload = await response.json();
+            if (!response.ok || !payload.success) {
+              feedback.className = "tb-feedback is-error";
+              feedback.textContent = payload.message || "订阅失败，请稍后重试。";
+              return;
+            }
+
+            feedback.textContent = "";
+            if (form.closest("#subscribe-modal-form-view")) {
+              formView.hidden = true;
+              successView.hidden = false;
+            } else {
+              feedback.className = "tb-feedback is-success";
+              feedback.textContent = "感谢订阅！";
+              input.value = "";
+            }
+          } catch (error) {
+            feedback.className = "tb-feedback is-error";
+            feedback.textContent = "订阅失败，请稍后重试。";
+          }
+        });
+      });
+    })();
+  </script>
+  
+</body>
+</html>

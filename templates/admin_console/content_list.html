@@ -1,0 +1,70 @@
+{% extends "admin_console/base.html" %}
+
+{% block admin_console_content %}
+  <form method="get" class="tb-console-filters">
+    <div class="tb-console-field">
+      <label for="id_q">Search</label>
+      <input id="id_q" type="text" name="q" value="{{ filters.q }}" placeholder="Title, slug, or URL" />
+    </div>
+    <div class="tb-console-field">
+      <label for="id_status">Status</label>
+      <select id="id_status" name="status">
+        <option value="">All statuses</option>
+        {% for value, label in status_choices %}
+          <option value="{{ value }}"{% if filters.status == value %} selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="tb-console-field">
+      <label for="id_content_type">Content Type</label>
+      <select id="id_content_type" name="content_type">
+        <option value="">All content</option>
+        {% for value, label in content_type_choices %}
+          <option value="{{ value }}"{% if filters.content_type == value %} selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="tb-console-field">
+      <button type="submit" class="button button-longrunning">Apply Filters</button>
+    </div>
+  </form>
+
+  {% if content_data.items %}
+    <section class="tb-console-table-wrap">
+      <table class="tb-console-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Source</th>
+            <th>Status</th>
+            <th>Stage</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in content_data.items %}
+            <tr>
+              <td>
+                <a href="{% url 'admin_console:content-detail' item.id %}" style="text-decoration:none; color:inherit;">
+                  <strong>{{ item.title_zh|default:item.title_original }}</strong><br />
+                </a>
+                <small>{{ item.content_type }}</small>
+              </td>
+              <td>{{ item.source_name }}</td>
+              <td><span class="tb-console-kicker">{{ item.status }}</span></td>
+              <td>{{ item.current_stage }}</td>
+              <td>
+                <a href="{% url 'admin_console:content-detail' item.id %}" class="button button-small">Detail</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    <div class="tb-console-footer">
+      {{ content_data.pagination.total }} items · page {{ content_data.pagination.page }} / {{ content_data.pagination.total_pages }}
+    </div>
+  {% else %}
+    <div class="tb-console-empty">No content items match the current filters.</div>
+  {% endif %}
+{% endblock %}

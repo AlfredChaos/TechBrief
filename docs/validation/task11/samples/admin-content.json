@@ -1,0 +1,51 @@
+{
+  "success": true,
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "items": [
+      {
+        "id": "3cc7ae74-645c-4d94-bb26-6246a5b30052",
+        "content_type": "article",
+        "source_name": "Anthropic",
+        "title_original": "Task11 Review Pending Article",
+        "title_zh": "Task11 待审核文章",
+        "status": "review_pending",
+        "current_stage": "review_pending",
+        "published_at_source": "2026-06-05T09:28:52.812104+00:00",
+        "updated_at": "2026-06-05T09:28:52.812908+00:00",
+        "preview_url": "/articles/task11-review-pending-article",
+        "available_actions": [
+          "view_detail",
+          "publish_web",
+          "open_public_page"
+        ]
+      },
+      {
+        "id": "d46e6942-8413-4d09-8b96-7a907226f5af",
+        "content_type": "article",
+        "source_name": "Pipeline Source",
+        "title_original": "Task11 Pipeline Article",
+        "title_zh": "ZH: Task11 Pipeline Article",
+        "status": "review_pending",
+        "current_stage": "review_pending",
+        "published_at_source": "2026-06-05T08:55:17.062364+00:00",
+        "updated_at": "2026-06-05T08:55:17.245063+00:00",
+        "preview_url": null,
+        "available_actions": [
+          "view_detail",
+          "publish_web"
+        ]
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "page_size": 20,
+      "total": 2,
+      "total_pages": 1
+    }
+  },
+  "meta": {
+    "request_id": "req_da0cd5cdc1424bc88d9c83e930734b4a"
+  }
+}

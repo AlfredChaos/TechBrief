@@ -1,0 +1,41 @@
+{
+  "source": {
+    "source_code": "anthropic",
+    "source_name": "Anthropic",
+    "base_url": "https://www.anthropic.com"
+  },
+  "content_item": {
+    "dedupe_key": "task11-anthropic-video-publish-0001",
+    "content_type": "video",
+    "ingestion_mode": "auto",
+    "status": "review_pending",
+    "current_stage": "review_pending",
+    "source_name_snapshot": "Anthropic",
+    "title_original": "Anthropic Safety Workshop",
+    "title_zh": "Anthropic 安全工作坊",
+    "summary_original": "A replay sample for video publish and notify acceptance checks.",
+    "summary_zh": "用于视频发布与通知验收检查的回放样例。",
+    "author_or_speaker": "Anthropic",
+    "source_url": "https://www.anthropic.com/news/safety-workshop",
+    "canonical_url": "https://www.anthropic.com/news/safety-workshop",
+    "content_md": "# Anthropic Safety Workshop\n\n## Workshop agenda\n\nThe session covers evaluation and policy checkpoints.\n\n```text\npolicy > eval > release\n```\n\nOpen the [event page](https://www.anthropic.com/news/safety-workshop).",
+    "zh_md": "# Anthropic 安全工作坊\n\n## 工作坊议程\n\n会议涵盖评测与策略检查点。\n\n```text\npolicy > eval > release\n```\n\n打开 [event page](https://www.anthropic.com/news/safety-workshop)。",
+    "supports_bilingual": true
+  },
+  "subscribers": [
+    {
+      "email": "anthropic-reader1@example.com",
+      "status": "active",
+      "source_page": "home_hero",
+      "locale": "zh-CN",
+      "unsubscribe_token": "task11-anthropic-reader1"
+    },
+    {
+      "email": "anthropic-reader2@example.com",
+      "status": "active",
+      "source_page": "nav_modal",
+      "locale": "en-US",
+      "unsubscribe_token": "task11-anthropic-reader2"
+    }
+  ]
+}

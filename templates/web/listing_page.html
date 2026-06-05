@@ -1,0 +1,80 @@
+{% extends "web/base_public.html" %}
+
+{% block title %}{{ page_title }} - {{ brand_name }}{% endblock %}
+
+{% block content %}
+  <section class="tb-section">
+    <div class="tb-stack" style="gap:24px;">
+      <div class="tb-stack" style="gap:12px;">
+        <div class="tb-label">{% if is_archive %}Archive{% else %}Briefings{% endif %}</div>
+        <h1 class="tb-heading" style="font-size:clamp(2rem,4vw,3.25rem);">{{ page_title }}</h1>
+        <p class="tb-subheading">{{ page_subtitle }}</p>
+      </div>
+
+      <div class="tb-glass tb-card tb-panel">
+        <form class="tb-filters" method="get">
+          <input class="tb-input" type="search" name="q" value="{{ filters.q }}" placeholder="{{ search_label }}">
+          <input class="tb-input" type="text" name="source" value="{{ filters.source }}" placeholder="{{ source_label }}">
+          <select class="tb-select" name="content_type">
+            <option value="">{{ content_type_label }}</option>
+            <option value="article" {% if filters.content_type == "article" %}selected{% endif %}>Article</option>
+            <option value="video" {% if filters.content_type == "video" %}selected{% endif %}>Video</option>
+          </select>
+          <input class="tb-input" type="date" name="date_from" value="{{ filters.date_from }}">
+          <input class="tb-input" type="date" name="date_to" value="{{ filters.date_to }}">
+          <button class="tb-button" type="submit">Apply</button>
+        </form>
+      </div>
+
+      {% if is_archive and archive_periods %}
+        <div class="tb-toolbar">
+          <div class="tb-label">Periods</div>
+          <div class="tb-actions">
+            {% for period in archive_periods %}
+              <a class="tb-button--ghost" href="?year={{ period.year }}&month={{ period.month }}">{{ period.label }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if items %}
+        <div class="tb-list-grid">
+          {% for item in items %}
+            <a href="{{ item.url }}" class="tb-glass tb-item-card">
+              <div class="tb-cover">
+                {% if item.cover_url %}
+                  <img src="{{ item.cover_url }}" alt="{{ item.title }}">
+                {% endif %}
+              </div>
+              <div class="tb-item-card__body tb-card__body">
+                <div class="tb-meta-row">
+                  <span class="tb-badge">{{ item.source_name }}</span>
+                  <span class="tb-metadata">{{ item.published_label }}</span>
+                </div>
+                <h2 class="tb-title-md">{{ item.title }}</h2>
+                <p class="tb-summary">{{ item.summary|default:"" }}</p>
+                <div class="tb-meta-row">
+                  <span class="tb-metadata">{{ item.content_type|upper }}</span>
+                  {% if item.reading_mode_flags.supports_bilingual %}
+                    <span class="tb-metadata">Bilingual</span>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+
+        {% if pagination.total_pages > 1 %}
+          <div class="tb-pagination">
+            <span class="tb-button--ghost">{{ pagination.page }} / {{ pagination.total_pages }}</span>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="tb-glass tb-card tb-empty">
+          <h2 class="tb-title-md">{{ empty_state_title }}</h2>
+          <p class="tb-summary">{{ empty_state_body }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

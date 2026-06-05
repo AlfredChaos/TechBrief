@@ -1,0 +1,39 @@
+{
+  "success": true,
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "items": [
+      {
+        "id": "717715bd-1c79-48cd-938b-2161401ee29d",
+        "slug": "task11-openai-reasoning-models",
+        "content_type": "article",
+        "source_name": "OpenAI",
+        "source_code": "task11-openai",
+        "title": "Task11 OpenAI 推理模型",
+        "title_zh": "Task11 OpenAI 推理模型",
+        "title_original": "Task11 OpenAI Reasoning Models",
+        "summary": "Task11 公开文章摘要。",
+        "summary_zh": "Task11 公开文章摘要。",
+        "summary_original": "Task11 public article summary.",
+        "cover_url": null,
+        "published_at": "2026-06-05T09:28:52.800538Z",
+        "published_label": "2026-06-05",
+        "reading_mode_flags": {
+          "supports_zh": true,
+          "supports_bilingual": true
+        },
+        "url": "/articles/task11-openai-reasoning-models"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "page_size": 20,
+      "total": 1,
+      "total_pages": 1
+    }
+  },
+  "meta": {
+    "request_id": "req_3fed0eba8d0047478b166df54f7ad16c"
+  }
+}

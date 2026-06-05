@@ -1,0 +1,36 @@
+[project]
+name = "techbrief"
+version = "0.1.0"
+description = "TechBrief Django, Wagtail, and Celery bootstrap project"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "celery>=5.4,<5.6",
+  "dj-database-url>=2.2,<3.0",
+  "Django>=5.2,<5.3",
+  "django-celery-beat>=2.7,<2.9",
+  "django-environ>=0.11,<0.13",
+  "psycopg[binary]>=3.2,<3.3",
+  "cos-python-sdk-v5>=1.9.38,<2.0",
+  "redis>=5.0,<6.0",
+  "wagtail>=6.4,<6.5",
+  "whitenoise>=6.8,<6.9",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.2,<9.0",
+  "pytest-django>=4.8,<5.0",
+  "ruff>=0.8,<0.10",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "techbrief.settings.test"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]

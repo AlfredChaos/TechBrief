@@ -1,0 +1,67 @@
+{
+  "success": true,
+  "code": "OK",
+  "message": "success",
+  "data": {
+    "items": [
+      {
+        "run_id": "8bcd660b-6001-5c3d-88f2-e39ee46747ee",
+        "discovery_run_id": null,
+        "content_item_id": "3cc7ae74-645c-4d94-bb26-6246a5b30052",
+        "status": "failed",
+        "stage": "translate",
+        "duration_ms": 3200,
+        "error_code": "TRANSLATE_TIMEOUT",
+        "started_at": "2026-06-05T09:28:52.812104+00:00",
+        "ended_at": "2026-06-05T09:28:52.812104+00:00"
+      },
+      {
+        "run_id": "eb39ac69-f8fc-450d-9c48-498331e60f03",
+        "discovery_run_id": null,
+        "content_item_id": "5acb9154-34ef-494b-ab9b-f4d8f611d171",
+        "status": "failed",
+        "stage": "notify",
+        "duration_ms": 53,
+        "error_code": "DIGEST_DELIVERY_FAILED",
+        "started_at": "2026-06-05T09:27:45.385951+00:00",
+        "ended_at": "2026-06-05T09:27:45.439442+00:00"
+      },
+      {
+        "run_id": "76415c9d-65b0-4229-a6e3-238443258316",
+        "discovery_run_id": null,
+        "content_item_id": "5acb9154-34ef-494b-ab9b-f4d8f611d171",
+        "status": "failed",
+        "stage": "notify",
+        "duration_ms": 61,
+        "error_code": "DIGEST_DELIVERY_FAILED",
+        "started_at": "2026-06-05T09:00:41.292499+00:00",
+        "ended_at": "2026-06-05T09:00:41.354328+00:00"
+      },
+      {
+        "run_id": "d0d711eb-7ab8-498e-a919-22530602c965",
+        "discovery_run_id": null,
+        "content_item_id": "5acb9154-34ef-494b-ab9b-f4d8f611d171",
+        "status": "failed",
+        "stage": "notify",
+        "duration_ms": 54,
+        "error_code": "DIGEST_DELIVERY_FAILED",
+        "started_at": "2026-06-05T09:00:20.882495+00:00",
+        "ended_at": "2026-06-05T09:00:20.936502+00:00"
+      }
+    ],
+    "summary": {
+      "total_runs": 4,
+      "success_runs": 0,
+      "failed_runs": 4
+    },
+    "pagination": {
+      "page": 1,
+      "page_size": 20,
+      "total": 4,
+      "total_pages": 1
+    }
+  },
+  "meta": {
+    "request_id": "req_bcaad63cca7144be9d9850a5b0766f17"
+  }
+}

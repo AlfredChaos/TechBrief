@@ -1,0 +1,41 @@
+{
+  "source": {
+    "source_code": "openai",
+    "source_name": "OpenAI",
+    "base_url": "https://openai.com"
+  },
+  "content_item": {
+    "dedupe_key": "replay-task10-publish-notify-openai-reasoning-0001",
+    "content_type": "article",
+    "ingestion_mode": "auto",
+    "status": "review_pending",
+    "current_stage": "review_pending",
+    "source_name_snapshot": "OpenAI",
+    "title_original": "OpenAI Reasoning Models",
+    "title_zh": "OpenAI 推理模型",
+    "summary_original": "Reasoning models reshape problem solving.",
+    "summary_zh": "推理模型正在重塑复杂问题求解流程。",
+    "author_or_speaker": "OpenAI",
+    "source_url": "https://openai.com/research/reasoning",
+    "canonical_url": "https://openai.com/research/reasoning",
+    "content_md": "# OpenAI Reasoning Models\n\nReasoning models take more deliberate steps.",
+    "zh_md": "# OpenAI 推理模型\n\n推理模型会进行更完整的中间思考。",
+    "supports_bilingual": true
+  },
+  "subscribers": [
+    {
+      "email": "reader1@example.com",
+      "status": "active",
+      "source_page": "home_hero",
+      "locale": "zh-CN",
+      "unsubscribe_token": "replay-token-reader1"
+    },
+    {
+      "email": "reader2@example.com",
+      "status": "active",
+      "source_page": "article_floating_cta",
+      "locale": "en-US",
+      "unsubscribe_token": "replay-token-reader2"
+    }
+  ]
+}

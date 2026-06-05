@@ -1,0 +1,104 @@
+{
+  "home_page": {
+    "title": "TechBrief Home",
+    "slug": "techbrief-home",
+    "title_zh": "TechBrief",
+    "title_en": "TechBrief",
+    "hero_title_zh": "每天获取值得读的 AI 技术情报",
+    "hero_title_en": "Daily AI technical briefings worth your time",
+    "hero_subtitle_zh": "聚合官方博客与公开视频内容，提供结构化中文摘要、双语阅读与每日订阅入口。",
+    "hero_subtitle_en": "Follow official blogs and public videos with structured summaries, bilingual reading, and a daily subscription workflow.",
+    "subscribe_placeholder_zh": "输入邮箱地址",
+    "subscribe_placeholder_en": "Enter your email",
+    "primary_cta_text_zh": "立即订阅",
+    "primary_cta_text_en": "Subscribe",
+    "is_published": true
+  },
+  "listing_pages": [
+    {
+      "title": "Articles",
+      "slug": "articles",
+      "page_code": "articles",
+      "title_zh": "最新内容",
+      "title_en": "Latest Briefings",
+      "subtitle_zh": "浏览最新发布的文章与公开视频技术内容。",
+      "subtitle_en": "Browse the latest published articles and public video briefings.",
+      "default_sort": "published_desc",
+      "default_filters_json": {
+        "content_types": [
+          "article",
+          "video"
+        ]
+      },
+      "enable_date_filter": true,
+      "page_size": 20,
+      "is_published": true
+    },
+    {
+      "title": "Archive",
+      "slug": "archive",
+      "page_code": "archive",
+      "title_zh": "归档",
+      "title_en": "Archive",
+      "subtitle_zh": "按时间回看历史发布内容。",
+      "subtitle_en": "Review previously published items over time.",
+      "default_sort": "published_desc",
+      "default_filters_json": {
+        "archived": true
+      },
+      "enable_date_filter": true,
+      "page_size": 20,
+      "is_published": true
+    }
+  ],
+  "static_pages": [
+    {
+      "title": "About",
+      "slug": "about",
+      "page_code": "about",
+      "title_zh": "关于我们",
+      "title_en": "About",
+      "body_md_zh": "## TechBrief\n\nTechBrief 聚合值得关注的 AI 技术内容，并通过结构化处理帮助读者快速获取要点。",
+      "body_md_en": "## TechBrief\n\nTechBrief curates notable AI technical updates and helps readers grasp the key points quickly through structured processing.",
+      "body_html_zh": "<h2>TechBrief</h2><p>TechBrief 聚合值得关注的 AI 技术内容，并通过结构化处理帮助读者快速获取要点。</p>",
+      "body_html_en": "<h2>TechBrief</h2><p>TechBrief curates notable AI technical updates and helps readers grasp the key points quickly through structured processing.</p>",
+      "seo_title_zh": "关于 TechBrief",
+      "seo_title_en": "About TechBrief",
+      "seo_description_zh": "了解 TechBrief 的定位、内容来源与产品目标。",
+      "seo_description_en": "Learn about TechBrief, its content sources, and product goals.",
+      "is_published": true
+    },
+    {
+      "title": "Privacy",
+      "slug": "privacy",
+      "page_code": "privacy",
+      "title_zh": "隐私政策",
+      "title_en": "Privacy",
+      "body_md_zh": "## 隐私政策\n\n我们仅收集完成订阅与运营所需的最小信息。",
+      "body_md_en": "## Privacy Policy\n\nWe only collect the minimum information required to operate subscriptions and the service.",
+      "body_html_zh": "<h2>隐私政策</h2><p>我们仅收集完成订阅与运营所需的最小信息。</p>",
+      "body_html_en": "<h2>Privacy Policy</h2><p>We only collect the minimum information required to operate subscriptions and the service.</p>",
+      "seo_title_zh": "TechBrief 隐私政策",
+      "seo_title_en": "TechBrief Privacy Policy",
+      "seo_description_zh": "查看 TechBrief 的数据收集与使用说明。",
+      "seo_description_en": "Review how TechBrief collects and uses data.",
+      "is_published": true
+    },
+    {
+      "title": "Terms",
+      "slug": "terms",
+      "page_code": "terms",
+      "title_zh": "服务条款",
+      "title_en": "Terms",
+      "body_md_zh": "## 服务条款\n\n使用 TechBrief 即表示你同意将内容用于个人阅读与研究参考。",
+      "body_md_en": "## Terms of Service\n\nUsing TechBrief means you agree to use the content for personal reading and research reference.",
+      "body_html_zh": "<h2>服务条款</h2><p>使用 TechBrief 即表示你同意将内容用于个人阅读与研究参考。</p>",
+      "body_html_en": "<h2>Terms of Service</h2><p>Using TechBrief means you agree to use the content for personal reading and research reference.</p>",
+      "seo_title_zh": "TechBrief 服务条款",
+      "seo_title_en": "TechBrief Terms of Service",
+      "seo_description_zh": "查看访问和使用 TechBrief 的基本条款。",
+      "seo_description_en": "Review the basic terms for accessing and using TechBrief.",
+      "is_published": true
+    }
+  ]
+}

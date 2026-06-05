@@ -1,0 +1,39 @@
+- [x] 已完成 README、PRD、技术方案、系统架构、数据库设计、API 设计、交付说明、验收清单和 `stitch_ai_insight_bridge` 的可追溯引用链核对
+- [x] 已形成统一的需求优先级、冲突裁决规则和信息缺口清单
+- [x] 已将 MVP 需求拆解为公开站点、后台管理、内容流水线、邮件订阅、微信草稿五大能力域
+- [x] 已固化 P0 页面范围、核心对象、状态枚举、外部集成与非目标边界
+- [x] 已将 `stitch_ai_insight_bridge` 的设计 token、HTML 原型、后台截图转化为前端实现约束
+- [x] 已形成页面/组件/状态映射清单，明确 3 个公开 HTML 原型、5 个后台截图与落地页面之间的一一对应关系
+- [x] 已补齐文章列表页、Archive、About、Privacy、Terms、退订确认页、退订成功页等缺失页面规格
+- [x] 已补齐订阅邮箱无效、提交中、失败、重复订阅、公开页空态/404/无结果态、详情页降级态、后台加载/空数据/错误/确认/反馈态等缺失状态规格
+- [x] 已明确首页、详情页、订阅弹窗、后台 5 个页面的高保真验收条目，至少覆盖布局骨架、信息层级、视觉 token、交互反馈与降级策略
+- [x] 已明确响应式、Light/Dark mode、双语阅读模式、阅读进度条和悬浮订阅入口的前端验收标准
+- [x] 已为列表页、静态页、退订页补充映射入口，并明确其缺失原型的补齐依据
+- [x] 已在 `spec.md` 显式定义列表页、Archive、About、Privacy、Terms、退订确认页、退订成功页的路由职责、布局骨架、内容槽位、交互约束和验收口径
+- [x] 已在 `spec.md` 显式定义订阅链路、公开浏览、详情页降级和后台操作的缺失状态规格，覆盖触发条件、反馈形式和恢复路径
+- [x] 已形成前端验收矩阵，覆盖布局层级、文案槽位、视觉 token、断点规则、主题切换、交互触发、反馈状态和降级策略
+- [x] 已在 `spec.md` 锁定 `tb_source`、`tb_source_endpoint`、`tb_discovery_run`、`tb_discovery_run_source_stat`、`tb_content_item`、`tb_content_artifact`、`tb_run_log`、`tb_subscriber`、`tb_email_digest_batch`、`tb_email_delivery`、`tb_publish_record`、`tb_wechat_draft_detail`、`tb_content_page_snapshot` 及页面配置表的数据模型职责与关系
+- [x] 已在 `spec.md` 锁定 PostgreSQL 与 COS 的分层边界，以及 `dedupe_key`、`web_slug`、`unsubscribe_token`、`provider_message_id`、`wechat_draft_id` 等关键键位的归属
+- [x] 已在 `spec.md` 锁定 `/api/public/*`、`/api/admin/*`、`/api/integrations/*` 的接口分区、认证方式、CSRF 规则、幂等接口和统一错误码口径
+- [x] 已在 `spec.md` 锁定 `discover -> fetch -> extract -> transcribe -> translate -> research -> review_pending -> publish -> notify` 的阶段输入输出、状态写回位置和产物归属
+- [x] 已在 `spec.md` 锁定可重试阶段矩阵，并明确通知失败不回滚 Web 发布、微信草稿失败不阻断主站发布
+- [x] 已在 `spec.md` 锁定 Source Adapters、Extractors、Media/ASR、LLM、COS、Resend、WeChat、GA4 的责任边界、调用方向和失败记录要求
+- [x] 已在 `spec.md` 补齐 Task4 Boundary Matrix，覆盖表职责、存储分层、主追踪对象、关键唯一键与外部关联键归属
+- [x] 已在 `spec.md` 补齐 Task4 Retry And Recovery Matrix，覆盖可重试阶段、不可重试阶段与失败恢复边界
+- [x] 已在 `spec.md` 补齐 Task4 Integration Responsibility Matrix，覆盖 Source Adapters、Extractors、Media/ASR、LLM、COS、Resend、WeChat、GA4
+- [x] 已在 `spec.md` 定义工程初始化顺序和阶段性交付策略
+- [x] 已在 `spec.md` 补齐 Task5 Implementation Order，覆盖 Phase 0-7 的目标、最小交付物与退出检查
+- [x] 已在 `spec.md` 补齐 Task5 Stage Deliverables，覆盖工程骨架、核心模型、公开站点、后台、流水线、发布通知、联调验收
+- [x] 已在 `spec.md` 建立 PRD P0、任务拆解与验收清单之间的一一映射
+- [x] 已在 `spec.md` 补齐 Task6 Requirement-To-Validation Mapping，覆盖公开页、订阅、后台、来源管理、流水线、发布、邮件、微信、日志、GA4
+- [x] 已在 `spec.md` 补齐 Task6 Validation Mode Matrix，明确 mock、真实联调与上线阻断项划分
+- [x] 已完成 Task 1 所需的外部补充调研并闭合对应事实缺口：GA4、Resend、腾讯云 COS、微信草稿箱接口、yt-dlp 站点支持范围、MiMo 音频输入约束均已有官方公开文档佐证
+- [x] 已记录以下内部未决缺口为当前阻塞项：PRD 评审结论、域名与外部资源提供方/持有人、视频平台白名单、视频时长与转录优先级、研究报告公开范围、初始管理员账号修改策略
+- [x] 已将以下内部未决缺口如实记录并纳入 Phase 0 / 实施启动门禁：PRD 评审结论、域名与外部资源提供方/持有人、视频平台白名单、视频时长与转录优先级、研究报告公开范围、初始管理员账号修改策略；Task 1 以 blocker 已记录并受门禁约束为完成条件，不以 blocker 已闭合为前提
+- [x] 已补齐 Task11 自动化验收回放入口，提供 `validate_acceptance_replays` 管理命令、Task11 回放套件清单和 4 条 mock-first 回放样例
+- [x] 已补齐 Task11 手工验证入口，提供 `scripts/run_task11_automated_validation.sh`、`scripts/run_task11_manual_validation_prep.sh` 和 `docs/delivery/Task11-Validation-Guide.md`
+- [x] 已将 Task11 当前真实验证口径写回交付文档：当前仅覆盖 OpenAI/Anthropic、article/video、结构保真、publish/notify/wechat mock 回放与失败恢复边界；未宣称 10 条历史公开内容回放、真实外部集成联调或 Task11.3 证据沉淀已完成
+- [x] 已补齐 Batch1 验收缺口的发现与追溯基线：RSS/XML 解析、HTML 列表回退、`ETag` / `Last-Modified` 条件请求、`canonical_url / source_item_id / platform_item_id` 去重、已处理内容不重复入队，以及 `raw_html` / `http_response` / `transcript_*` / debug artifact 持久化
+- [x] 已完成 Batch 2（公开站点与后台框架首版）实现与测试验证：覆盖公开站点首页/列表页/详情页/静态页、后台仪表盘/内容/订阅/工作流页面骨架、共享视觉 token 与最小 SSR 数据通路
+- [x] 已完成 Batch 3（内容流水线、发布与通知首版）实现与测试验证：覆盖 discover/fetch/extract/transcribe/translate/research/review_pending/publish/notify 全阶段骨架、订阅/退订/每日汇总/邮件投递/微信草稿基础适配层与 mock-first 集成测试
+- [x] 已完成 Phase 8 联调验证与验收证据沉淀，全量测试通过（66 passed），Batch 1/2/3 均已通过验证

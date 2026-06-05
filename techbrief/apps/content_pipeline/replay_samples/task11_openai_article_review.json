@@ -1,0 +1,35 @@
+{
+  "source": {
+    "source_code": "openai",
+    "source_name": "OpenAI",
+    "base_url": "https://openai.com",
+    "default_language": "en"
+  },
+  "endpoint": {
+    "endpoint_type": "rss",
+    "endpoint_role": "primary",
+    "endpoint_url": "https://openai.com/blog/rss.xml",
+    "content_type_scope": "article"
+  },
+  "discovery_items": [
+    {
+      "dedupe_key": "task11-openai-article-review-0001",
+      "title_original": "Reasoning Interfaces for Agents",
+      "summary_original": "A replay sample for Task11.1 article review validation.",
+      "source_url": "https://openai.com/blog/reasoning-interfaces",
+      "canonical_url": "https://openai.com/blog/reasoning-interfaces",
+      "source_item_id": "openai-article-review-0001",
+      "published_at_source": "2026-05-01T10:00:00+00:00",
+      "content_type": "article",
+      "content_md": "# Reasoning Interfaces for Agents\n\n## Why it matters\n\nAgents need reliable interface boundaries.\n\n```python\nprint(\"reason carefully\")\n```\n\nRead the [API reference](https://platform.openai.com/docs).",
+      "zh_md": "# 面向智能体的推理接口\n\n## 为什么重要\n\n智能体需要稳定的接口边界。\n\n```python\nprint(\"reason carefully\")\n```\n\n阅读 [API reference](https://platform.openai.com/docs)。",
+      "supports_bilingual": true,
+      "metadata_json": {
+        "acceptance_tags": [
+          "review_pending",
+          "structure_fidelity"
+        ]
+      }
+    }
+  ]
+}

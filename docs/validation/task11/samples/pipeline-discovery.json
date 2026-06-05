@@ -1,0 +1,12 @@
+{
+  "run_id": "ce836f93-9efe-4e92-8447-bd419a074084",
+  "discovery_run_id": "ac449989-f1ae-44fa-bce5-60592b768abe",
+  "content_item_ids": [
+    "d46e6942-8413-4d09-8b96-7a907226f5af",
+    "7acd6dfc-4d72-4538-8e60-168d6a954ee5",
+    "57b5fb09-e1bd-45d5-afe3-4b02356519cc"
+  ],
+  "discovered_count": 3,
+  "enqueued_count": 3,
+  "failed_count": 0
+}

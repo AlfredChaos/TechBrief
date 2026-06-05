@@ -1,0 +1,119 @@
+{% extends "web/base_public.html" %}
+
+{% block title %}{{ page_title }} - {{ brand_name }}{% endblock %}
+
+{% block content %}
+  <section class="tb-section">
+    <div class="tb-stack" style="gap:32px;">
+      <article class="tb-glass tb-card tb-panel">
+        <div class="tb-stack" style="gap:20px;">
+          <div class="tb-meta-row">
+            <span class="tb-badge">{{ detail.source_name }}</span>
+            <span class="tb-metadata">{{ detail.published_label }}</span>
+          </div>
+          <h1 class="tb-heading" style="font-size:clamp(2rem,4vw,3.5rem);">{{ detail.title_zh }}</h1>
+          {% if detail.supports_bilingual %}
+            <p class="tb-subheading">{{ detail.title_original }}</p>
+          {% endif %}
+          <div class="tb-toolbar">
+            <div class="tb-actions">
+              <a class="tb-button--ghost {% if view_mode == 'zh' %}is-active{% endif %}" href="{{ view_switch_urls.zh }}">{{ labels.mode_zh }}</a>
+              <a class="tb-button--ghost {% if view_mode == 'bilingual' %}is-active{% endif %}" href="{{ view_switch_urls.bilingual }}">{{ labels.mode_bilingual }}</a>
+            </div>
+            <button type="button" class="tb-button" data-open-subscribe>{{ labels.subscribe }}</button>
+          </div>
+        </div>
+      </article>
+
+      <div class="tb-glass tb-card tb-cover" style="min-height:320px;">
+        {% if detail.cover_url %}
+          <img src="{{ detail.cover_url }}" alt="{{ detail.title_zh }}">
+        {% endif %}
+      </div>
+
+      {% if view_mode == "bilingual" and detail.supports_bilingual %}
+        <div class="tb-article-columns">
+          <article class="tb-glass tb-prose" style="position:relative;">
+            <button type="button" class="tb-copy-btn" data-copy-panel="original">{{ labels.copy_original|default:"Copy" }}</button>
+            {% include "web/partials/content_blocks.html" with blocks=detail.content_blocks_original %}
+          </article>
+          <article class="tb-glass tb-prose" style="position:relative;">
+            <button type="button" class="tb-copy-btn" data-copy-panel="zh">{{ labels.copy_zh|default:"复制" }}</button>
+            {% include "web/partials/content_blocks.html" with blocks=detail.content_blocks_zh %}
+          </article>
+        </div>
+      {% else %}
+        <article class="tb-glass tb-prose" style="position:relative;">
+          <button type="button" class="tb-copy-btn" data-copy-panel="zh">{{ labels.copy_zh|default:"复制" }}</button>
+          {% include "web/partials/content_blocks.html" with blocks=detail.content_blocks_zh %}
+        </article>
+      {% endif %}
+
+      {% if detail.research_report_md %}
+        <section class="tb-glass tb-card tb-panel">
+          <div class="tb-stack" style="gap:12px;">
+            <div class="tb-label">{{ labels.research }}</div>
+            <div class="tb-copy">{{ detail.research_report_md|linebreaks }}</div>
+          </div>
+        </section>
+      {% endif %}
+
+      <section class="tb-glass tb-card tb-panel">
+        <div class="tb-stack" style="gap:12px;">
+          <div class="tb-label">{{ labels.disclaimer }}</div>
+          <div class="tb-copy">{{ detail.disclaimer|linebreaks }}</div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Floating subscribe button (appears on scroll) -->
+  <button type="button" class="tb-fab-subscribe" id="fab-subscribe" data-open-subscribe aria-label="{{ labels.subscribe }}">
+    {{ labels.subscribe }}
+  </button>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    (() => {
+      /* ── Floating subscribe FAB ───────────────────────────── */
+      const fab = document.getElementById("fab-subscribe");
+      if (fab) {
+        let visible = false;
+        const toggleFab = () => {
+          const shouldShow = window.scrollY > 300;
+          if (shouldShow !== visible) {
+            visible = shouldShow;
+            fab.classList.toggle("is-visible", visible);
+          }
+        };
+        window.addEventListener("scroll", toggleFab, { passive: true });
+        toggleFab();
+      }
+
+      /* ── Bilingual copy buttons ───────────────────────────── */
+      document.querySelectorAll("[data-copy-panel]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const article = btn.closest(".tb-prose");
+          if (!article) return;
+          const texts = [];
+          article.querySelectorAll("p, h1, h2, h3, h4, li, blockquote, pre code").forEach((el) => {
+            const t = el.textContent.trim();
+            if (t) texts.push(t);
+          });
+          const content = texts.join("\n\n");
+          if (!content) return;
+          navigator.clipboard.writeText(content).then(() => {
+            btn.classList.add("is-copied");
+            const original = btn.textContent;
+            btn.textContent = "✓";
+            setTimeout(() => {
+              btn.classList.remove("is-copied");
+              btn.textContent = original;
+            }, 1500);
+          }).catch(() => {});
+        });
+      });
+    })();
+  </script>
+{% endblock %}

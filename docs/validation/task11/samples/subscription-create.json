@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "code": "OK",
+  "message": "subscribed",
+  "data": {
+    "subscriber_id": "0771e5f7-0cb3-42f9-ac42-48dc84f4cce7",
+    "status": "active",
+    "subscribed_at": "2026-06-05T09:28:52.930209+00:00",
+    "unsubscribe_token": "22b2174539b34a9f8f9ad4435168e547"
+  },
+  "meta": {
+    "request_id": "req_c22a23fb63f1472e8571a84ab817c231"
+  }
+}

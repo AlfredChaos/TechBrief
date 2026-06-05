@@ -1,0 +1,186 @@
+{% extends "wagtailadmin/generic/base.html" %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <style>
+    :root {
+{{ theme_css_variables|safe }}
+      --tb-console-border: color-mix(in srgb, var(--tb-colors-outline-variant) 52%, white);
+      --tb-console-surface: rgba(255, 255, 255, 0.88);
+      --tb-console-surface-strong: rgba(255, 255, 255, 0.92);
+      --tb-console-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+      --tb-console-shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --tb-console-active: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--tb-colors-primary) 18%, white),
+        color-mix(in srgb, var(--tb-colors-tertiary) 16%, white)
+      );
+    }
+
+    .tb-console-shell {
+      display: grid;
+      gap: 24px;
+    }
+
+    .tb-console-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 12px;
+      border-radius: var(--tb-rounded-lg);
+      background: linear-gradient(180deg, var(--tb-console-surface), var(--tb-console-surface-strong));
+      border: 1px solid var(--tb-console-border);
+      box-shadow: var(--tb-console-shadow);
+    }
+
+    .tb-console-nav__link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      padding: 10px 14px;
+      border-radius: var(--tb-rounded-full);
+      color: var(--tb-colors-on-surface-variant);
+      text-decoration: none;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid transparent;
+    }
+
+    .tb-console-nav__link.is-active {
+      color: var(--tb-colors-on-surface);
+      border-color: color-mix(in srgb, var(--tb-colors-primary) 24%, white);
+      background: var(--tb-console-active);
+    }
+
+    .tb-console-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .tb-console-grid--cards {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .tb-console-card {
+      padding: 18px;
+      border-radius: calc(var(--tb-rounded-xl) - 6px);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--tb-console-border);
+      box-shadow: var(--tb-console-shadow-soft);
+    }
+
+    .tb-console-card__eyebrow {
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-console-card__value {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--tb-colors-on-surface);
+    }
+
+    .tb-console-card__meta {
+      margin-top: 8px;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-console-table-wrap {
+      overflow-x: auto;
+      border-radius: calc(var(--tb-rounded-xl) - 6px);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--tb-console-border);
+      box-shadow: var(--tb-console-shadow-soft);
+    }
+
+    .tb-console-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .tb-console-table th,
+    .tb-console-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--tb-console-border);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .tb-console-table th {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-console-kicker {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: var(--tb-rounded-full);
+      background: color-mix(in srgb, var(--tb-colors-inverse-primary) 26%, white);
+      color: var(--tb-colors-on-surface-variant);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .tb-console-filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      align-items: end;
+      padding: 18px;
+      border-radius: calc(var(--tb-rounded-xl) - 6px);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--tb-console-border);
+      box-shadow: var(--tb-console-shadow-soft);
+    }
+
+    .tb-console-field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--tb-colors-on-surface-variant);
+    }
+
+    .tb-console-field input,
+    .tb-console-field select {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 12px;
+      border: 1px solid color-mix(in srgb, var(--tb-colors-outline) 24%, white);
+      border-radius: var(--tb-rounded-md);
+      background: #fff;
+    }
+
+    .tb-console-empty {
+      padding: 32px 20px;
+      text-align: center;
+      color: var(--tb-colors-on-surface-variant);
+      border-radius: calc(var(--tb-rounded-xl) - 6px);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px dashed color-mix(in srgb, var(--tb-colors-outline) 28%, white);
+    }
+
+    .tb-console-footer {
+      color: var(--tb-colors-on-surface-variant);
+      font-size: 13px;
+    }
+  </style>
+{% endblock %}
+
+{% block main_content %}
+  <section class="tb-console-shell">
+    <nav class="tb-console-nav" aria-label="TechBrief admin sections">
+      {% for item in nav_items %}
+        <a href="{{ item.url }}" class="tb-console-nav__link{% if item.active %} is-active{% endif %}">{{ item.label }}</a>
+      {% endfor %}
+    </nav>
+    {% block admin_console_content %}{% endblock %}
+  </section>
+{% endblock %}

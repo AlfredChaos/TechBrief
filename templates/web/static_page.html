@@ -1,0 +1,18 @@
+{% extends "web/base_public.html" %}
+
+{% block title %}{{ page_title }} - {{ brand_name }}{% endblock %}
+
+{% block content %}
+  <section class="tb-section">
+    <article class="tb-glass tb-card tb-panel">
+      <div class="tb-stack" style="gap:16px;">
+        <div class="tb-label">Static Page</div>
+        <h1 class="tb-heading" style="font-size:clamp(2rem,4vw,3rem);">{{ page_title }}</h1>
+        {% if page_description %}
+          <p class="tb-subheading">{{ page_description }}</p>
+        {% endif %}
+        <div class="tb-static-body tb-copy">{{ page_body_html|safe }}</div>
+      </div>
+    </article>
+  </section>
+{% endblock %}

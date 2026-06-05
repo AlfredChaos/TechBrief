@@ -1,0 +1,18 @@
+{% extends "web/base_public.html" %}
+
+{% block title %}{{ page_title }} - {{ brand_name }}{% endblock %}
+
+{% block content %}
+  <section class="tb-section">
+    <article class="tb-glass tb-card tb-panel">
+      <div class="tb-stack" style="gap:16px; text-align:center;">
+        <div class="tb-label">{{ unsubscribe_state.status }}</div>
+        <h1 class="tb-heading" style="font-size:clamp(2rem,4vw,3rem);">{{ unsubscribe_state.title }}</h1>
+        <p class="tb-subheading">{{ unsubscribe_state.body }}</p>
+        <div>
+          <a class="tb-button" href="/">{{ brand_name }}</a>
+        </div>
+      </div>
+    </article>
+  </section>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "admin_console/base.html" %}
+
+{% block admin_console_content %}
+  <section class="tb-console-grid tb-console-grid--cards">
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">New Content Today</p>
+      <p class="tb-console-card__value">{{ dashboard_data.metrics.new_content_today }}</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Published Today</p>
+      <p class="tb-console-card__value">{{ dashboard_data.metrics.published_today }}</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Failed Today</p>
+      <p class="tb-console-card__value">{{ dashboard_data.metrics.failed_today }}</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Subscribers</p>
+      <p class="tb-console-card__value">{{ dashboard_data.metrics.subscriber_total }}</p>
+      <div class="tb-console-card__meta">+{{ dashboard_data.metrics.subscriber_new_today }} today</div>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Review Pending</p>
+      <p class="tb-console-card__value">{{ dashboard_data.metrics.review_pending_count }}</p>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Workflow Success Rate</p>
+      <p class="tb-console-card__value">{{ dashboard_data.metrics.workflow_success_rate|floatformat:2 }}</p>
+    </article>
+  </section>
+
+  <section class="tb-console-grid tb-console-grid--cards">
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Database</p>
+      <span class="tb-console-kicker">{{ dashboard_data.system_status.database }}</span>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Redis</p>
+      <span class="tb-console-kicker">{{ dashboard_data.system_status.redis }}</span>
+    </article>
+    <article class="tb-console-card">
+      <p class="tb-console-card__eyebrow">Worker</p>
+      <span class="tb-console-kicker">{{ dashboard_data.system_status.worker }}</span>
+    </article>
+  </section>
+
+  {% if dashboard_data.recent_activities %}
+    <section class="tb-console-table-wrap">
+      <table class="tb-console-table">
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>Type</th>
+            <th>Occurred At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in dashboard_data.recent_activities %}
+            <tr>
+              <td>{{ item.message }}</td>
+              <td><span class="tb-console-kicker">{{ item.type }}</span></td>
+              <td>{{ item.occurred_at }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  {% else %}
+    <div class="tb-console-empty">No recent activity is available yet.</div>
+  {% endif %}
+{% endblock %}

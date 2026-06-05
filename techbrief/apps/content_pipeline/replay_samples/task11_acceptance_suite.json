@@ -1,0 +1,19 @@
+{
+  "review_pending_samples": [
+    "task11_openai_article_review",
+    "task11_anthropic_video_review"
+  ],
+  "publish_notify_samples": [
+    "task11_openai_article_publish",
+    "task11_anthropic_video_publish"
+  ],
+  "failure_injection_samples": {
+    "notify_partial_failure": "task11_openai_article_publish",
+    "wechat_failure_non_blocking": "task11_anthropic_video_publish"
+  },
+  "limitations": [
+    "This suite is mock-first and does not claim 10/10 historical replay acceptance.",
+    "This suite does not replace real Resend, WeChat, COS, ASR, or GA4 integration verification.",
+    "This suite does not replace screenshot, callback payload, or object storage evidence collection required by Task11.3."
+  ]
+}
