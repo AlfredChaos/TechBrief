@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: techbrief-config
+  namespace: techbrief
+  labels:
+    app.kubernetes.io/name: techbrief
+data:
+  APP_ENV: "production"
+  DJANGO_SETTINGS_MODULE: "techbrief.settings.production"
+  DJANGO_DEBUG: "0"
+  DJANGO_ALLOWED_HOSTS: "techbrief.app,www.techbrief.app"
+  DJANGO_CSRF_TRUSTED_ORIGINS: "https://techbrief.app,https://www.techbrief.app"
+  PUBLIC_BASE_URL: "https://techbrief.app"
+  ADMIN_BASE_URL: "https://admin.techbrief.app"
+  DATABASE_CONN_MAX_AGE: "60"
+  CELERY_TIMEZONE: "UTC"
+  CELERY_WORKER_CONCURRENCY: "4"
+  CELERY_MAX_TASKS_PER_CHILD: "100"
+  GUNICORN_WORKERS: "4"
+  GUNICORN_TIMEOUT: "120"
+  COS_ENABLED: "1"
+  COS_KEY_PREFIX: "techbrief/prod"
+  EMAIL_DELIVERY_ADAPTER: "resend"
+  WECHAT_DRAFT_ADAPTER: "wechat_api"
+  LLM_ADAPTER: "openai_compatible"
+  ASR_ADAPTER: "whisper"
+  REVIEW_AUTO_APPROVE: "1"
+  LOG_JSON: "1"

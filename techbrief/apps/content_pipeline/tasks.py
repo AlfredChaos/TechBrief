@@ -16,7 +16,11 @@ from techbrief.apps.content_pipeline.models import (
     Source,
     TriggeredBy,
 )
-from techbrief.apps.content_pipeline.services import ContentPipelineService, DiscoveryWorkflowService
+from techbrief.apps.content_pipeline.services import (
+    ContentPipelineService,
+    DiscoveryWorkflowService,
+    PipelineStageError,
+)
 from techbrief.apps.integrations.adapters import BaseEmailAdapter, BaseWeChatDraftAdapter
 from techbrief.apps.publishers.models import Subscriber, SubscriberSourcePage, SubscriberStatus
 from techbrief.apps.publishers.services import (
@@ -112,7 +116,13 @@ def run_discovery(
     return result
 
 
-@shared_task(name="techbrief.content_pipeline.fetch")
+@shared_task(
+    name="techbrief.content_pipeline.fetch",
+    autoretry_for=(PipelineStageError,),
+    retry_backoff=60,
+    retry_backoff_max=600,
+    max_retries=3,
+)
 def run_fetch(
     *,
     content_item_id: str,
@@ -133,7 +143,13 @@ def run_fetch(
     )
 
 
-@shared_task(name="techbrief.content_pipeline.extract")
+@shared_task(
+    name="techbrief.content_pipeline.extract",
+    autoretry_for=(PipelineStageError,),
+    retry_backoff=60,
+    retry_backoff_max=600,
+    max_retries=3,
+)
 def run_extract(
     *,
     content_item_id: str,
@@ -154,7 +170,13 @@ def run_extract(
     )
 
 
-@shared_task(name="techbrief.content_pipeline.transcribe")
+@shared_task(
+    name="techbrief.content_pipeline.transcribe",
+    autoretry_for=(PipelineStageError,),
+    retry_backoff=60,
+    retry_backoff_max=600,
+    max_retries=3,
+)
 def run_transcribe(
     *,
     content_item_id: str,
@@ -175,7 +197,13 @@ def run_transcribe(
     )
 
 
-@shared_task(name="techbrief.content_pipeline.translate")
+@shared_task(
+    name="techbrief.content_pipeline.translate",
+    autoretry_for=(PipelineStageError,),
+    retry_backoff=60,
+    retry_backoff_max=600,
+    max_retries=3,
+)
 def run_translate(
     *,
     content_item_id: str,
@@ -196,7 +224,13 @@ def run_translate(
     )
 
 
-@shared_task(name="techbrief.content_pipeline.research")
+@shared_task(
+    name="techbrief.content_pipeline.research",
+    autoretry_for=(PipelineStageError,),
+    retry_backoff=60,
+    retry_backoff_max=600,
+    max_retries=3,
+)
 def run_research(
     *,
     content_item_id: str,

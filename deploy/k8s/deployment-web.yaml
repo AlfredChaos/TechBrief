@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techbrief-web
+  namespace: techbrief
+  labels:
+    app.kubernetes.io/name: techbrief
+    app.kubernetes.io/component: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: techbrief
+      app.kubernetes.io/component: web
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: techbrief
+        app.kubernetes.io/component: web
+    spec:
+      initContainers:
+        - name: migrate
+          image: techbrief-app:latest
+          command: ["scripts/docker-entrypoint.sh", "migrate"]
+          envFrom:
+            - configMapRef:
+                name: techbrief-config
+            - secretRef:
+                name: techbrief-secrets
+      containers:
+        - name: web
+          image: techbrief-app:latest
+          command: ["scripts/docker-entrypoint.sh", "web"]
+          ports:
+            - containerPort: 8010
+              name: http
+          env:
+            - name: TECHBRIEF_SERVICE
+              value: "web"
+          envFrom:
+            - configMapRef:
+                name: techbrief-config
+            - secretRef:
+                name: techbrief-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /health/live/
+              port: 8010
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready/
+              port: 8010
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3

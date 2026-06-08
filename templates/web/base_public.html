@@ -4,6 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{{ page_title }} - {{ brand_name }}{% endblock %}</title>
+  {% block seo_head %}
+  <meta name="description" content="{{ seo_description|default:'' }}">
+  <meta property="og:title" content="{{ page_title }} - {{ brand_name }}">
+  <meta property="og:description" content="{{ seo_description|default:'' }}">
+  <meta property="og:url" content="{{ canonical_url|default:'' }}">
+  <meta property="og:type" content="website">
+  {% if og_image_url %}<meta property="og:image" content="{{ og_image_url }}">{% endif %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title }} - {{ brand_name }}">
+  <meta name="twitter:description" content="{{ seo_description|default:'' }}">
+  {% endblock %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Serif:wght@400;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
@@ -521,8 +532,7 @@
     }
 
     /* ── Dark mode ──────────────────────────────────────────── */
-    @media (prefers-color-scheme: dark) {
-      :root {
+    [data-theme="dark"] {
 {{ dark_mode_css_variables|safe }}
         --tb-border: rgba(0, 0, 0, 0.36);
         --tb-glass-fill: rgba(31, 31, 35, 0.82);
@@ -531,64 +541,78 @@
         --tb-shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.28);
       }
 
-      body {
+      [data-theme="dark"] body {
         background:
           radial-gradient(circle at top left, rgba(0, 88, 188, 0.12), transparent 30%),
           radial-gradient(circle at top right, rgba(158, 61, 0, 0.1), transparent 36%),
           linear-gradient(180deg, var(--tb-colors-surface) 0%, var(--tb-colors-background) 100%);
       }
 
-      .tb-topbar {
+      [data-theme="dark"] .tb-topbar {
         background: rgba(19, 19, 22, 0.88);
         border-bottom-color: rgba(65, 71, 85, 0.3);
       }
 
-      .tb-nav a.is-active,
-      .tb-nav a:hover,
-      .tb-pill.is-active,
-      .tb-button--ghost:hover {
+      [data-theme="dark"] .tb-nav a.is-active,
+      [data-theme="dark"] .tb-nav a:hover,
+      [data-theme="dark"] .tb-pill.is-active,
+      [data-theme="dark"] .tb-button--ghost:hover {
         background: rgba(173, 198, 255, 0.12);
       }
 
-      .tb-button--ghost {
+      [data-theme="dark"] .tb-button--ghost {
         background: rgba(31, 31, 35, 0.5);
         border-color: rgba(65, 71, 85, 0.4);
       }
 
-      .tb-badge {
+      [data-theme="dark"] .tb-badge {
         background: rgba(31, 31, 35, 0.6);
         border-color: rgba(65, 71, 85, 0.35);
       }
 
-      .tb-prose pre {
+      [data-theme="dark"] .tb-prose pre {
         background: rgba(14, 14, 17, 0.94);
       }
 
-      .tb-prose blockquote {
+      [data-theme="dark"] .tb-prose blockquote {
         background: rgba(31, 31, 35, 0.5);
         border-left-color: rgba(173, 198, 255, 0.4);
       }
 
-      .tb-modal-backdrop {
+      [data-theme="dark"] .tb-modal-backdrop {
         background: rgba(0, 0, 0, 0.45);
       }
 
-      .tb-footer {
+      [data-theme="dark"] .tb-footer {
         background: rgba(19, 19, 22, 0.7);
         border-top-color: rgba(65, 71, 85, 0.3);
       }
 
-      .tb-input,
-      .tb-select {
+      [data-theme="dark"] .tb-input,
+      [data-theme="dark"] .tb-select {
         background: rgba(31, 31, 35, 0.6);
         border-color: rgba(65, 71, 85, 0.5);
       }
 
-      .tb-cover {
+      [data-theme="dark"] .tb-cover {
         background:
           linear-gradient(135deg, rgba(173, 198, 255, 0.12), rgba(255, 182, 140, 0.08)),
           linear-gradient(180deg, rgba(31, 31, 35, 0.3), rgba(31, 31, 35, 0.05));
       }
+
+    /* ── Theme toggle ───────────────────────────────────────── */
+    .tb-theme-toggle {
+      background: none;
+      border: 1px solid var(--tb-border);
+      border-radius: 999px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      color: var(--tb-colors-on-surface-variant);
+    }
+    .tb-theme-toggle:hover {
+      background: var(--tb-colors-secondary-container);
     }
 
     /* ── Reading progress bar ─────────────────────────────── */
@@ -675,6 +699,7 @@
           {% endfor %}
         </nav>
         <div class="tb-actions">
+          <button type="button" class="tb-theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌓</button>
           <a class="tb-pill {% if site_locale.is_chinese %}is-active{% endif %}" href="{{ locale_switch_url_zh }}">CN</a>
           <a class="tb-pill {% if not site_locale.is_chinese %}is-active{% endif %}" href="{{ locale_switch_url_en }}">EN</a>
           <button type="button" class="tb-button" data-open-subscribe>{{ subscribe_labels.button }}</button>
@@ -834,6 +859,36 @@
   </script>
 
   {% block extra_js %}{% endblock %}
+
+  <!-- Theme toggle: dark/light mode with localStorage persistence -->
+  <script>
+    (function() {
+      var KEY = 'tb_theme';
+      var root = document.documentElement;
+      var btn = document.getElementById('theme-toggle');
+
+      function apply(theme) {
+        root.setAttribute('data-theme', theme);
+        if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌓';
+      }
+
+      // Initial: localStorage > system preference > light
+      var saved = localStorage.getItem(KEY);
+      if (saved) {
+        apply(saved);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        apply('dark');
+      }
+
+      if (btn) {
+        btn.addEventListener('click', function() {
+          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          apply(next);
+          localStorage.setItem(KEY, next);
+        });
+      }
+    })();
+  </script>
 
   <!-- GA4 snippet placeholder -->
   {% if ga4_measurement_id %}

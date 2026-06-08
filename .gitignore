@@ -1,10 +1,41 @@
-.env
-.venv/
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+.venv/
+
+# Environment (secrets)
+.env
+deploy/k8s/secrets.yaml
+
+# Django / Celery
+staticfiles/
+*.sqlite3
+celerybeat-schedule
+celerybeat.pid
+
+# Test / Cache
 .pytest_cache/
 .mypy_cache/
-staticfiles/
+.ruff_cache/
+
+# Logs
 logs/
-test.sqlite3
+*.log
+
+# Artifacts / generated output
 artifacts/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

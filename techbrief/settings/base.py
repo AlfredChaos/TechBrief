@@ -17,6 +17,9 @@ env = environ.Env(
     COS_ENABLED=(bool, False),
     EMAIL_DELIVERY_ADAPTER=(str, "mock"),
     WECHAT_DRAFT_ADAPTER=(str, "mock"),
+    LLM_ADAPTER=(str, "mock"),
+    ASR_ADAPTER=(str, "mock"),
+    REVIEW_AUTO_APPROVE=(bool, True),
     LOG_JSON=(bool, False),
 )
 environ.Env.read_env(BASE_DIR / ".env")
@@ -136,6 +139,20 @@ EMAIL_FROM_ADDRESS = env("EMAIL_FROM_ADDRESS", default="digest@example.com")
 RESEND_API_KEY = env("RESEND_API_KEY", default="")
 WECHAT_API_BASE_URL = env("WECHAT_API_BASE_URL", default="https://api.weixin.qq.com")
 WECHAT_ACCESS_TOKEN = env("WECHAT_ACCESS_TOKEN", default="")
+
+# LLM integration
+LLM_ADAPTER = env("LLM_ADAPTER", default="mock")
+LLM_API_KEY = env("LLM_API_KEY", default="")
+LLM_API_BASE_URL = env("LLM_API_BASE_URL", default="https://api.openai.com/v1")
+LLM_MODEL = env("LLM_MODEL", default="gpt-4o")
+
+# ASR integration
+ASR_ADAPTER = env("ASR_ADAPTER", default="mock")
+ASR_API_KEY = env("ASR_API_KEY", default="")
+ASR_API_BASE_URL = env("ASR_API_BASE_URL", default="https://api.openai.com/v1")
+
+# Pipeline configuration
+REVIEW_AUTO_APPROVE = env.bool("REVIEW_AUTO_APPROVE", default=True)
 
 PUBLIC_BASE_URL = env("PUBLIC_BASE_URL", default="http://127.0.0.1:8010")
 ADMIN_BASE_URL = env("ADMIN_BASE_URL", default="http://127.0.0.1:8010")

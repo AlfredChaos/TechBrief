@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techbrief-beat
+  namespace: techbrief
+  labels:
+    app.kubernetes.io/name: techbrief
+    app.kubernetes.io/component: beat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: techbrief
+      app.kubernetes.io/component: beat
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: techbrief
+        app.kubernetes.io/component: beat
+    spec:
+      containers:
+        - name: beat
+          image: techbrief-app:latest
+          command: ["scripts/docker-entrypoint.sh", "beat"]
+          env:
+            - name: TECHBRIEF_SERVICE
+              value: "beat"
+          envFrom:
+            - configMapRef:
+                name: techbrief-config
+            - secretRef:
+                name: techbrief-secrets
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi

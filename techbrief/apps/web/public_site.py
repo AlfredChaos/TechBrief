@@ -235,8 +235,8 @@ def build_base_context(request, *, locale: SiteLocale | None = None) -> dict:
             "success_title": get_localized_value(locale, "感谢订阅！", "Subscription Confirmed"),
             "success_body": get_localized_value(
                 locale,
-                "您的邮箱已成功加入名单。请检查收件箱以确认订阅。",
-                "Your email has been added successfully. Please check your inbox to confirm the subscription.",
+                "您的邮箱已成功加入订阅名单，感谢关注！",
+                "Your email has been added to our list. Thanks for subscribing!",
             ),
             "success_back": get_localized_value(locale, "返回浏览", "Back To Reading"),
             "error_invalid": get_localized_value(locale, "请输入有效邮箱地址。", "Please enter a valid email address."),
@@ -248,6 +248,9 @@ def build_base_context(request, *, locale: SiteLocale | None = None) -> dict:
         "locale_switch_url_en": build_locale_switch_url(request, "en-US"),
         "unsubscribe_api_url": "/api/public/subscriptions/unsubscribe",
         "subscription_api_url": "/api/public/subscriptions",
+        "seo_description": "",
+        "canonical_url": f"{getattr(settings, 'PUBLIC_BASE_URL', '')}{request.path}",
+        "og_image_url": "",
     }
 
 
@@ -550,6 +553,11 @@ def build_home_context(request) -> dict:
             page.subscribe_placeholder_en,
         ),
         "home_cta_button": get_localized_value(locale, page.primary_cta_text_zh, page.primary_cta_text_en),
+        "seo_description": get_localized_value(
+            locale,
+            "TechBrief — 每日 AI 技术内容双语聚合平台，发现、翻译、发布精选技术文章与视频。",
+            "TechBrief — Daily bilingual AI tech content aggregation. Curated articles and videos, translated and published.",
+        ),
     }
 
 
@@ -561,6 +569,7 @@ def build_static_context(request, page: StaticPage) -> dict:
         "page_title": get_localized_value(locale, page.title_zh, page.title_en),
         "page_body_html": get_localized_value(locale, page.body_html_zh, page.body_html_en),
         "page_description": get_localized_value(locale, page.seo_description_zh, page.seo_description_en),
+        "seo_description": get_localized_value(locale, page.seo_description_zh, page.seo_description_en),
     }
 
 
@@ -587,6 +596,12 @@ def build_detail_context(request, snapshot: ContentPageSnapshot) -> dict:
             "copy_zh": get_localized_value(locale, "复制", "Copy"),
             "copy_original": get_localized_value(locale, "复制原文", "Copy Original"),
         },
+        "seo_description": get_localized_value(
+            locale,
+            detail.get("summary_zh", "") or detail.get("summary_original", ""),
+            detail.get("summary_original", "") or detail.get("summary_zh", ""),
+        )[:200],
+        "og_image_url": detail.get("cover_url", ""),
     }
 
 

@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: techbrief-ingress
+  namespace: techbrief
+  labels:
+    app.kubernetes.io/name: techbrief
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - techbrief.app
+        - admin.techbrief.app
+      secretName: techbrief-tls
+  rules:
+    - host: techbrief.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: techbrief-web
+                port:
+                  number: 80
+    - host: admin.techbrief.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: techbrief-web
+                port:
+                  number: 80

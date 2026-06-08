@@ -22,6 +22,7 @@ from techbrief.apps.content_pipeline.models import (
     ContentStatus,
     ContentType,
     DiscoveryRun,
+    DiscoveryRunStatus,
     DiscoveryRunType,
     EndpointContentScope,
     EndpointRole,
@@ -68,6 +69,18 @@ STAGE_TASK_MAP = {
     ContentStage.PUBLISH: run_publish,
     ContentStage.NOTIFY: run_notify,
 }
+
+# Ordered pipeline stages for timeline display in workflow runs.
+CONTENT_STAGES = [
+    ContentStage.FETCH,
+    ContentStage.EXTRACT,
+    ContentStage.TRANSCRIBE,
+    ContentStage.TRANSLATE,
+    ContentStage.RESEARCH,
+    ContentStage.REVIEW_PENDING,
+    ContentStage.PUBLISH,
+    ContentStage.NOTIFY,
+]
 
 
 class AdminActionError(Exception):

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import uuid
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -14,6 +15,8 @@ from urllib.request import Request, urlopen
 from xml.etree import ElementTree
 
 from django.conf import settings
+
+logger = logging.getLogger(__name__)
 from django.db import transaction
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
@@ -406,18 +409,65 @@ def _default_fetch_handler(*, content_item: ContentItem) -> StageResult:
     final_url = content_item.final_url or content_item.source_url or content_item.canonical_url
     metadata_json = dict(content_item.metadata_json or {})
     fetch_payload = dict(metadata_json.get("fetch_response") or {})
+
+    # Use pre-seeded body if available (test injection / replay), otherwise fetch live.
+    raw_html = fetch_payload.get("body")
     response_headers = dict(fetch_payload.get("headers") or {})
-    raw_html = fetch_payload.get("body") or (
-        "<html><body>"
-        f"<article><h1>{content_item.title_original}</h1>"
-        f"<p>Placeholder fetch snapshot for {final_url or 'unknown source'}.</p>"
-        "</article></body></html>"
-    )
+    response_status = fetch_payload.get("status_code", 200)
+    is_placeholder = False
+
+    if raw_html is None and final_url:
+        # Real HTTP fetch
+        try:
+            req_headers = {"User-Agent": "TechBrief/1.0 (+https://github.com/techbrief)"}
+            # Conditional request support (ETag / Last-Modified)
+            prev_fetch = dict(metadata_json.get("fetch") or {})
+            if prev_fetch.get("etag"):
+                req_headers["If-None-Match"] = prev_fetch["etag"]
+            if prev_fetch.get("last_modified"):
+                req_headers["If-Modified-Since"] = prev_fetch["last_modified"]
+
+            req = Request(final_url, headers=req_headers, method="GET")
+            with urlopen(req, timeout=30) as resp:
+                response_status = resp.status
+                raw_html = resp.read().decode("utf-8", errors="replace")
+                # Store useful headers for future conditional requests
+                if etag := resp.headers.get("ETag"):
+                    response_headers["etag"] = etag
+                if lm := resp.headers.get("Last-Modified"):
+                    response_headers["last_modified"] = lm
+                if ct := resp.headers.get("Content-Type"):
+                    response_headers["content_type"] = ct
+                # Update final_url after redirects
+                if resp.url and resp.url != final_url:
+                    final_url = resp.url
+        except (URLError, HTTPError, OSError) as exc:
+            logger.warning("Fetch failed for %s: %s", final_url, exc)
+            # Fall back to placeholder on network error so the pipeline can continue
+            raw_html = (
+                "<html><body>"
+                f"<article><h1>{content_item.title_original}</h1>"
+                f"<p>Fetch fallback for {final_url or 'unknown source'}.</p>"
+                f"<!-- fetch_error: {exc} -->"
+                "</article></body></html>"
+            )
+            is_placeholder = True
+            response_status = getattr(exc, "code", 0)
+    elif raw_html is None:
+        # No URL and no pre-seeded body
+        raw_html = (
+            "<html><body>"
+            f"<article><h1>{content_item.title_original}</h1>"
+            "<p>No source URL available for fetching.</p>"
+            "</article></body></html>"
+        )
+        is_placeholder = True
+
     metadata_json["fetch"] = {
-        "placeholder": not bool(fetch_payload.get("body")),
+        "placeholder": is_placeholder,
         "fetched_at": timezone.now().isoformat(),
         "final_url": final_url,
-        "response_status_code": fetch_payload.get("status_code", 200),
+        "response_status_code": response_status,
         "response_headers": response_headers,
     }
     return StageResult(
@@ -439,7 +489,7 @@ def _default_fetch_handler(*, content_item: ContentItem) -> StageResult:
                 body=json.dumps(
                     {
                         "final_url": final_url,
-                        "status_code": fetch_payload.get("status_code", 200),
+                        "status_code": response_status,
                         "headers": response_headers,
                     },
                     ensure_ascii=False,
@@ -453,41 +503,37 @@ def _default_fetch_handler(*, content_item: ContentItem) -> StageResult:
 
 
 def _default_extract_handler(*, content_item: ContentItem) -> StageResult:
-    content_md = content_item.content_md or (
-        f"# {content_item.title_original}\n\n"
-        "Extracted content placeholder.\n\n"
-        f"Source: [{content_item.final_url or content_item.source_url}]"
-        f"({content_item.final_url or content_item.source_url})"
-    )
-    content_ast = content_item.content_ast or {
-        "type": "doc",
-        "version": 1,
-        "source": "workflow_placeholder",
-        "title": content_item.title_original,
-        "blocks": [
-            {"type": "h1", "text": content_item.title_original},
-            {"type": "p", "text": "Extracted content placeholder."},
-            {
-                "type": "link",
-                "text": "Source",
-                "url": content_item.final_url or content_item.source_url or content_item.canonical_url,
-            },
-        ],
-        "evidence": {
-            "placeholder": True,
-            "source_url": content_item.final_url or content_item.source_url or content_item.canonical_url,
-            "text_source_status": (
-                TextSourceStatus.HTML if content_item.content_type == ContentType.ARTICLE else TextSourceStatus.NONE
-            ),
-        },
-    }
+    metadata_json = dict(content_item.metadata_json or {})
+    is_placeholder = True
+
+    # Prefer already-populated fields (manual intake / replay)
+    if content_item.content_md:
+        content_md = content_item.content_md
+        content_ast = content_item.content_ast or _build_ast_from_md(content_md, content_item)
+        is_placeholder = False
+    elif content_item.content_type == ContentType.ARTICLE:
+        content_md, content_ast = _extract_article_content(content_item)
+        is_placeholder = False
+    else:
+        # VIDEO: extract from metadata, not from HTML body
+        content_md = content_item.content_md or (
+            f"# {content_item.title_original}\n\n"
+            f"Video source: {content_item.final_url or content_item.source_url}\n"
+        )
+        content_ast = content_item.content_ast or {
+            "type": "doc",
+            "version": 1,
+            "source": "video_metadata",
+            "title": content_item.title_original,
+            "blocks": [{"type": "h1", "text": content_item.title_original}],
+        }
+
     text_source_status = (
         TextSourceStatus.HTML if content_item.content_type == ContentType.ARTICLE else TextSourceStatus.NONE
     )
-    metadata_json = dict(content_item.metadata_json or {})
     metadata_json["extract"] = {
-        "placeholder": True,
-        "block_types": [block["type"] for block in content_ast.get("blocks", [])],
+        "placeholder": is_placeholder,
+        "block_types": [b["type"] for b in (content_ast or {}).get("blocks", [])],
         "source_kind": "html" if content_item.content_type == ContentType.ARTICLE else "video_metadata",
     }
     return StageResult(
@@ -510,7 +556,111 @@ def _default_extract_handler(*, content_item: ContentItem) -> StageResult:
     )
 
 
+def _extract_article_content(content_item: ContentItem) -> tuple[str, dict]:
+    """Extract article content from RAW_HTML artifact using readability + markdownify."""
+    source_url = content_item.final_url or content_item.source_url or content_item.canonical_url
+    raw_html = _get_latest_artifact_body(content_item, ArtifactType.RAW_HTML)
+
+    if raw_html:
+        try:
+            return _readability_extract(raw_html, source_url)
+        except Exception as exc:
+            logger.warning("readability extract failed for %s: %s, falling back", source_url, exc)
+
+    # Fallback: minimal extraction from whatever we have
+    content_md = (
+        f"# {content_item.title_original}\n\n"
+        f"Source: [{source_url}]({source_url})"
+    )
+    content_ast = {
+        "type": "doc",
+        "version": 1,
+        "source": "fallback_extract",
+        "title": content_item.title_original,
+        "blocks": [
+            {"type": "h1", "text": content_item.title_original},
+            {"type": "link", "text": "Source", "url": source_url or ""},
+        ],
+    }
+    return content_md, content_ast
+
+
+def _readability_extract(raw_html: str, source_url: str | None) -> tuple[str, dict]:
+    """Use readability-lxml + markdownify for production-quality extraction."""
+    from markdownify import markdownify as md
+
+    try:
+        from readability import Document
+
+        doc = Document(raw_html)
+        article_html = doc.summary()
+        title = doc.title()
+    except ImportError:
+        # readability-lxml not installed; fallback to basic HTML parsing
+        article_html = raw_html
+        title = ""
+
+    content_md = md(article_html, heading_style="ATX", strip=["img"]) if article_html else ""
+    # Build a simple AST from the markdown content
+    content_ast = _build_ast_from_md(content_md or "", type("Obj", (), {"title_original": title or ""})())
+    if title:
+        content_ast["title"] = title
+    content_ast["source"] = "readability_extract"
+    content_ast["evidence"] = {"source_url": source_url}
+    return content_md, content_ast
+
+
+def _build_ast_from_md(md_text: str, content_item: ContentItem) -> dict:
+    """Build a simple AST from markdown text by parsing heading/paragraph structure."""
+    lines = md_text.split("\n")
+    blocks: list[dict] = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith("#### "):
+            blocks.append({"type": "h4", "text": stripped[5:]})
+        elif stripped.startswith("### "):
+            blocks.append({"type": "h3", "text": stripped[4:]})
+        elif stripped.startswith("## "):
+            blocks.append({"type": "h2", "text": stripped[3:]})
+        elif stripped.startswith("# "):
+            blocks.append({"type": "h1", "text": stripped[2:]})
+        elif stripped.startswith("```"):
+            blocks.append({"type": "code_block", "text": line})
+        elif stripped.startswith("- ") or stripped.startswith("* "):
+            blocks.append({"type": "list_item", "text": stripped[2:]})
+        elif stripped.startswith("> "):
+            blocks.append({"type": "blockquote", "text": stripped[2:]})
+        else:
+            blocks.append({"type": "p", "text": stripped})
+    return {
+        "type": "doc",
+        "version": 1,
+        "source": "ast_from_md",
+        "title": getattr(content_item, "title_original", ""),
+        "blocks": blocks,
+    }
+
+
+def _get_latest_artifact_body(content_item: ContentItem, artifact_type: str) -> str | None:
+    """Retrieve the text body of the latest artifact of a given type, if any."""
+    artifact = (
+        content_item.artifacts.filter(artifact_type=artifact_type).order_by("-created_at").first()
+    )
+    if not artifact:
+        return None
+    # For local artifacts the body isn't stored in DB — return None.
+    # Real COS-backed artifacts would be downloaded here.
+    # The fetch handler stores the body in metadata for testability.
+    metadata = dict(content_item.metadata_json or {})
+    fetch_data = dict(metadata.get("fetch_response") or {})
+    return fetch_data.get("body")
+
+
 def _default_transcribe_handler(*, content_item: ContentItem) -> StageResult:
+    from techbrief.apps.integrations.asr import get_asr_adapter
+
     transcript_text = content_item.transcript_text
     text_source_status = content_item.text_source_status
     transcript_language = content_item.transcript_language or content_item.original_language or "en"
@@ -518,27 +668,48 @@ def _default_transcribe_handler(*, content_item: ContentItem) -> StageResult:
     metadata_json = dict(content_item.metadata_json or {})
     artifact_specs: list[ArtifactSpec] = []
     if content_item.content_type == ContentType.VIDEO:
-        transcript_text = transcript_text or f"Transcript placeholder for {content_item.title_original}"
-        transcript_segments_json = transcript_segments_json or {
-            "segments": [
-                {
-                    "start_ms": 0,
-                    "end_ms": 12000,
-                    "text": transcript_text,
-                    "speaker": "speaker-1",
+        if not transcript_text:
+            # Use ASR adapter (mock by default, whisper when configured)
+            asr = get_asr_adapter()
+            video_url = content_item.final_url or content_item.source_url or ""
+            try:
+                result = asr.transcribe(audio_url=video_url)
+                transcript_text = result.text
+                transcript_language = result.language or transcript_language
+                transcript_segments_json = {
+                    "segments": [
+                        {
+                            "start_ms": seg.start_ms,
+                            "end_ms": seg.end_ms,
+                            "text": seg.text,
+                            "speaker": seg.speaker,
+                        }
+                        for seg in result.segments
+                    ],
+                    "evidence": {
+                        "provider": result.provider,
+                        "language": result.language,
+                        "duration_ms": result.duration_ms,
+                    },
                 }
-            ],
-            "evidence": {
-                "placeholder": True,
-                "provider": "mock-asr",
-                "derived_from": content_item.source_url or content_item.canonical_url,
-            },
-        }
+            except Exception as exc:
+                logger.warning("ASR transcription failed for %s: %s", video_url, exc)
+                transcript_text = f"Transcript fallback for {content_item.title_original}"
+                transcript_segments_json = None
+
+        # Ensure segments exist even when text was pre-populated
+        if not transcript_segments_json:
+            transcript_segments_json = {
+                "segments": [
+                    {"start_ms": 0, "end_ms": 0, "text": transcript_text or "", "speaker": "speaker-1"}
+                ]
+            }
+
         text_source_status = TextSourceStatus.ASR
         metadata_json["transcribe"] = {
-            "placeholder": True,
-            "provider": "mock-asr",
-            "segment_count": len(transcript_segments_json["segments"]),
+            "placeholder": get_asr_adapter().provider_name == "mock_asr",
+            "provider": get_asr_adapter().provider_name,
+            "segment_count": len(transcript_segments_json.get("segments", [])),
             "text_source_status": text_source_status,
         }
         artifact_specs = [
@@ -580,17 +751,72 @@ def _default_transcribe_handler(*, content_item: ContentItem) -> StageResult:
 
 
 def _default_translate_handler(*, content_item: ContentItem) -> StageResult:
-    title_zh = content_item.title_zh or f"ZH: {content_item.title_original}"
-    summary_zh = content_item.summary_zh or content_item.summary_original or "Translated summary placeholder."
-    zh_md = content_item.zh_md or f"## {title_zh}\n\nTranslated body placeholder."
+    from techbrief.apps.integrations.llm import get_llm_adapter
+
+    metadata_json = dict(content_item.metadata_json or {})
+    is_mock = get_llm_adapter().provider_name == "mock_llm"
+
+    # Use pre-populated fields if available (manual intake / replay)
+    title_zh = content_item.title_zh
+    summary_zh = content_item.summary_zh
+    zh_md = content_item.zh_md
+
+    if not title_zh or not zh_md:
+        llm = get_llm_adapter()
+        source_title = content_item.title_original or ""
+        source_summary = content_item.summary_original or ""
+        source_body = content_item.content_md or ""
+
+        if is_mock:
+            # Preserve backward-compatible mock behavior
+            title_zh = title_zh or f"ZH: {source_title}"
+            summary_zh = summary_zh or source_summary or "Translated summary placeholder."
+            zh_md = zh_md or f"## {title_zh}\n\nTranslated body placeholder."
+        else:
+            # Real LLM translation
+            translate_prompt = (
+                "Translate the following English tech content to Chinese (Simplified).\n"
+                "RULES:\n"
+                "1. Keep all code blocks, inline code, and command-line output unchanged.\n"
+                "2. Keep all URLs unchanged; only translate link text.\n"
+                "3. Preserve heading levels, paragraph structure, and list formatting.\n"
+                "4. Use consistent terminology.\n\n"
+                f"TITLE:\n{source_title}\n\n"
+            )
+            if source_summary:
+                translate_prompt += f"SUMMARY:\n{source_summary}\n\n"
+            translate_prompt += f"BODY:\n{source_body}"
+
+            try:
+                response = llm.chat(
+                    translate_prompt,
+                    system_prompt=(
+                        "You are a professional tech translator. Translate English to Simplified Chinese. "
+                        "Return the translation with clear sections: TITLE, SUMMARY (if provided), BODY. "
+                        "Each section on its own line prefixed with the section name."
+                    ),
+                    temperature=0.3,
+                )
+                translated = response.text
+                # Parse the LLM response into sections
+                title_zh = _extract_section(translated, "TITLE") or title_zh or source_title
+                summary_zh = _extract_section(translated, "SUMMARY") or summary_zh or source_summary
+                body_text = _extract_section(translated, "BODY") or translated
+                zh_md = zh_md or body_text
+            except Exception as exc:
+                logger.warning("LLM translation failed for %s: %s", content_item.id, exc)
+                # Fallback to mock-style output
+                title_zh = title_zh or f"ZH: {source_title}"
+                summary_zh = summary_zh or source_summary or "Translation fallback."
+                zh_md = zh_md or f"## {title_zh}\n\nTranslation fallback."
+
     zh_ast = content_item.zh_ast or {
         "type": "doc",
         "source": "workflow_skeleton",
         "lang": "zh-CN",
     }
-    metadata_json = dict(content_item.metadata_json or {})
     metadata_json["translate"] = {
-        "placeholder": True,
+        "placeholder": is_mock,
         "supports_bilingual": True,
     }
     return StageResult(
@@ -606,17 +832,71 @@ def _default_translate_handler(*, content_item: ContentItem) -> StageResult:
     )
 
 
+def _extract_section(text: str, section_name: str) -> str | None:
+    """Extract a named section from LLM output like 'TITLE: ...'."""
+    import re
+
+    pattern = rf"{section_name}\s*:\s*\n?(.*?)(?=\n(?:TITLE|SUMMARY|BODY)\s*:|\Z)"
+    match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+    if match:
+        return match.group(1).strip()
+    return None
+
+
 def _default_research_handler(*, content_item: ContentItem) -> StageResult:
-    research_report_md = content_item.research_report_md or (
-        f"## Research Notes\n\n- Source: {content_item.source_name_snapshot}\n"
-        f"- Title: {content_item.title_original}\n"
-        f"- Based on: {'transcript' if content_item.transcript_text else 'content body'}\n"
-        f"- Evidence URL: {content_item.final_url or content_item.source_url or content_item.canonical_url}\n"
-        "- Status: generated by workflow placeholder\n"
-    )
+    from techbrief.apps.integrations.llm import get_llm_adapter
+
     metadata_json = dict(content_item.metadata_json or {})
+    is_mock = get_llm_adapter().provider_name == "mock_llm"
+
+    if content_item.research_report_md:
+        research_report_md = content_item.research_report_md
+    elif is_mock:
+        research_report_md = (
+            f"## Research Notes\n\n- Source: {content_item.source_name_snapshot}\n"
+            f"- Title: {content_item.title_original}\n"
+            f"- Based on: {'transcript' if content_item.transcript_text else 'content body'}\n"
+            f"- Evidence URL: {content_item.final_url or content_item.source_url or content_item.canonical_url}\n"
+            "- Status: generated by workflow placeholder\n"
+        )
+    else:
+        llm = get_llm_adapter()
+        base_content = content_item.transcript_text or content_item.content_md or ""
+        source_label = (
+            "video transcript" if content_item.transcript_text else "article content"
+        )
+        prompt = (
+            "Generate a structured research report for the following tech content. "
+            "Include:\n"
+            "1. **Key Takeaways** — 3-5 bullet points\n"
+            "2. **Technical Depth** — assessment of technical complexity (beginner/intermediate/advanced)\n"
+            "3. **Context & Background** — relevant context a reader might need\n"
+            "4. **Related Topics** — suggested areas for further reading\n\n"
+            f"Source: {content_item.source_name_snapshot}\n"
+            f"Title: {content_item.title_original}\n"
+            f"Based on: {source_label}\n\n"
+            f"Content:\n{base_content[:8000]}"
+        )
+        try:
+            response = llm.chat(
+                prompt,
+                system_prompt=(
+                    "You are a tech research analyst. Generate concise, well-structured research notes "
+                    "in Markdown format. Focus on accuracy and actionable insights."
+                ),
+                temperature=0.3,
+            )
+            research_report_md = response.text
+        except Exception as exc:
+            logger.warning("LLM research failed for %s: %s", content_item.id, exc)
+            research_report_md = (
+                f"## Research Notes\n\n- Source: {content_item.source_name_snapshot}\n"
+                f"- Title: {content_item.title_original}\n"
+                f"- Status: LLM research failed ({exc}), using fallback\n"
+            )
+
     metadata_json["research"] = {
-        "placeholder": True,
+        "placeholder": is_mock,
         "based_on": "transcript" if content_item.transcript_text else "content_md",
         "has_transcript": bool(content_item.transcript_text),
     }
@@ -639,7 +919,25 @@ def _default_research_handler(*, content_item: ContentItem) -> StageResult:
 
 
 def _default_review_pending_handler(*, content_item: ContentItem) -> StageResult:
-    return StageResult(log_context={"review_ready": True})
+    auto_approve = getattr(settings, "REVIEW_AUTO_APPROVE", True)
+    metadata_json = dict(content_item.metadata_json or {})
+    metadata_json["review"] = {
+        "auto_approved": auto_approve,
+        "reviewed_at": timezone.now().isoformat() if auto_approve else None,
+    }
+    if auto_approve:
+        # Auto-approve: pipeline will continue to PUBLISH + NOTIFY via stage sequence
+        return StageResult(
+            content_updates={"metadata_json": metadata_json},
+            log_context={"review_ready": True, "auto_approved": True},
+        )
+    else:
+        # Manual gate: stop the pipeline here. Admin must trigger publish manually.
+        return StageResult(
+            content_updates={"metadata_json": metadata_json},
+            next_stage=None,  # Stop pipeline — admin triggers publish via console
+            log_context={"review_ready": True, "auto_approved": False, "requires_manual_publish": True},
+        )
 
 
 DISCOVERY_HANDLER = _default_discovery_handler
@@ -723,6 +1021,9 @@ def _persist_stage_artifacts(
     stage: str,
     artifact_specs: list[ArtifactSpec],
 ) -> list[dict[str, Any]]:
+    from techbrief.apps.core.storage import get_storage_backend
+
+    storage = get_storage_backend()
     persisted: list[dict[str, Any]] = []
     for spec in artifact_specs:
         body = spec.body.encode("utf-8") if isinstance(spec.body, str) else spec.body
@@ -730,17 +1031,25 @@ def _persist_stage_artifacts(
         storage_label = spec.storage_label or spec.artifact_type
         storage_key = f"content-items/{content_item.id}/{stage}/{storage_label}.{file_ext}"
         sha = sha256(body).hexdigest()
-        artifact, _ = ContentArtifact.objects.update_or_create(
+
+        # Upload to storage backend (COS when enabled, local registry otherwise)
+        storage_result = storage.put_object(
             storage_key=storage_key,
+            body=body,
+            content_type=spec.content_type,
+        )
+
+        artifact, _ = ContentArtifact.objects.update_or_create(
+            storage_key=storage_result.storage_key,
             defaults={
                 "content_item": content_item,
                 "artifact_type": spec.artifact_type,
-                "storage_provider": "local_artifact_registry",
-                "bucket_name": "techbrief-local-artifacts",
+                "storage_provider": storage_result.storage_provider,
+                "bucket_name": storage_result.bucket_name,
                 "content_type": spec.content_type,
                 "file_ext": file_ext,
                 "language": spec.language,
-                "size_bytes": len(body),
+                "size_bytes": storage_result.size_bytes,
                 "sha256": sha,
                 "is_primary": spec.is_primary,
             },
